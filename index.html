@@ -149,7 +149,7 @@
               onclick="toggleCalendarPopover('to', event)" 
               class="flex items-center gap-2.5 px-3 py-1.5 bg-white hover:bg-slate-50 border border-slate-300 rounded-xl text-xs font-black text-slate-800 shadow-2xs focus:outline-none focus:ring-2 focus:ring-emerald-500/20 cursor-pointer transition"
             >
-              <span id="toDateText">09/25/2026</span>
+              <span id="toDateText">09/28/2026</span>
               <i class="fa-regular fa-calendar text-slate-700 text-[13px]"></i>
             </button>
 
@@ -193,7 +193,7 @@
       <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200 overflow-hidden space-y-2.5">
         <div class="flex items-center justify-between">
           <h3 class="text-sm font-extrabold text-slate-900 tracking-tight">Team Performance</h3>
-          <span id="teamPerfSub" class="text-[11px] font-bold text-slate-400">Pacing: 09/01/2026 to 09/25/2026</span>
+          <span id="teamPerfSub" class="text-[11px] font-bold text-slate-400">Pacing: 09/01/2026 to 09/28/2026</span>
         </div>
         <div class="overflow-x-auto">
           <table class="w-full text-center text-xs min-w-[1050px]">
@@ -746,7 +746,7 @@
 
   </div>
 
-  <!-- JAVASCRIPT: SUPPORTS DYNAMIC CPR PARTNERS, TODAY AUTO-DETECTION & JSONS -->
+  <!-- JAVASCRIPT: SUPPORTS DYNAMIC CPR PARTNERS, TODAY AUTO-DETECTION & CACHE-BUSTING -->
   <script>
     const DATA_CACHE = {
       july: null,
@@ -759,7 +759,7 @@
       if (now.getFullYear() === 2026) {
         return new Date(2026, now.getMonth(), now.getDate());
       }
-      return new Date(2026, 8, 25);
+      return new Date(2026, 8, 28);
     }
 
     let today = getSystemToday();
@@ -778,9 +778,10 @@
       "July", "August", "September", "October", "November", "December"
     ];
 
+    // FETCHES JSON FILES WITH CACHE-BUSTING TIMESTAMP & NO-STORE TO BYPASS BROWSER CACHE
     async function fetchJSON(url) {
       try {
-        const res = await fetch(url);
+        const res = await fetch(`${url}?t=${Date.now()}`, { cache: 'no-store' });
         if (!res.ok) {
           console.warn(`File ${url} returned status ${res.status}`);
           return null;
