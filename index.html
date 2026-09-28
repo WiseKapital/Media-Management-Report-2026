@@ -196,7 +196,7 @@
 
   </div>
 
-  <!-- JAVASCRIPT ULTRA-OPTIMIZADO -->
+  <!-- JAVASCRIPT: REPARTO EQUITATIVO DE KPIS Y MULTI-MES AUTOMÁTICO -->
   <script>
     const DATA_CACHE = { july: null, august: null, september: null };
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -208,6 +208,18 @@
     
     let today = getSystemToday(), fromDate = new Date(2026, today.getMonth(), 1), toDate = new Date(today);
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth(), activeSortKey = null, activeSortDir = 'desc';
+
+    // ALGORITMO DE PARTICIÓN ENTERA: REPARTO EQUITATIVO CON DIFERENCIA MÁXIMA DE 1
+    function distributeEqual(total, count) {
+      if (!count || count <= 0 || !total || total <= 0) return [];
+      const base = Math.floor(total / count);
+      const rem = total % count;
+      const res = [];
+      for (let i = 0; i < count; i++) {
+        res.push(i < rem ? base + 1 : base);
+      }
+      return res;
+    }
 
     async function fetchJSON(url) {
       try {
@@ -332,7 +344,8 @@
       const lRatio = leads / (data.totals.cpl.mtd || 1), sRatio = sigs / (data.totals.signups.mtd || 1);
       const uRatio = users / (data.totals.cpa.mtd || 1), bRatio = budget / (data.totals.budget || 1), rRatio = rev / (data.totals.revenue || 1);
 
-      const partners = (data.partners || []).map(p => {
+      // Pre-procesa métricas reales
+      let partners = (data.partners || []).map(p => {
         const pL = isFull ? p.cplMtd : (typeof p.cplMtd === 'number' && p.cplMtd > 0 ? Math.round(p.cplMtd * lRatio) : '—');
         const pS = isFull ? p.sigMtd : (typeof p.sigMtd === 'number' && p.sigMtd > 0 ? Math.round(p.sigMtd * sRatio) : '—');
         const pU = isFull ? p.cpaMtd : (typeof p.cpaMtd === 'number' && p.cpaMtd > 0 ? Math.round(p.cpaMtd * uRatio) : '—');
@@ -343,11 +356,6 @@
         if (pP > 0 && pR > 0) st = 'working-well'; else if (pP < 0 && pB > 0) st = 'not-working'; else if (pS >= 9 || pU >= 2) st = 'potential';
         return {
           ...p, cplMtd: pL, sigMtd: pS, cpaMtd: pU, budget: pB, rev: pR, profit: pP, status: st,
-          budgetKpi: typeof p.budgetKpi === 'number' ? p.budgetKpi : '—',
-          cplKpi: typeof p.cplKpi === 'number' ? p.cplKpi : '—',
-          sigKpi: typeof p.sigKpi === 'number' ? p.sigKpi : '—',
-          cpaKpi: typeof p.cpaKpi === 'number' ? p.cpaKpi : '—',
-          cprKpi: typeof p.cprKpi === 'number' ? p.cprKpi : '—',
           cplRr: isFull ? p.cplRr : (typeof pL === 'number' ? Math.round(pL * rrFactor) : '—'),
           sigRr: isFull ? p.sigRr : (typeof pS === 'number' ? Math.round(pS * rrFactor) : '—'),
           cpaRr: isFull ? p.cpaRr : (typeof pU === 'number' ? Math.round(pU * rrFactor) : '—'),
@@ -355,19 +363,21 @@
         };
       });
 
+      // APLICA REPARTO EQUITATIVO DE KPIS DINÁMICAMENTE (MÁXIMO 1 DE DIFERENCIA)
+      applyEqualKpis(partners, totKpis, teamKpis);
+
       renderTopCards(partners, teamKpis);
       renderLeadsDonut(partners, leads, rr.leads);
       updateCPRDonut(partners, data.totals.cpr?.mtd || 0, data.totals.cpr?.rr || 0);
       renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, 30);
-      renderTable(partners, { cplMtd: leads, cplRr: rr.leads, sigMtd: sigs, sigRr: rr.sigs, cprMtd: data.totals.cpr?.mtd||0, cprRr: data.totals.cpr?.rr||0, cpaMtd: users, cpaRr: rr.users, rev, budget, profit, totKpis });
-      renderBreakdownTables(partners, daysCount, totKpis);
+      renderTable(partners, { cplMtd: leads, cplRr: rr.leads, sigMtd: sigs, sigRr: rr.sigs, cprMtd: data.totals.cpr?.mtd||0, cprRr: data.totals.cpr?.rr||0, cpaMtd: users, cpaRr: rr.users, rev, budget, profit, totKpis, teamKpis });
+      renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
       renderInactive(data.inactive_partners);
     }
 
     function renderMultiMonth(sDate, eDate) {
       document.getElementById('tp-header-period').textContent = 'TOTAL CONSOLIDATED';
 
-      // Detecta meses cubiertos
       const sM = sDate.getMonth(), eM = eDate.getMonth();
       const covered = [];
       if (sM <= 6 && eM >= 6 && DATA_CACHE.july) covered.push(DATA_CACHE.july);
@@ -384,7 +394,6 @@
         cur.setDate(cur.getDate() + 1);
       }
 
-      // Suma total de días objetivo de los meses seleccionados para cálculo exacto del Run-Rate (RR)
       const totalTargetDays = covered.reduce((a, m) => a + (m.date_range?.days || 30), 0) || 30;
       const daysCount = Math.max(slice.length, 1);
       const rrFactor = totalTargetDays / daysCount;
@@ -402,7 +411,7 @@
         leads: Math.round(leads * rrFactor) 
       };
 
-      // Suma de KPIs para el equipo y totales
+      // Suma dinámica de los KPIs totales según los meses seleccionados
       const teamKpis = {
         budget: covered.reduce((a,m) => a + (m.team_kpis?.budget || 5500), 0),
         signups: covered.reduce((a,m) => a + (m.team_kpis?.signups || 1000), 0),
@@ -423,22 +432,9 @@
       document.getElementById('leads-badge-kpi').textContent = totKpis.cpl.kpi.toLocaleString();
       document.getElementById('cpr-badge-kpi').textContent = totKpis.cpr.kpi.toLocaleString();
 
-      // Consolidación de partners y suma acumulativa de sus KPIs individuales
       const pMap = {};
       covered.forEach(m => (m.partners || []).forEach(p => {
-        if (!pMap[p.name]) {
-          pMap[p.name] = { 
-            name: p.name, 
-            budgetKpi: 0, cplKpi: 0, sigKpi: 0, cprKpi: 0, cpaKpi: 0,
-            cplMtd: 0, sigMtd: 0, cprMtd: 0, cpaMtd: 0, rev: 0, budget: 0 
-          };
-        }
-        if (typeof p.budgetKpi === 'number') pMap[p.name].budgetKpi += p.budgetKpi;
-        if (typeof p.cplKpi === 'number') pMap[p.name].cplKpi += p.cplKpi;
-        if (typeof p.sigKpi === 'number') pMap[p.name].sigKpi += p.sigKpi;
-        if (typeof p.cprKpi === 'number') pMap[p.name].cprKpi += p.cprKpi;
-        if (typeof p.cpaKpi === 'number') pMap[p.name].cpaKpi += p.cpaKpi;
-
+        if (!pMap[p.name]) pMap[p.name] = { name: p.name, cplMtd: 0, sigMtd: 0, cprMtd: 0, cpaMtd: 0, rev: 0, budget: 0 };
         if (typeof p.cplMtd === 'number') pMap[p.name].cplMtd += p.cplMtd;
         if (typeof p.sigMtd === 'number') pMap[p.name].sigMtd += p.sigMtd;
         if (typeof p.cprMtd === 'number') pMap[p.name].cprMtd += p.cprMtd;
@@ -447,16 +443,11 @@
         pMap[p.name].budget += (p.budget || 0);
       }));
 
-      const partners = Object.values(pMap).map(p => {
+      let partners = Object.values(pMap).map(p => {
         const pP = Number((p.rev - p.budget).toFixed(2));
         let st = 'neutral'; if (pP > 0 && p.rev > 0) st = 'working-well'; else if (pP < 0 && p.budget > 0) st = 'not-working'; else if (p.sigMtd >= 9 || p.cpaMtd >= 2) st = 'potential';
         return {
           ...p, profit: pP, status: st,
-          budgetKpi: p.budgetKpi > 0 ? p.budgetKpi : '—',
-          cplKpi: p.cplKpi > 0 ? p.cplKpi : '—',
-          sigKpi: p.sigKpi > 0 ? p.sigKpi : '—',
-          cpaKpi: p.cpaKpi > 0 ? p.cpaKpi : '—',
-          cprKpi: p.cprKpi > 0 ? p.cprKpi : '—',
           cplRr: p.cplMtd > 0 ? Math.round(p.cplMtd * rrFactor) : '—',
           sigRr: p.sigMtd > 0 ? Math.round(p.sigMtd * rrFactor) : '—',
           cpaRr: p.cpaMtd > 0 ? Math.round(p.cpaMtd * rrFactor) : '—',
@@ -467,13 +458,55 @@
       let cprMtd = 0; covered.forEach(m => cprMtd += (m.totals?.cpr?.mtd || 0));
       const cprRr = Number((cprMtd * rrFactor).toFixed(1));
 
+      // APLICA REPARTO EQUITATIVO DE KPIS SUMADOS DINÁMICAMENTE
+      applyEqualKpis(partners, totKpis, teamKpis);
+
       renderTopCards(partners, teamKpis);
       renderLeadsDonut(partners, leads, rr.leads);
       updateCPRDonut(partners, cprMtd, cprRr);
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
-      renderTable(partners, { cplMtd: leads, cplRr: rr.leads, sigMtd: sigs, sigRr: rr.sigs, cprMtd, cprRr, cpaMtd: users, cpaRr: rr.users, rev, budget, profit, totKpis });
-      renderBreakdownTables(partners, daysCount, totKpis);
+      renderTable(partners, { cplMtd: leads, cplRr: rr.leads, sigMtd: sigs, sigRr: rr.sigs, cprMtd, cprRr, cpaMtd: users, cpaRr: rr.users, rev, budget, profit, totKpis, teamKpis });
+      renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
       renderInactive(DATA_CACHE.september?.inactive_partners || []);
+    }
+
+    // FUNCIÓN CENTRAL: REPARTE LOS KPIS TOTALES EN PARTES IGUALES ENTRE LOS PARTNERS ACTIVOS
+    function applyEqualKpis(partners, totKpis, teamKpis) {
+      const kLeads = totKpis.cpl?.kpi || 4000;
+      const kSigs = totKpis.signups?.kpi || 1000;
+      const kCpa = totKpis.cpa?.kpi || 300;
+      const kCpr = totKpis.cpr?.kpi || 200;
+      const kBudget = teamKpis.budget || 5500;
+
+      // Filtra partners activos por métrica
+      const cplPartners = partners.filter(p => typeof p.cplMtd === 'number' && p.cplMtd > 0);
+      const sigPartners = partners.filter(p => typeof p.sigMtd === 'number' && p.sigMtd > 0);
+      const cpaPartners = partners.filter(p => typeof p.cpaMtd === 'number' && p.cpaMtd > 0);
+      const cprPartners = partners.filter(p => typeof p.cprMtd === 'number' && p.cprMtd > 0);
+      const budgetPartners = partners.filter(p => (p.budget || 0) > 0);
+
+      // Calcula la partición entera equitativa (máx 1 de diferencia)
+      const cplList = distributeEqual(kLeads, cplPartners.length);
+      const sigList = distributeEqual(kSigs, sigPartners.length);
+      const cpaList = distributeEqual(kCpa, cpaPartners.length);
+      const cprList = distributeEqual(kCpr, cprPartners.length);
+      const bList = distributeEqual(kBudget, budgetPartners.length);
+
+      // Asigna a cada partner activo su KPI equitativo
+      cplPartners.forEach((p, i) => p.cplKpi = cplList[i]);
+      sigPartners.forEach((p, i) => p.sigKpi = sigList[i]);
+      cpaPartners.forEach((p, i) => p.cpaKpi = cpaList[i]);
+      cprPartners.forEach((p, i) => p.cprKpi = cprList[i]);
+      budgetPartners.forEach((p, i) => p.budgetKpi = bList[i]);
+
+      // Rellena los inactivos con guión '—'
+      partners.forEach(p => {
+        if (!p.cplKpi) p.cplKpi = '—';
+        if (!p.sigKpi) p.sigKpi = '—';
+        if (!p.cpaKpi) p.cpaKpi = '—';
+        if (!p.cprKpi) p.cprKpi = '—';
+        if (!p.budgetKpi) p.budgetKpi = '—';
+      });
     }
 
     function renderKPIs(d) {
@@ -634,7 +667,7 @@
       document.getElementById('tableCounter').textContent = `Showing ${partners.length} active partners`;
     }
 
-    function renderBreakdownTables(partners, daysCount = 30, totKpis = {}) {
+    function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
       
       const cpl = partners.filter(p => typeof p.cplMtd === 'number' && p.cplMtd > 0).sort((a,b) => b.cplMtd - a.cplMtd);
@@ -644,9 +677,9 @@
       const renderRows = (list, type) => list.map(p => {
         const b = p.budget || 0, bRr = Math.round(b * rrF), r = p.rev || 0, roi = b > 0 ? `1:${(r/b).toFixed(1)}` : (r > 0 ? '1:∞' : '—');
         const bKpiDisplay = (typeof p.budgetKpi === 'number' && p.budgetKpi > 0) ? `$${p.budgetKpi.toLocaleString()}` : '—';
-        if (type === 'CPL') return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-500">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center text-slate-600">$${bRr}</td><td class="text-center text-slate-400">${p.cplKpi||'—'}</td><td class="text-center font-black">${p.cplMtd}</td><td class="text-center font-black text-green-custom">${p.cplRr}</td><td class="text-center font-bold">${p.sigMtd||0}</td><td class="text-center font-bold">${p.cpaMtd||0}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`;
-        if (type === 'CPR') return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-500">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center text-slate-600">$${bRr}</td><td class="text-center text-slate-400">${p.cprKpi||200}</td><td class="text-center font-black">${Number(p.cprMtd).toFixed(1)}</td><td class="text-center font-bold">${p.cprRr}</td><td class="text-center font-bold">${p.cpaMtd||0}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`;
-        if (type === 'CPA') { const s2p = p.sigMtd > 0 ? ((p.cpaMtd/p.sigMtd)*100).toFixed(1)+'%' : '0.0%'; return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-500">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center text-slate-600">$${bRr}</td><td class="text-center font-bold">${p.sigMtd||0}</td><td class="text-center text-slate-400">${p.cpaKpi||50}</td><td class="text-center font-black">${p.cpaMtd}</td><td class="text-center font-bold text-red-custom">${p.cpaRr}</td><td class="text-center font-bold text-purple-700">${s2p}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`; }
+        if (type === 'CPL') return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center text-slate-600">$${bRr}</td><td class="text-center text-slate-500 font-bold">${p.cplKpi||'—'}</td><td class="text-center font-black">${p.cplMtd}</td><td class="text-center font-black text-green-custom">${p.cplRr}</td><td class="text-center font-bold">${p.sigMtd||0}</td><td class="text-center font-bold">${p.cpaMtd||0}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`;
+        if (type === 'CPR') return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center text-slate-600">$${bRr}</td><td class="text-center text-slate-500 font-bold">${p.cprKpi||200}</td><td class="text-center font-black">${Number(p.cprMtd).toFixed(1)}</td><td class="text-center font-bold">${p.cprRr}</td><td class="text-center font-bold">${p.cpaMtd||0}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`;
+        if (type === 'CPA') { const s2p = p.sigMtd > 0 ? ((p.cpaMtd/p.sigMtd)*100).toFixed(1)+'%' : '0.0%'; return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center text-slate-600">$${bRr}</td><td class="text-center font-bold">${p.sigMtd||0}</td><td class="text-center text-slate-500 font-bold">${p.cpaKpi||25}</td><td class="text-center font-black">${p.cpaMtd}</td><td class="text-center font-bold text-red-custom">${p.cpaRr}</td><td class="text-center font-bold text-purple-700">${s2p}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`; }
       }).join('');
 
       const renderFoot = (list, type) => {
@@ -657,17 +690,17 @@
         if (type === 'CPL') { 
           const l = list.reduce((a,p)=>a+p.cplMtd,0), lRr = Math.round(l * rrF), s = list.reduce((a,p)=>a+(p.sigMtd||0),0), u = list.reduce((a,p)=>a+(p.cpaMtd||0),0); 
           const lKpi = totKpis.cpl?.kpi || list.reduce((a,p)=>a+(typeof p.cplKpi==='number'?p.cplKpi:0),0) || 4000;
-          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center font-bold">$${bRr}</td><td class="text-center text-slate-500 font-bold">${lKpi.toLocaleString()}</td><td class="text-center font-black">${l}</td><td class="text-center font-black text-green-custom">${lRr}</td><td class="text-center font-black">${s}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
+          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center font-bold">$${bRr}</td><td class="text-center text-slate-700 font-black">${lKpi.toLocaleString()}</td><td class="text-center font-black">${l}</td><td class="text-center font-black text-green-custom">${lRr}</td><td class="text-center font-black">${s}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
         }
         if (type === 'CPR') { 
           const c = Number(list.reduce((a,p)=>a+p.cprMtd,0).toFixed(1)), cRr = list.reduce((a,p)=>a+(p.cprRr||0),0), u = list.reduce((a,p)=>a+(p.cpaMtd||0),0); 
           const cKpi = totKpis.cpr?.kpi || list.reduce((a,p)=>a+(typeof p.cprKpi==='number'?p.cprKpi:0),0) || 200;
-          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center font-bold">$${bRr}</td><td class="text-center text-slate-500 font-bold">${cKpi.toLocaleString()}</td><td class="text-center font-black">${c}</td><td class="text-center font-bold">${cRr}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
+          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center font-bold">$${bRr}</td><td class="text-center text-slate-700 font-black">${cKpi.toLocaleString()}</td><td class="text-center font-black">${c}</td><td class="text-center font-bold">${cRr}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
         }
         if (type === 'CPA') { 
           const s = list.reduce((a,p)=>a+(p.sigMtd||0),0), u = list.reduce((a,p)=>a+p.cpaMtd,0), uRr = Math.round(u * rrF), s2p = s > 0 ? ((u/s)*100).toFixed(1)+'%' : '0.0%'; 
           const aKpi = totKpis.cpa?.kpi || list.reduce((a,p)=>a+(typeof p.cpaKpi==='number'?p.cpaKpi:0),0) || 300;
-          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center font-bold">$${bRr}</td><td class="text-center font-black">${s}</td><td class="text-center text-slate-500 font-bold">${aKpi.toLocaleString()}</td><td class="text-center font-black">${u}</td><td class="text-center font-bold text-red-custom">${uRr}</td><td class="text-center font-black text-purple-700">${s2p}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
+          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center font-bold">$${bRr}</td><td class="text-center font-black">${s}</td><td class="text-center text-slate-700 font-black">${aKpi.toLocaleString()}</td><td class="text-center font-black">${u}</td><td class="text-center font-bold text-red-custom">${uRr}</td><td class="text-center font-black text-purple-700">${s2p}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
         }
       };
 
