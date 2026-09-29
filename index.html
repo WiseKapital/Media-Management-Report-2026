@@ -128,7 +128,7 @@
 
   </div>
 
-  <!-- JAVASCRIPT ULTRA-OPTIMIZADO -->
+  <!-- JAVASCRIPT ULTRA-OPTIMIZADO Y PROTEGIDO -->
   <script>
     const DATA_CACHE = { july: null, august: null, september: null };
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -173,18 +173,26 @@
       try {
         const res = await fetch(`${url}?t=${Date.now()}`, { cache: 'no-store' });
         return res.ok ? await res.json() : null;
-      } catch (e) { return null; }
+      } catch (e) { 
+        console.warn(`Error cargando ${url}:`, e);
+        return null; 
+      }
     }
 
     async function loadAllJSONs() {
-      [DATA_CACHE.september, DATA_CACHE.august, DATA_CACHE.july] = await Promise.all([
-        fetchJSON('./data_september.json'), fetchJSON('./data_august.json'), fetchJSON('./data_july.json')
-      ]);
-      today = getSystemToday();
-      fromDate = new Date(2026, today.getMonth(), 1); toDate = new Date(today);
-      fromViewMonth = toViewMonth = today.getMonth();
-      updateDatesUI();
-      dispatchRange(fromDate, toDate);
+      try {
+        [DATA_CACHE.september, DATA_CACHE.august, DATA_CACHE.july] = await Promise.all([
+          fetchJSON('./data_september.json'), fetchJSON('./data_august.json'), fetchJSON('./data_july.json')
+        ]);
+        today = getSystemToday();
+        fromDate = new Date(2026, today.getMonth(), 1); 
+        toDate = new Date(today);
+        fromViewMonth = toViewMonth = today.getMonth();
+        updateDatesUI();
+        dispatchRange(fromDate, toDate);
+      } catch (err) {
+        console.error("Error al iniciar:", err);
+      }
     }
 
     const fmtMDY = d => `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${d.getFullYear()}`;
@@ -193,8 +201,10 @@
     function updateDatesUI() {
       document.getElementById('fromDateText').textContent = fmtMDY(fromDate);
       document.getElementById('toDateText').textContent = fmtMDY(toDate);
-      document.getElementById('teamPerfSub').textContent = `Pacing: ${fmtMDY(fromDate)} to ${fmtMDY(toDate)}`;
-      document.getElementById('lineChartTitle').textContent = `LEADS vs SIGNUPS vs USERS vs KPIs — ${fmtMDY(fromDate)} to ${fmtMDY(toDate)}`;
+      const sub = document.getElementById('teamPerfSub');
+      if (sub) sub.textContent = `Pacing: ${fmtMDY(fromDate)} to ${fmtMDY(toDate)}`;
+      const title = document.getElementById('lineChartTitle');
+      if (title) title.textContent = `LEADS vs SIGNUPS vs USERS vs KPIs — ${fmtMDY(fromDate)} to ${fmtMDY(toDate)}`;
     }
 
     function toggleCal(t, e) {
@@ -236,7 +246,8 @@
             if (isFrom) { fromDate = cur; if (fromDate > toDate) toDate = new Date(fromDate); }
             else { toDate = cur; if (toDate < fromDate) fromDate = new Date(toDate); }
             document.getElementById(t + 'Pop').classList.add('hidden');
-            updateDatesUI(); dispatchRange(fromDate, toDate);
+            updateDatesUI(); 
+            dispatchRange(fromDate, toDate);
           };
         }
         grid.appendChild(cell);
@@ -269,7 +280,7 @@
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
       const sigs = isFull ? data.totals.signups.mtd : slice.reduce((a,r) => a + r.signups, 0);
       
-      // CPR suma directamente desde la serie diaria (en días sin datos da 0)
+      // CPR se suma día por día desde la serie diaria
       const cprVal = isFull ? (data.totals.cpr?.mtd || 0) : slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
       
       const users = isFull ? data.totals.cpa.mtd : slice.reduce((a,r) => a + r.users, 0);
@@ -305,7 +316,6 @@
         const pR = isFull ? p.rev : Number(((p.rev || 0) * rRatio).toFixed(2));
         const pP = Number((pR - pB).toFixed(2));
         
-        // CPR escala de forma segura con los días seleccionados
         const pCpr = isFull ? (p.cprMtd || 0) : (typeof p.cprMtd === 'number' && p.cprMtd > 0 && cprVal > 0 ? Number((p.cprMtd * cRatio).toFixed(1)) : 0);
         const pCprRr = isFull ? (p.cprRr || 0) : (pCpr > 0 ? Number((pCpr * rrFactor).toFixed(2)) : 0);
 
@@ -555,8 +565,6 @@
       const cpa = partners.filter(p => typeof p.cpaMtd === 'number' && p.cpaMtd > 0).sort((a,b) => b.cpaMtd - a.cpaMtd);
 
       const totalRows = cpl.length + cpr.length + cpa.length;
-      
-      // Si no hay filas con actividad en la fecha seleccionada, no divide y deja presupuesto en 0 de forma segura
       const allBudgetKpis = totalRows > 0 ? distributeEqual(kBudget, totalRows) : [];
 
       let kpiIdx = 0;
@@ -614,7 +622,7 @@
             <td class="text-center text-slate-500 font-bold">${p.cpaKpi||25}</td>
             <td class="text-center font-black">${p.cpaMtd}</td>
             <td class="text-center font-bold ${getRrColor(p.cpaRr, p.cpaKpi)}">${p.cpaRr}</td>
-            <td class="text-center font-black text-purple-700">${s2p}</td>
+            <td class="text-center font-bold text-purple-700">${s2p}</td>
             <td class="text-center font-bold">$${Number(r).toFixed(2)}</td>
             <td class="text-center font-bold">${roi}</td>
             <td class="p-2 text-center whitespace-nowrap">${badge}</td>
@@ -626,7 +634,6 @@
         const b = list.reduce((a,p)=>a+(p.budget||0),0), bRr = Math.round(b * rrF), r = list.reduce((a,p)=>a+(p.rev||0),0), roi = b > 0 ? `1:${(r/b).toFixed(1)}` : '—';
         const bKpiTotDisplay = `$${totBKpi.toLocaleString()}`;
 
-        // Suma matemática estricta ignorando guiones para evitar concatenaciones de texto
         const s = list.reduce((a,p) => a + (typeof p.sigMtd === 'number' ? p.sigMtd : 0), 0);
         const u = list.reduce((a,p) => a + (typeof p.cpaMtd === 'number' ? p.cpaMtd : 0), 0);
 
@@ -699,7 +706,7 @@
         <!-- CPA -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-md">CPA</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpa.length ? renderFoot(cpa, 'CPA', cpaTotBKpi) : ''}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
         </div>`;
     }
 
@@ -719,7 +726,7 @@
 
     function switchTab(tab) {
       const v1 = document.getElementById('section-v1'), v2 = document.getElementById('section-v2');
-      ['all','v1','v2'].forEach(t => document.getElementById(`tab-${t}`).className = (t === tab) ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white' : 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200';
+      ['all','v1','v2'].forEach(t => document.getElementById(`tab-${t}`).className = (t === tab) ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white' : 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200');
       v1.style.display = (tab === 'all' || tab === 'v1') ? 'block' : 'none';
       v2.style.display = (tab === 'all' || tab === 'v2') ? 'block' : 'none';
     }
@@ -729,7 +736,12 @@
       if (!e.target.closest('#toPop') && !e.target.closest('#toBtn')) document.getElementById('toPop').classList.add('hidden');
     });
 
-    document.addEventListener('DOMContentLoaded', loadAllJSONs);
+    // EJECUCIÓN INMEDIATA SEGURA (evita quedarse colgado por el evento DOMContentLoaded)
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadAllJSONs);
+    } else {
+      loadAllJSONs();
+    }
   </script>
 </body>
 </html>
