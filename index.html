@@ -178,6 +178,7 @@
     let today = getSystemToday(), fromDate = new Date(2026, today.getMonth(), 1), toDate = new Date(today);
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
 
+    // COLOR DINÁMICO: VERDE SI RR >= KPI, ROJO SI RR < KPI
     function getRrColor(rrVal, kpiVal, isBudget = false) {
       if (kpiVal === '—' || kpiVal === undefined || kpiVal === null) return 'text-slate-500';
       const r = parseFloat(String(rrVal).replace(/[^0-9.-]/g, ''));
@@ -186,6 +187,14 @@
       
       if (isBudget) return r <= k ? 'text-green-custom' : 'text-red-custom';
       return r >= k ? 'text-green-custom' : 'text-red-custom';
+    }
+
+    // BADGE DE ESTADO
+    function getStatusBadge(status) {
+      if (status === 'working-well') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">Working Well</span>`;
+      if (status === 'not-working') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-red-100 text-red-800">Not Working Well</span>`;
+      if (status === 'potential') return `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800">Potential</span>`;
+      return `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Neutral</span>`;
     }
 
     // ALGORITMO DE PARTICIÓN ENTERA CON DIFERENCIA MÁXIMA DE 1
@@ -344,7 +353,7 @@
         };
       });
 
-      applyEqualKpis(partners, totKpis, teamKpis);
+      applyEqualKpis(partners, totKpis);
 
       renderTopCards(partners, teamKpis);
       renderLeadsDonut(partners, leads, rr.leads);
@@ -439,7 +448,7 @@
       const cprRr = Number((cprMtd * rrFactor).toFixed(1));
       document.getElementById('cpr-badge-rr').className = getRrColor(cprRr, totKpis.cpr.kpi) + ' font-black';
 
-      applyEqualKpis(partners, totKpis, teamKpis);
+      applyEqualKpis(partners, totKpis);
 
       renderTopCards(partners, teamKpis);
       renderLeadsDonut(partners, leads, rr.leads);
@@ -449,30 +458,25 @@
       renderInactive(DATA_CACHE.september?.inactive_partners || []);
     }
 
-    function applyEqualKpis(partners, totKpis, teamKpis) {
+    function applyEqualKpis(partners, totKpis) {
       const kLeads = totKpis.cpl?.kpi || 4000;
-      const kSigs = totKpis.signups?.kpi || 1000;
       const kCpa = totKpis.cpa?.kpi || 300;
       const kCpr = totKpis.cpr?.kpi || 200;
 
       const cplPartners = partners.filter(p => typeof p.cplMtd === 'number' && p.cplMtd > 0);
-      const sigPartners = partners.filter(p => typeof p.sigMtd === 'number' && p.sigMtd > 0);
       const cpaPartners = partners.filter(p => typeof p.cpaMtd === 'number' && p.cpaMtd > 0);
       const cprPartners = partners.filter(p => typeof p.cprMtd === 'number' && p.cprMtd > 0);
 
       const cplList = distributeEqual(kLeads, cplPartners.length);
-      const sigList = distributeEqual(kSigs, sigPartners.length);
       const cpaList = distributeEqual(kCpa, cpaPartners.length);
       const cprList = distributeEqual(kCpr, cprPartners.length);
 
       cplPartners.forEach((p, i) => p.cplKpi = cplList[i]);
-      sigPartners.forEach((p, i) => p.sigKpi = sigList[i]);
       cpaPartners.forEach((p, i) => p.cpaKpi = cpaList[i]);
       cprPartners.forEach((p, i) => p.cprKpi = cprList[i]);
 
       partners.forEach(p => {
         if (!p.cplKpi) p.cplKpi = '—';
-        if (!p.sigKpi) p.sigKpi = '—';
         if (!p.cpaKpi) p.cpaKpi = '—';
         if (!p.cprKpi) p.cprKpi = '—';
       });
@@ -618,7 +622,7 @@
       });
     }
 
-    // RENDERIZA LAS 3 TABLAS PEQUEÑAS DISTRIBUYENDO EL BUDGET KPI TOTAL EQUITATIVAMENTE ENTRE TODAS LAS FILAS
+    // RENDERIZA LAS 3 TABLAS CON STATUS Y REPARTO EQUITATIVO DE BUDGET KPI
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
@@ -627,10 +631,7 @@
       const cpr = partners.filter(p => typeof p.cprMtd === 'number' && p.cprMtd > 0).sort((a,b) => b.cprMtd - a.cprMtd);
       const cpa = partners.filter(p => typeof p.cpaMtd === 'number' && p.cpaMtd > 0).sort((a,b) => b.cpaMtd - a.cpaMtd);
 
-      // Total de filas sumando las 3 tablas
       const totalRows = cpl.length + cpr.length + cpa.length;
-      
-      // Reparte el Budget KPI total ($5,500) en partes iguales entre TODAS las filas de las 3 tablas (máximo 1 de diferencia)
       const allBudgetKpis = distributeEqual(kBudget, totalRows);
 
       let kpiIdx = 0;
@@ -646,30 +647,75 @@
         const b = p.budget || 0, bRr = Math.round(b * rrF), r = p.rev || 0, roi = b > 0 ? `1:${(r/b).toFixed(1)}` : (r > 0 ? '1:∞' : '—');
         const bKpi = p._bKpi;
         const bKpiDisplay = `$${bKpi.toLocaleString()}`;
+        const statusBadge = getStatusBadge(p.status);
 
-        if (type === 'CPL') return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td><td class="text-center text-slate-500 font-bold">${p.cplKpi||'—'}</td><td class="text-center font-black">${p.cplMtd}</td><td class="text-center font-black ${getRrColor(p.cplRr, p.cplKpi)}">${p.cplRr}</td><td class="text-center font-bold">${p.sigMtd||0}</td><td class="text-center font-bold">${p.cpaMtd||0}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`;
-        if (type === 'CPR') return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td><td class="text-center text-slate-500 font-bold">${p.cprKpi||200}</td><td class="text-center font-black">${Number(p.cprMtd).toFixed(1)}</td><td class="text-center font-bold ${getRrColor(p.cprRr, p.cprKpi)}">${p.cprRr}</td><td class="text-center font-bold">${p.cpaMtd||0}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`;
-        if (type === 'CPA') { const s2p = p.sigMtd > 0 ? ((p.cpaMtd/p.sigMtd)*100).toFixed(1)+'%' : '0.0%'; return `<tr class="hover:bg-slate-50"><td class="p-2 font-bold">${p.name}</td><td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td><td class="text-center font-bold">$${b}</td><td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td><td class="text-center font-bold">${p.sigMtd||0}</td><td class="text-center text-slate-500 font-bold">${p.cpaKpi||25}</td><td class="text-center font-black">${p.cpaMtd}</td><td class="text-center font-bold ${getRrColor(p.cpaRr, p.cpaKpi)}">${p.cpaRr}</td><td class="text-center font-bold text-purple-700">${s2p}</td><td class="text-center font-bold">$${Number(r).toFixed(2)}</td><td class="text-center font-bold">${roi}</td></tr>`; }
+        if (type === 'CPL') return `<tr class="hover:bg-slate-50">
+          <td class="p-2 font-bold">${p.name}</td>
+          <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
+          <td class="text-center font-bold">$${b}</td>
+          <td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td>
+          <td class="text-center text-slate-500 font-bold">${p.cplKpi||'—'}</td>
+          <td class="text-center font-black">${p.cplMtd}</td>
+          <td class="text-center font-black ${getRrColor(p.cplRr, p.cplKpi)}">${p.cplRr}</td>
+          <td class="text-center font-bold">${p.sigMtd||0}</td>
+          <td class="text-center font-bold">${p.cpaMtd||0}</td>
+          <td class="text-center font-bold">$${Number(r).toFixed(2)}</td>
+          <td class="text-center font-bold">${roi}</td>
+          <td class="p-2 text-center whitespace-nowrap">${statusBadge}</td>
+        </tr>`;
+        
+        if (type === 'CPR') return `<tr class="hover:bg-slate-50">
+          <td class="p-2 font-bold">${p.name}</td>
+          <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
+          <td class="text-center font-bold">$${b}</td>
+          <td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td>
+          <td class="text-center text-slate-500 font-bold">${p.cprKpi||200}</td>
+          <td class="text-center font-black">${Number(p.cprMtd).toFixed(1)}</td>
+          <td class="text-center font-bold ${getRrColor(p.cprRr, p.cprKpi)}">${p.cprRr}</td>
+          <td class="text-center font-bold">${p.cpaMtd||0}</td>
+          <td class="text-center font-bold">$${Number(r).toFixed(2)}</td>
+          <td class="text-center font-bold">${roi}</td>
+          <td class="p-2 text-center whitespace-nowrap">${statusBadge}</td>
+        </tr>`;
+        
+        if (type === 'CPA') { 
+          const s2p = p.sigMtd > 0 ? ((p.cpaMtd/p.sigMtd)*100).toFixed(1)+'%' : '0.0%'; 
+          return `<tr class="hover:bg-slate-50">
+            <td class="p-2 font-bold">${p.name}</td>
+            <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
+            <td class="text-center font-bold">$${b}</td>
+            <td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td>
+            <td class="text-center font-bold">${p.sigMtd||0}</td>
+            <td class="text-center text-slate-500 font-bold">${p.cpaKpi||25}</td>
+            <td class="text-center font-black">${p.cpaMtd}</td>
+            <td class="text-center font-bold ${getRrColor(p.cpaRr, p.cpaKpi)}">${p.cpaRr}</td>
+            <td class="text-center font-bold text-purple-700">${s2p}</td>
+            <td class="text-center font-bold">$${Number(r).toFixed(2)}</td>
+            <td class="text-center font-bold">${roi}</td>
+            <td class="p-2 text-center whitespace-nowrap">${statusBadge}</td>
+          </tr>`; 
+        }
       }).join('');
 
       const renderFoot = (list, type, totBKpi) => {
         const b = list.reduce((a,p)=>a+(p.budget||0),0), bRr = Math.round(b * rrF), r = list.reduce((a,p)=>a+(p.rev||0),0), roi = b > 0 ? `1:${(r/b).toFixed(1)}` : '—';
         const bKpiTotDisplay = `$${totBKpi.toLocaleString()}`;
+        const countCell = `<td class="p-2 text-center whitespace-nowrap"><span class="text-[10px] font-black uppercase text-slate-500">${list.length} Media</span></td>`;
 
         if (type === 'CPL') { 
           const l = list.reduce((a,p)=>a+p.cplMtd,0), lRr = Math.round(l * rrF), s = list.reduce((a,p)=>a+(p.sigMtd||0),0), u = list.reduce((a,p)=>a+(p.cpaMtd||0),0); 
           const lKpi = totKpis.cpl?.kpi || 4000;
-          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td><td class="text-center text-slate-700 font-black">${lKpi.toLocaleString()}</td><td class="text-center font-black">${l}</td><td class="text-center font-black ${getRrColor(lRr, lKpi)}">${lRr}</td><td class="text-center font-black">${s}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
+          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td><td class="text-center text-slate-700 font-black">${lKpi.toLocaleString()}</td><td class="text-center font-black">${l}</td><td class="text-center font-black ${getRrColor(lRr, lKpi)}">${lRr}</td><td class="text-center font-black">${s}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td>${countCell}</tr>`; 
         }
         if (type === 'CPR') { 
           const c = Number(list.reduce((a,p)=>a+p.cprMtd,0).toFixed(1)), cRr = list.reduce((a,p)=>a+(p.cprRr||0),0), u = list.reduce((a,p)=>a+(p.cpaMtd||0),0); 
           const cKpi = totKpis.cpr?.kpi || 200;
-          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td><td class="text-center text-slate-700 font-black">${cKpi.toLocaleString()}</td><td class="text-center font-black">${c}</td><td class="text-center font-bold ${getRrColor(cRr, cKpi)}">${cRr}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
+          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td><td class="text-center text-slate-700 font-black">${cKpi.toLocaleString()}</td><td class="text-center font-black">${c}</td><td class="text-center font-bold ${getRrColor(cRr, cKpi)}">${cRr}</td><td class="text-center font-black">${u}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td>${countCell}</tr>`; 
         }
         if (type === 'CPA') { 
           const s = list.reduce((a,p)=>a+(p.sigMtd||0),0), u = list.reduce((a,p)=>a+p.cpaMtd,0), uRr = Math.round(u * rrF), s2p = s > 0 ? ((u/s)*100).toFixed(1)+'%' : '0.0%'; 
           const aKpi = totKpis.cpa?.kpi || 300;
-          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td><td class="text-center font-black">${s}</td><td class="text-center text-slate-700 font-black">${aKpi.toLocaleString()}</td><td class="text-center font-black">${u}</td><td class="text-center font-bold ${getRrColor(uRr, aKpi)}">${uRr}</td><td class="text-center font-black text-purple-700">${s2p}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td></tr>`; 
+          return `<tr><td class="p-2 font-black">Grand total</td><td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td><td class="text-center font-black">$${b}</td><td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td><td class="text-center font-black">${s}</td><td class="text-center text-slate-700 font-black">${aKpi.toLocaleString()}</td><td class="text-center font-black">${u}</td><td class="text-center font-bold ${getRrColor(uRr, aKpi)}">${uRr}</td><td class="text-center font-black text-purple-700">${s2p}</td><td class="text-center font-black">$${r.toFixed(2)}</td><td class="text-center font-black">${roi}</td>${countCell}</tr>`; 
         }
       };
 
@@ -677,17 +723,17 @@
         <!-- CPL -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-sky-900 bg-sky-100 px-3 py-1 rounded-md">CPL</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center"><th rowspan="2" class="p-2 text-left bg-slate-50">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-fuchsia-100">Leads</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th></tr><tr class="bg-slate-50 font-bold text-center"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpl, 'CPL') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpl, 'CPL', cplTotBKpi)}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center"><th rowspan="2" class="p-2 text-left bg-slate-50">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-fuchsia-100">Leads</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 bg-emerald-100/60 align-middle">STATUS</th></tr><tr class="bg-slate-50 font-bold text-center"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpl, 'CPL') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpl, 'CPL', cplTotBKpi)}</tfoot></table></div>
         </div>
         <!-- CPR -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-amber-900 bg-amber-100 px-3 py-1 rounded-md">CPR</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center"><th rowspan="2" class="p-2 text-left bg-slate-50">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th></tr><tr class="bg-slate-50 font-bold text-center"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="10" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpr, 'CPR', cprTotBKpi)}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center"><th rowspan="2" class="p-2 text-left bg-slate-50">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 bg-emerald-100/60 align-middle">STATUS</th></tr><tr class="bg-slate-50 font-bold text-center"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpr, 'CPR', cprTotBKpi)}</tfoot></table></div>
         </div>
         <!-- CPA -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-md">CPA</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center"><th rowspan="2" class="p-2 text-left bg-slate-50">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th></tr><tr class="bg-slate-50 font-bold text-center"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center"><th rowspan="2" class="p-2 text-left bg-slate-50">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 bg-emerald-100/60 align-middle">STATUS</th></tr><tr class="bg-slate-50 font-bold text-center"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
         </div>`;
     }
 
@@ -707,7 +753,7 @@
 
     function switchTab(tab) {
       const v1 = document.getElementById('section-v1'), v2 = document.getElementById('section-v2');
-      ['all','v1','v2'].forEach(t => document.getElementById(`tab-${t}`).className = (t === tab) ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white' : 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200');
+      ['all','v1','v2'].forEach(t => document.getElementById(`tab-${t}`).className = (t === tab) ? 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white' : 'px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200';
       v1.style.display = (tab === 'all' || tab === 'v1') ? 'block' : 'none';
       v2.style.display = (tab === 'all' || tab === 'v2') ? 'block' : 'none';
     }
