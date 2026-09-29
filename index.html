@@ -14,7 +14,6 @@
     .text-green-custom { color: #00b074 !important; }
     .text-red-custom { color: #e11d48 !important; }
     table.table-grid, table.table-grid th, table.table-grid td { border: 1px solid #cbd5e1 !important; border-collapse: collapse !important; }
-    table.table-grid tr.sort-row-borderless th { border: none !important; background: transparent !important; padding: 4px 0 8px; }
     ::-webkit-scrollbar { width: 5px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
@@ -63,7 +62,7 @@
       <div class="flex gap-2">
         <button onclick="switchTab('all')" id="tab-all" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-900 text-white">All Views</button>
         <button onclick="switchTab('v1')" id="tab-v1" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">View 1 (Summary)</button>
-        <button onclick="switchTab('v2')" id="tab-v2" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">View 2 (General Table)</button>
+        <button onclick="switchTab('v2')" id="tab-v2" class="px-3 py-1.5 text-xs font-bold rounded-lg bg-slate-100 text-slate-600 hover:bg-slate-200">View 2 (Campaign Tables)</button>
       </div>
     </div>
 
@@ -149,46 +148,8 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 2: MAIN GENERAL TABLE & 3 CAMPAIGN BREAKDOWNS -->
+    <!-- SECCIÓN 2: 3 TABLAS DE DESGLOSE (CPL, CPR, CPA) -->
     <div id="section-v2" class="space-y-6">
-      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 md:p-6 space-y-4">
-        <div class="flex items-center justify-between border-b pb-3">
-          <div id="tableCounter" class="text-xs font-extrabold text-slate-900">Showing active partners</div>
-          <button onclick="resetSort()" class="px-3 py-1.5 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-lg text-xs font-bold border"><i class="fa-solid fa-rotate-left mr-1"></i> Reset Table</button>
-        </div>
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-xs table-grid" id="mainPartnersTable">
-            <thead>
-              <tr class="sort-row-borderless select-none">
-                <th></th>
-                <th colspan="3" class="text-center"><button onclick="sortCol('cpl')" id="sort-btn-cpl" class="px-2 py-1 bg-white border rounded text-[10px] font-bold">Sort <i class="fa-solid fa-sort"></i></button></th>
-                <th colspan="3" class="text-center"><button onclick="sortCol('signups')" id="sort-btn-signups" class="px-2 py-1 bg-white border rounded text-[10px] font-bold">Sort <i class="fa-solid fa-sort"></i></button></th>
-                <th colspan="3" class="text-center"><button onclick="sortCol('cpr')" id="sort-btn-cpr" class="px-2 py-1 bg-white border rounded text-[10px] font-bold">Sort <i class="fa-solid fa-sort"></i></button></th>
-                <th colspan="3" class="text-center"><button onclick="sortCol('cpa')" id="sort-btn-cpa" class="px-2 py-1 bg-white border rounded text-[10px] font-bold">Sort <i class="fa-solid fa-sort"></i></button></th>
-                <th class="text-center"><button onclick="sortCol('revenue')" id="sort-btn-revenue" class="px-2 py-1 bg-white border rounded text-[10px] font-bold">Sort <i class="fa-solid fa-sort"></i></button></th>
-                <th class="text-center"><button onclick="sortCol('budget')" id="sort-btn-budget" class="px-2 py-1 bg-white border rounded text-[10px] font-bold">Sort <i class="fa-solid fa-sort"></i></button></th>
-                <th class="text-center"><button onclick="sortCol('profit')" id="sort-btn-profit" class="px-2 py-1 bg-white border rounded text-[10px] font-bold">Sort <i class="fa-solid fa-sort"></i></button></th>
-                <th></th>
-              </tr>
-              <tr class="bg-mint-header text-slate-800 font-extrabold text-center">
-                <th rowspan="2" class="p-2.5 text-left">MEDIA PARTNER</th><th colspan="3" class="p-2">CPL</th><th colspan="3" class="p-2">SIGNUPS</th>
-                <th colspan="3" class="p-2 bg-emerald-100/50">CPR</th><th colspan="3" class="p-2">CPA</th>
-                <th rowspan="2" class="p-2.5">REVENUE</th><th rowspan="2" class="p-2.5">BUDGET</th><th rowspan="2" class="p-2.5">PROFIT</th><th rowspan="2" class="p-2.5 bg-emerald-100/60">STATUS</th>
-              </tr>
-              <tr class="bg-mint-header text-slate-700 font-bold text-center">
-                <th class="p-1 w-14">KPI</th><th class="p-1 w-14">MTD</th><th class="p-1 w-14">RR</th>
-                <th class="p-1 w-14">KPI</th><th class="p-1 w-14">MTD</th><th class="p-1 w-14">RR</th>
-                <th class="p-1 w-14 bg-emerald-50">KPI</th><th class="p-1 w-14 bg-emerald-50">MTD</th><th class="p-1 w-14 bg-emerald-50">RR</th>
-                <th class="p-1 w-14">KPI</th><th class="p-1 w-14">MTD</th><th class="p-1 w-14">RR</th>
-              </tr>
-            </thead>
-            <tbody id="partnersTableBody" class="font-semibold text-slate-800"></tbody>
-            <tfoot id="partnersTableFoot"></tfoot>
-          </table>
-        </div>
-      </div>
-
-      <!-- 3 TABLAS DE DESGLOSE: CPL, CPR, CPA -->
       <div id="breakdown-tables-container" class="space-y-6"></div>
     </div>
 
@@ -215,7 +176,7 @@
     }
     
     let today = getSystemToday(), fromDate = new Date(2026, today.getMonth(), 1), toDate = new Date(today);
-    let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth(), activeSortKey = null, activeSortDir = 'desc';
+    let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
 
     function getRrColor(rrVal, kpiVal, isBudget = false) {
       if (kpiVal === '—' || kpiVal === undefined || kpiVal === null) return 'text-slate-500';
@@ -389,7 +350,6 @@
       renderLeadsDonut(partners, leads, rr.leads);
       updateCPRDonut(partners, data.totals.cpr?.mtd || 0, data.totals.cpr?.rr || 0, totKpis.cpr?.kpi || 200);
       renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, 30);
-      renderTable(partners, { cplMtd: leads, cplRr: rr.leads, sigMtd: sigs, sigRr: rr.sigs, cprMtd: data.totals.cpr?.mtd||0, cprRr: data.totals.cpr?.rr||0, cpaMtd: users, cpaRr: rr.users, rev, budget, profit, totKpis, teamKpis });
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
       renderInactive(data.inactive_partners);
     }
@@ -485,7 +445,6 @@
       renderLeadsDonut(partners, leads, rr.leads);
       updateCPRDonut(partners, cprMtd, cprRr, totKpis.cpr.kpi);
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
-      renderTable(partners, { cplMtd: leads, cplRr: rr.leads, sigMtd: sigs, sigRr: rr.sigs, cprMtd, cprRr, cpaMtd: users, cpaRr: rr.users, rev, budget, profit, totKpis, teamKpis });
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
       renderInactive(DATA_CACHE.september?.inactive_partners || []);
     }
@@ -659,41 +618,6 @@
       });
     }
 
-    function renderTable(partners, totals) {
-      const tbody = document.getElementById('partnersTableBody'), tfoot = document.getElementById('partnersTableFoot');
-      tbody.innerHTML = partners.map(p => {
-        const badge = p.status === 'working-well' ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800">Working Well</span>` :
-                      p.status === 'not-working' ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-red-100 text-red-800">Not Working Well</span>` :
-                      p.status === 'potential' ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-black bg-amber-100 text-amber-800">Potential</span>` :
-                      `<span class="px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600">Neutral</span>`;
-        return `<tr class="hover:bg-slate-50 partner-row" data-name="${p.name}" data-cpl="${p.cplMtd||0}" data-signups="${p.sigMtd||0}" data-cpr="${p.cprMtd||0}" data-cpa="${p.cpaMtd||0}" data-revenue="${p.rev||0}" data-budget="${p.budget||0}" data-profit="${p.profit||0}">
-          <td class="p-2.5 font-extrabold">${p.name}</td>
-          <td class="p-2.5 text-center text-slate-400 italic">${p.cplKpi}</td><td class="p-2.5 text-center font-extrabold">${p.cplMtd}</td><td class="p-2.5 text-center ${getRrColor(p.cplRr, p.cplKpi)} font-extrabold">${p.cplRr}</td>
-          <td class="p-2.5 text-center text-slate-400 italic">${p.sigKpi}</td><td class="p-2.5 text-center font-extrabold">${p.sigMtd}</td><td class="p-2.5 text-center ${getRrColor(p.sigRr, p.sigKpi)} font-extrabold">${p.sigRr}</td>
-          <td class="p-2.5 text-center text-slate-400 italic">${p.cprMtd>0 ? p.cprKpi : '—'}</td><td class="p-2.5 text-center font-extrabold">${p.cprMtd>0 ? Number(p.cprMtd).toFixed(1) : '—'}</td><td class="p-2.5 text-center ${getRrColor(p.cprRr, p.cprKpi)} font-extrabold">${p.cprRr>0 ? p.cprRr : '—'}</td>
-          <td class="p-2.5 text-center text-slate-400 italic">${p.cpaKpi}</td><td class="p-2.5 text-center font-extrabold">${p.cpaMtd}</td><td class="p-2.5 text-center ${getRrColor(p.cpaRr, p.cpaKpi)} font-extrabold">${p.cpaRr}</td>
-          <td class="p-2.5 text-center font-extrabold">$${p.rev||0}</td><td class="p-2.5 text-center font-extrabold">$${p.budget||0}</td><td class="p-2.5 text-center font-extrabold ${p.profit>0?'text-green-custom':p.profit<0?'text-red-custom':''}">$${p.profit||0}</td>
-          <td class="p-2 text-center whitespace-nowrap">${badge}</td>
-        </tr>`;
-      }).join('');
-
-      const cplKpiTot = totals.totKpis?.cpl?.kpi || 4000;
-      const sigKpiTot = totals.totKpis?.signups?.kpi || 1000;
-      const cprKpiTot = totals.totKpis?.cpr?.kpi || 200;
-      const cpaKpiTot = totals.totKpis?.cpa?.kpi || 300;
-
-      tfoot.innerHTML = `<tr class="bg-slate-50 font-black border-t-2 border-slate-300">
-        <td class="p-2.5 font-extrabold">Grand total</td>
-        <td class="p-2.5 text-center text-slate-400 italic">${cplKpiTot.toLocaleString()}</td><td class="p-2.5 text-center font-black">${totals.cplMtd}</td><td class="p-2.5 text-center ${getRrColor(totals.cplRr, cplKpiTot)} font-black">${totals.cplRr}</td>
-        <td class="p-2.5 text-center text-slate-400 italic">${sigKpiTot.toLocaleString()}</td><td class="p-2.5 text-center font-black">${totals.sigMtd}</td><td class="p-2.5 text-center ${getRrColor(totals.sigRr, sigKpiTot)} font-black">${totals.sigRr}</td>
-        <td class="p-2.5 text-center text-slate-400 italic">${cprKpiTot.toLocaleString()}</td><td class="p-2.5 text-center font-black">${totals.cprMtd>0?Number(totals.cprMtd).toFixed(1):'0.0'}</td><td class="p-2.5 text-center ${getRrColor(totals.cprRr, cprKpiTot)} font-bold">${totals.cprRr>0?totals.cprRr:'0.0'}</td>
-        <td class="p-2.5 text-center text-slate-400 italic">${cpaKpiTot.toLocaleString()}</td><td class="p-2.5 text-center font-black">${totals.cpaMtd}</td><td class="p-2.5 text-center ${getRrColor(totals.cpaRr, cpaKpiTot)} font-black">${totals.cpaRr}</td>
-        <td class="p-2.5 text-center font-black">$${Math.round(totals.rev)}</td><td class="p-2.5 text-center font-black">$${Math.round(totals.budget)}</td><td class="p-2.5 text-center text-green-custom font-black">$${Math.round(totals.profit)}</td>
-        <td class="p-2 text-center text-slate-500 font-black">${partners.length} Media</td>
-      </tr>`;
-      document.getElementById('tableCounter').textContent = `Showing ${partners.length} active partners`;
-    }
-
     // RENDERIZA LAS 3 TABLAS PEQUEÑAS DISTRIBUYENDO EL BUDGET KPI TOTAL EQUITATIVAMENTE ENTRE TODAS LAS FILAS
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
@@ -778,24 +702,8 @@
         document.getElementById(`tp-rr-${k}`).textContent = k === 'budget'||k==='revenue'||k==='profit' ? '$0' : '0';
       });
       document.getElementById('tp-rr-roi').textContent = '—';
-      document.getElementById('partnersTableBody').innerHTML = `<tr><td colspan="17" class="p-8 text-center text-slate-400 font-bold italic">No data recorded between ${fmtMDY(sDate)} and ${fmtMDY(eDate)}</td></tr>`;
       document.getElementById('breakdown-tables-container').innerHTML = '';
-      document.getElementById('tableCounter').textContent = 'Showing 0 active partners';
     }
-
-    function sortCol(k) {
-      if (activeSortKey === k) activeSortDir = activeSortDir === 'desc' ? 'asc' : 'desc';
-      else { activeSortKey = k; activeSortDir = 'desc'; }
-      const tbody = document.getElementById('partnersTableBody');
-      const rows = Array.from(tbody.querySelectorAll('tr.partner-row'));
-      rows.sort((a,b) => {
-        const vA = parseFloat(a.dataset[activeSortKey]) || 0, vB = parseFloat(b.dataset[activeSortKey]) || 0;
-        return activeSortDir === 'desc' ? vB - vA : vA - vB;
-      });
-      rows.forEach(r => tbody.appendChild(r));
-    }
-
-    function resetSort() { activeSortKey = null; dispatchRange(fromDate, toDate); }
 
     function switchTab(tab) {
       const v1 = document.getElementById('section-v1'), v2 = document.getElementById('section-v2');
