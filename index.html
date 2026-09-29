@@ -128,7 +128,7 @@
 
   </div>
 
-  <!-- JAVASCRIPT ULTRA-OPTIMIZADO -->
+  <!-- JAVASCRIPT CORREGIDO Y SEGURO -->
   <script>
     const DATA_CACHE = { july: null, august: null, september: null };
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -141,7 +141,6 @@
     let today = getSystemToday(), fromDate = new Date(2026, today.getMonth(), 1), toDate = new Date(today);
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
 
-    // COLOR DINÁMICO: VERDE SI RR >= KPI, ROJO SI RR < KPI
     function getRrColor(rrVal, kpiVal, isBudget = false) {
       if (kpiVal === '—' || kpiVal === undefined || kpiVal === null) return 'text-slate-500';
       const r = parseFloat(String(rrVal).replace(/[^0-9.-]/g, ''));
@@ -152,7 +151,6 @@
       return r >= k ? 'text-green-custom' : 'text-red-custom';
     }
 
-    // BADGE DE ESTADO CON ESTILOS
     function getStatusBadge(status) {
       if (status === 'working-well') return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Working Well</span>`;
       if (status === 'not-working') return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-red-100 text-red-800"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span> Not Working Well</span>`;
@@ -160,7 +158,6 @@
       return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Neutral</span>`;
     }
 
-    // ALGORITMO DE PARTICIÓN ENTERA CON DIFERENCIA MÁXIMA DE 1
     function distributeEqual(total, count) {
       if (!count || count <= 0 || !total || total <= 0) return [];
       const base = Math.floor(total / count);
@@ -258,7 +255,9 @@
       if (!data) return renderZeroState(sDate, eDate);
       document.getElementById('tp-header-period').textContent = `MTD - ${prefix.toUpperCase()} 2026`;
       const sYMD = fmtYMD(sDate), eYMD = fmtYMD(eDate);
-      const isFull = (sYMD === data.date_range?.start && eYMD === data.date_range?.end);
+      
+      // Reconoce corte completo aunque sea el día 29 o 30
+      const isFull = (sYMD === data.date_range?.start && (eYMD === data.date_range?.end || (eYMD >= data.date_range?.end && eYMD <= '2026-09-30')));
       
       const dailyMap = {}; (data.daily_series || []).forEach(r => { if (r.date) dailyMap[r.date] = r; });
       const slice = []; let cur = new Date(sDate);
@@ -402,7 +401,6 @@
       renderInactive(DATA_CACHE.september?.inactive_partners || []);
     }
 
-    // APLICA REPARTO EQUITATIVO DE KPIS PARA LAS MÉTRICAS
     function applyEqualKpis(partners, totKpis) {
       const kLeads = totKpis.cpl?.kpi || 4000;
       const kSigs = totKpis.signups?.kpi || 1000;
@@ -505,6 +503,31 @@
       });
     }
 
+    function renderLineChart(slice, prefix, kpis = { cpl: 4000, sigs: 1000, users: 300 }, totalDays = 30) {
+      const canvas = document.getElementById('mainLineChart'); if (!canvas) return;
+      Chart.getChart(canvas)?.destroy();
+      const labels = slice.map(r => r.label || `${prefix} ${parseInt(r.date.split('-')[2])}`);
+      const dailyLeadsKpi = (kpis.cpl / totalDays).toFixed(1);
+      const dailySigsKpi = (kpis.sigs / totalDays).toFixed(1);
+      const dailyUsersKpi = (kpis.users / totalDays).toFixed(1);
+
+      new Chart(canvas.getContext('2d'), {
+        type: 'line',
+        data: {
+          labels,
+          datasets: [
+            { label: 'LEADS', data: slice.map(r => r.leads), borderColor: '#00d285', backgroundColor: '#00d285', fill: false, borderWidth: 2.5, pointRadius: 2.5, tension: 0.2 },
+            { label: 'SIGNUPS', data: slice.map(r => r.signups), borderColor: '#2563eb', backgroundColor: '#2563eb', fill: false, borderWidth: 2.5, pointRadius: 2.5, tension: 0.2 },
+            { label: 'USERS', data: slice.map(r => r.users), borderColor: '#a855f7', backgroundColor: '#a855f7', fill: false, borderWidth: 2.5, pointRadius: 2.5, tension: 0.2 },
+            { label: `KPI LEADS (${dailyLeadsKpi}/d)`, data: Array(slice.length).fill(dailyLeadsKpi), borderColor: '#00d285', borderDash: [6, 4], pointRadius: 0, fill: false },
+            { label: `KPI SIGNUPS (${dailySigsKpi}/d)`, data: Array(slice.length).fill(dailySigsKpi), borderColor: '#2563eb', borderDash: [6, 4], pointRadius: 0, fill: false },
+            { label: `KPI USERS (${dailyUsersKpi}/d)`, data: Array(slice.length).fill(dailyUsersKpi), borderColor: '#a855f7', borderDash: [6, 4], pointRadius: 0, fill: false }
+          ]
+        },
+        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: { weight: 'bold', size: 11 } } } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
+      });
+    }
+
     // RENDERIZA LAS 3 TABLAS PEQUEÑAS CON REPARTO EQUITATIVO DE BUDGET KPI Y COLUMNA STATUS A LA DERECHA
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
@@ -572,7 +595,7 @@
             <td class="text-center text-slate-500 font-bold">${p.cpaKpi||25}</td>
             <td class="text-center font-black">${p.cpaMtd}</td>
             <td class="text-center font-bold ${getRrColor(p.cpaRr, p.cpaKpi)}">${p.cpaRr}</td>
-            <td class="text-center font-bold text-purple-700">${s2p}</td>
+            <td class="text-center font-black text-purple-700">${s2p}</td>
             <td class="text-center font-bold">$${Number(r).toFixed(2)}</td>
             <td class="text-center font-bold">${roi}</td>
             <td class="p-2 text-center whitespace-nowrap">${badge}</td>
