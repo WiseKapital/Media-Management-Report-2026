@@ -128,7 +128,7 @@
 
   </div>
 
-  <!-- JAVASCRIPT ULTRA-OPTIMIZADO Y PROTEGIDO -->
+  <!-- JAVASCRIPT ULTRA-OPTIMIZADO -->
   <script>
     const DATA_CACHE = { july: null, august: null, september: null };
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
@@ -280,7 +280,6 @@
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
       const sigs = isFull ? data.totals.signups.mtd : slice.reduce((a,r) => a + r.signups, 0);
       
-      // CPR se suma día por día desde la serie diaria
       const cprVal = isFull ? (data.totals.cpr?.mtd || 0) : slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
       
       const users = isFull ? data.totals.cpa.mtd : slice.reduce((a,r) => a + r.users, 0);
@@ -556,6 +555,7 @@
       });
     }
 
+    // RENDERIZA LAS 3 TABLAS PEQUEÑAS
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
@@ -612,7 +612,8 @@
         </tr>`;
 
         if (type === 'CPA') { 
-          const s2p = p.sigMtd > 0 ? ((p.cpaMtd/p.sigMtd)*100).toFixed(1)+'%' : '0.0%'; 
+          // S2P muestra el ROI expresado en porcentaje
+          const s2p = b > 0 ? (Number(((r / b) * 100).toFixed(1)).toLocaleString() + '%') : (r > 0 ? '∞' : '—');
           return `<tr class="hover:bg-slate-50">
             <td class="p-2 font-bold">${p.name}</td>
             <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
@@ -632,7 +633,7 @@
 
       const renderFoot = (list, type, totBKpi) => {
         const b = list.reduce((a,p)=>a+(p.budget||0),0), bRr = Math.round(b * rrF), r = list.reduce((a,p)=>a+(p.rev||0),0), roi = b > 0 ? `1:${(r/b).toFixed(1)}` : '—';
-        const bKpiTotDisplay = `$${totBKpi.toLocaleString()}`;
+        const bKpiTotDisplay = totBKpi > 0 ? `$${totBKpi.toLocaleString()}` : '$0';
 
         const s = list.reduce((a,p) => a + (typeof p.sigMtd === 'number' ? p.sigMtd : 0), 0);
         const u = list.reduce((a,p) => a + (typeof p.cpaMtd === 'number' ? p.cpaMtd : 0), 0);
@@ -673,7 +674,9 @@
           </tr>`; 
         }
         if (type === 'CPA') { 
-          const uRr = Math.round(u * rrF), s2p = s > 0 ? ((u/s)*100).toFixed(1)+'%' : '0.0%'; 
+          const uRr = Math.round(u * rrF);
+          // Grand total S2P muestra el ROI total en porcentaje
+          const s2p = b > 0 ? (Number(((r / b) * 100).toFixed(1)).toLocaleString() + '%') : '—';
           const aKpi = totKpis.cpa?.kpi || 300;
           return `<tr>
             <td class="p-2 font-black">Grand total</td>
@@ -736,7 +739,7 @@
       if (!e.target.closest('#toPop') && !e.target.closest('#toBtn')) document.getElementById('toPop').classList.add('hidden');
     });
 
-    // EJECUCIÓN INMEDIATA SEGURA (evita quedarse colgado por el evento DOMContentLoaded)
+    // EJECUCIÓN INMEDIATA SEGURA
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', loadAllJSONs);
     } else {
