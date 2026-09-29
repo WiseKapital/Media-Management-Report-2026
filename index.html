@@ -104,43 +104,6 @@
       <!-- 5 METRIC CARDS & PROGRESS BARS -->
       <div id="metrics-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3 items-start"></div>
 
-      <!-- DOUGHNUTS: LEADS & CPR -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <!-- LEADS -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-          <div class="flex items-center justify-between border-b pb-3 mb-4">
-            <div><span class="text-xs font-black uppercase text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md">LEADS (CPL)</span><h4 class="text-sm font-extrabold text-slate-900 mt-1">Lead Share by Partner</h4></div>
-            <div class="flex gap-1.5 text-xs font-bold text-slate-700">
-              <span class="bg-slate-100 px-2 py-0.5 rounded">TOTAL <b id="leads-badge-mtd">0</b></span>
-              <span class="bg-slate-100 px-2 py-0.5 rounded">KPI <b id="leads-badge-kpi">4,000</b></span>
-              <span class="bg-slate-100 px-2 py-0.5 rounded">RR <b id="leads-badge-rr">0</b></span>
-            </div>
-          </div>
-          <div class="relative w-full h-64 flex items-center justify-center">
-            <canvas id="leadsDonutChart"></canvas>
-            <div class="absolute flex flex-col items-center pointer-events-none"><span id="leads-donut-total" class="text-2xl font-black text-slate-900">0</span><span class="text-[11px] font-extrabold uppercase text-slate-400">Total Leads</span></div>
-          </div>
-          <div id="leads-legend-container" class="grid grid-cols-2 sm:grid-cols-5 gap-2 pt-4 border-t mt-3 text-xs"></div>
-        </div>
-        <!-- CPR -->
-        <div class="bg-white p-5 rounded-2xl shadow-sm border border-slate-200 flex flex-col justify-between">
-          <div class="flex items-center justify-between border-b pb-3 mb-4">
-            <div><span class="text-xs font-black uppercase text-amber-800 bg-amber-50 px-2.5 py-1 rounded-md">CPR</span><h4 class="text-sm font-extrabold text-slate-900 mt-1">CPR Performance</h4></div>
-            <div class="flex gap-1.5 text-xs font-bold text-slate-700">
-              <span class="bg-slate-100 px-2 py-0.5 rounded">TOTAL <b id="cpr-badge-mtd">0.0</b></span>
-              <span class="bg-slate-100 px-2 py-0.5 rounded">KPI <b id="cpr-badge-kpi">200</b></span>
-              <span class="bg-slate-100 px-2 py-0.5 rounded">RR <b id="cpr-badge-rr">0.0</b></span>
-            </div>
-          </div>
-          <div class="relative w-full h-64 flex items-center justify-center">
-            <canvas id="cprDonutChart"></canvas>
-            <div class="absolute flex flex-col items-center pointer-events-none text-center"><span id="cpr-center-val" class="text-3xl font-black text-slate-900">0.0</span><span id="cpr-center-sub" class="text-xs font-black uppercase text-amber-600 mt-0.5"></span></div>
-          </div>
-          <div id="cpr-legend-container" class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-4 border-t mt-3 text-xs"></div>
-          <div class="pt-3"><div class="flex items-center justify-center gap-2 p-3 bg-slate-50 border rounded-xl text-xs font-bold text-slate-500"><i class="fa-solid fa-circle-info text-amber-500"></i><span id="cpr-info-text"></span></div></div>
-        </div>
-      </div>
-
       <!-- MAIN LINE CHART -->
       <div class="bg-white p-4 md:p-5 rounded-2xl shadow-sm border border-slate-200">
         <h3 id="lineChartTitle" class="text-base font-extrabold text-slate-900 mb-3"></h3>
@@ -326,12 +289,6 @@
 
       renderKPIs({ budget, sigs, users, rev, profit, rr, roi: isFull ? data.totals.roi : null, teamKpis });
 
-      document.getElementById('leads-badge-kpi').textContent = (totKpis.cpl?.kpi || 4000).toLocaleString();
-      document.getElementById('leads-badge-rr').className = getRrColor(rr.leads, totKpis.cpl?.kpi || 4000) + ' font-black';
-
-      document.getElementById('cpr-badge-kpi').textContent = (totKpis.cpr?.kpi || 200).toLocaleString();
-      document.getElementById('cpr-badge-rr').className = getRrColor(data.totals.cpr?.rr || 0, totKpis.cpr?.kpi || 200) + ' font-black';
-
       const lRatio = leads / (data.totals.cpl.mtd || 1), sRatio = sigs / (data.totals.signups.mtd || 1);
       const uRatio = users / (data.totals.cpa.mtd || 1), bRatio = budget / (data.totals.budget || 1), rRatio = rev / (data.totals.revenue || 1);
 
@@ -356,8 +313,6 @@
       applyEqualKpis(partners, totKpis);
 
       renderTopCards(partners, teamKpis);
-      renderLeadsDonut(partners, leads, rr.leads);
-      updateCPRDonut(partners, data.totals.cpr?.mtd || 0, data.totals.cpr?.rr || 0, totKpis.cpr?.kpi || 200);
       renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, 30);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
       renderInactive(data.inactive_partners);
@@ -416,11 +371,6 @@
 
       renderKPIs({ budget, sigs, users, rev, profit, rr, teamKpis });
 
-      document.getElementById('leads-badge-kpi').textContent = totKpis.cpl.kpi.toLocaleString();
-      document.getElementById('leads-badge-rr').className = getRrColor(rr.leads, totKpis.cpl.kpi) + ' font-black';
-
-      document.getElementById('cpr-badge-kpi').textContent = totKpis.cpr.kpi.toLocaleString();
-
       const pMap = {};
       covered.forEach(m => (m.partners || []).forEach(p => {
         if (!pMap[p.name]) pMap[p.name] = { name: p.name, cplMtd: 0, sigMtd: 0, cprMtd: 0, cpaMtd: 0, rev: 0, budget: 0 };
@@ -444,15 +394,9 @@
         };
       });
 
-      let cprMtd = 0; covered.forEach(m => cprMtd += (m.totals?.cpr?.mtd || 0));
-      const cprRr = Number((cprMtd * rrFactor).toFixed(1));
-      document.getElementById('cpr-badge-rr').className = getRrColor(cprRr, totKpis.cpr.kpi) + ' font-black';
-
       applyEqualKpis(partners, totKpis);
 
       renderTopCards(partners, teamKpis);
-      renderLeadsDonut(partners, leads, rr.leads);
-      updateCPRDonut(partners, cprMtd, cprRr, totKpis.cpr.kpi);
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
       renderInactive(DATA_CACHE.september?.inactive_partners || []);
@@ -558,73 +502,6 @@
             </div>
           </div>`;
         grid.appendChild(col);
-      });
-    }
-
-    function renderLeadsDonut(partners, totalMtd, totalRr) {
-      const items = partners.filter(p => typeof p.cplMtd === 'number' && p.cplMtd > 0).map((p, idx) => ({ name: p.name, val: p.cplMtd, color: ['#00d285','#2563eb','#a855f7','#06b6d4','#f59e0b','#ec4899','#6366f1'][idx%7] })).sort((a,b) => b.val - a.val);
-      document.getElementById('leads-donut-total').textContent = totalMtd.toLocaleString();
-      document.getElementById('leads-badge-mtd').textContent = totalMtd.toLocaleString();
-      const canvas = document.getElementById('leadsDonutChart'); if (!canvas) return;
-      Chart.getChart(canvas)?.destroy();
-      new Chart(canvas.getContext('2d'), {
-        type: 'doughnut',
-        data: { labels: items.map(p => p.name), datasets: [{ data: items.map(p => p.val), backgroundColor: items.map(p => p.color), borderWidth: 3, borderColor: '#fff' }] },
-        options: { responsive: true, maintainAspectRatio: false, cutout: '72%', plugins: { legend: { display: false } } }
-      });
-      document.getElementById('leads-legend-container').innerHTML = items.map(p => `<div class="flex items-center gap-2 p-2 bg-slate-50 rounded-lg"><span class="w-3 h-3 rounded-full shrink-0" style="background:${p.color}"></span><div><p class="font-black">${p.name}: ${p.val.toLocaleString()}</p><p class="text-[10px] text-slate-400 font-bold">${totalMtd > 0 ? ((p.val / totalMtd) * 100).toFixed(1) : 0}%</p></div></div>`).join('');
-    }
-
-    function updateCPRDonut(partners, mtd, rr, kpi = 200) {
-      document.getElementById('cpr-badge-mtd').textContent = mtd > 0 ? Number(mtd).toFixed(1) : '0.0';
-      document.getElementById('cpr-badge-rr').textContent = rr > 0 ? rr : '0.0';
-      document.getElementById('cpr-badge-rr').className = getRrColor(rr, kpi) + ' font-black';
-
-      const active = (partners || []).filter(p => typeof p.cprMtd === 'number' && p.cprMtd > 0).map((p, idx) => ({ name: p.name, val: p.cprMtd, rr: p.cprRr || 0, color: ['#f59e0b','#00d285','#2563eb','#a855f7'][idx%4] }));
-      const canvas = document.getElementById('cprDonutChart');
-      if (canvas) {
-        Chart.getChart(canvas)?.destroy();
-        new Chart(canvas.getContext('2d'), {
-          type: 'doughnut',
-          data: { labels: active.length ? active.map(p => p.name) : ['No Data'], datasets: [{ data: active.length ? active.map(p => p.val) : [1], backgroundColor: active.length ? active.map(p => p.color) : ['#e2e8f0'], borderWidth: active.length ? 3 : 0, borderColor: '#fff' }] },
-          options: { responsive: true, maintainAspectRatio: false, cutout: '72%', plugins: { legend: { display: false } } }
-        });
-      }
-      const cVal = document.getElementById('cpr-center-val'), cSub = document.getElementById('cpr-center-sub'), iTxt = document.getElementById('cpr-info-text'), leg = document.getElementById('cpr-legend-container');
-      if (active.length) {
-        cVal.textContent = Number(mtd).toFixed(1); cVal.className = "text-3xl font-black text-slate-900";
-        cSub.textContent = active.map(p => p.name).join(' / ');
-        leg.innerHTML = active.map(p => `<div class="flex items-center gap-2 p-2 bg-amber-50/70 border border-amber-200/60 rounded-lg"><span class="w-3 h-3 rounded-full shrink-0" style="background:${p.color}"></span><div><p class="font-black text-slate-900">${p.name}: ${Number(p.val).toFixed(1)}</p><p class="text-[10px] text-slate-500 font-bold">${mtd > 0 ? ((p.val / mtd) * 100).toFixed(0) : 100}% • RR: <span class="${getRrColor(p.rr, p.cprKpi)} font-bold">${p.rr}</span></p></div></div>`).join('');
-        iTxt.innerHTML = `Active Partner(s): <b class="text-slate-800">${active.map(p => `${p.name} (${Number(p.val).toFixed(1)}, RR: ${p.rr})`).join(', ')}</b>`;
-      } else {
-        cVal.textContent = '0.0'; cVal.className = "text-3xl font-black text-slate-300"; cSub.textContent = 'No Data Yet';
-        leg.innerHTML = `<div class="col-span-full py-1 text-center text-xs text-slate-400 font-bold italic">No active partner CPR recorded</div>`;
-        iTxt.textContent = 'No partner data recorded yet for CPR';
-      }
-    }
-
-    function renderLineChart(slice, prefix, kpis = { cpl: 4000, sigs: 1000, users: 300 }, totalDays = 30) {
-      const canvas = document.getElementById('mainLineChart'); if (!canvas) return;
-      Chart.getChart(canvas)?.destroy();
-      const labels = slice.map(r => r.label || `${prefix} ${parseInt(r.date.split('-')[2])}`);
-      const dailyLeadsKpi = (kpis.cpl / totalDays).toFixed(1);
-      const dailySigsKpi = (kpis.sigs / totalDays).toFixed(1);
-      const dailyUsersKpi = (kpis.users / totalDays).toFixed(1);
-
-      new Chart(canvas.getContext('2d'), {
-        type: 'line',
-        data: {
-          labels,
-          datasets: [
-            { label: 'LEADS', data: slice.map(r => r.leads), borderColor: '#00d285', backgroundColor: '#00d285', fill: false, borderWidth: 2.5, pointRadius: 2.5, tension: 0.2 },
-            { label: 'SIGNUPS', data: slice.map(r => r.signups), borderColor: '#2563eb', backgroundColor: '#2563eb', fill: false, borderWidth: 2.5, pointRadius: 2.5, tension: 0.2 },
-            { label: 'USERS', data: slice.map(r => r.users), borderColor: '#a855f7', backgroundColor: '#a855f7', fill: false, borderWidth: 2.5, pointRadius: 2.5, tension: 0.2 },
-            { label: `KPI LEADS (${dailyLeadsKpi}/d)`, data: Array(slice.length).fill(dailyLeadsKpi), borderColor: '#00d285', borderDash: [6, 4], pointRadius: 0, fill: false },
-            { label: `KPI SIGNUPS (${dailySigsKpi}/d)`, data: Array(slice.length).fill(dailySigsKpi), borderColor: '#2563eb', borderDash: [6, 4], pointRadius: 0, fill: false },
-            { label: `KPI USERS (${dailyUsersKpi}/d)`, data: Array(slice.length).fill(dailyUsersKpi), borderColor: '#a855f7', borderDash: [6, 4], pointRadius: 0, fill: false }
-          ]
-        },
-        options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: { weight: 'bold', size: 11 } } } }, scales: { y: { beginAtZero: true, grid: { color: '#f1f5f9' } }, x: { grid: { display: false } } } }
       });
     }
 
