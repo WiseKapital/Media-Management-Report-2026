@@ -141,7 +141,6 @@
     let today = getSystemToday(), fromDate = new Date(2026, today.getMonth(), 1), toDate = new Date(today);
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
 
-    // COLOR DINÁMICO: VERDE SI RR >= KPI, ROJO SI RR < KPI
     function getRrColor(rrVal, kpiVal, isBudget = false) {
       if (kpiVal === '—' || kpiVal === undefined || kpiVal === null) return 'text-slate-500';
       const r = parseFloat(String(rrVal).replace(/[^0-9.-]/g, ''));
@@ -152,7 +151,6 @@
       return r >= k ? 'text-green-custom' : 'text-red-custom';
     }
 
-    // BADGE DE ESTADO CON ESTILOS
     function getStatusBadge(status) {
       if (status === 'working-well') return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-emerald-100 text-emerald-800"><span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> Working Well</span>`;
       if (status === 'not-working') return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-black bg-red-100 text-red-800"><span class="w-1.5 h-1.5 rounded-full bg-red-600"></span> Not Working Well</span>`;
@@ -160,7 +158,6 @@
       return `<span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold bg-slate-100 text-slate-600"><span class="w-1.5 h-1.5 rounded-full bg-slate-400"></span> Neutral</span>`;
     }
 
-    // ALGORITMO DE PARTICIÓN ENTERA CON DIFERENCIA MÁXIMA DE 1
     function distributeEqual(total, count) {
       if (!count || count <= 0 || !total || total <= 0) return [];
       const base = Math.floor(total / count);
@@ -402,7 +399,6 @@
       renderInactive(DATA_CACHE.september?.inactive_partners || []);
     }
 
-    // APLICA REPARTO EQUITATIVO DE KPIS PARA LAS MÉTRICAS
     function applyEqualKpis(partners, totKpis) {
       const kLeads = totKpis.cpl?.kpi || 4000;
       const kSigs = totKpis.signups?.kpi || 1000;
@@ -505,7 +501,7 @@
       });
     }
 
-    // RENDERIZA LAS 3 TABLAS PEQUEÑAS CON REPARTO EQUITATIVO DE BUDGET KPI Y COLUMNA STATUS A LA DERECHA
+    // RENDERIZA LAS 3 TABLAS PEQUEÑAS
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
