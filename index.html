@@ -268,7 +268,10 @@
       const daysCount = Math.max(slice.length, 1), rrFactor = 30 / daysCount;
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
       const sigs = isFull ? data.totals.signups.mtd : slice.reduce((a,r) => a + r.signups, 0);
-      const cprVal = isFull ? (data.totals.cpr?.mtd || 0) : slice.reduce((a,r) => a + (r.cpr || 0), 0);
+      
+      // CPR suma directamente desde la serie diaria (en días sin datos da 0)
+      const cprVal = isFull ? (data.totals.cpr?.mtd || 0) : slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
+      
       const users = isFull ? data.totals.cpa.mtd : slice.reduce((a,r) => a + r.users, 0);
       const budget = isFull ? data.totals.budget : slice.reduce((a,r) => a + r.budget, 0);
       const rev = isFull ? data.totals.revenue : Number(slice.reduce((a,r) => a + r.rev, 0).toFixed(2));
@@ -290,7 +293,8 @@
       renderKPIs({ budget, sigs, users, rev, profit, rr, roi: isFull ? data.totals.roi : null, teamKpis });
 
       const lRatio = leads / (data.totals.cpl.mtd || 1), sRatio = sigs / (data.totals.signups.mtd || 1);
-      const cRatio = (data.totals.cpr?.mtd > 0) ? (cprVal / data.totals.cpr.mtd) : 0;
+      const totMonthlyCpr = data.totals.cpr?.mtd || 0;
+      const cRatio = totMonthlyCpr > 0 ? (cprVal / totMonthlyCpr) : 0;
       const uRatio = users / (data.totals.cpa.mtd || 1), bRatio = budget / (data.totals.budget || 1), rRatio = rev / (data.totals.revenue || 1);
 
       let partners = (data.partners || []).map(p => {
@@ -301,7 +305,7 @@
         const pR = isFull ? p.rev : Number(((p.rev || 0) * rRatio).toFixed(2));
         const pP = Number((pR - pB).toFixed(2));
         
-        // CPR escala estrictamente con los datos de cprVal calculados de la serie diaria
+        // CPR escala de forma segura con los días seleccionados
         const pCpr = isFull ? (p.cprMtd || 0) : (typeof p.cprMtd === 'number' && p.cprMtd > 0 && cprVal > 0 ? Number((p.cprMtd * cRatio).toFixed(1)) : 0);
         const pCprRr = isFull ? (p.cprRr || 0) : (pCpr > 0 ? Number((pCpr * rrFactor).toFixed(2)) : 0);
 
@@ -348,7 +352,7 @@
       const rrFactor = totalTargetDays / daysCount;
 
       const leads = slice.reduce((a,r) => a + r.leads, 0), sigs = slice.reduce((a,r) => a + r.signups, 0);
-      const cprVal = slice.reduce((a,r) => a + (r.cpr || 0), 0);
+      const cprVal = slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
       const users = slice.reduce((a,r) => a + r.users, 0), budget = slice.reduce((a,r) => a + r.budget, 0);
       const rev = Number(slice.reduce((a,r) => a + r.rev, 0).toFixed(2)), profit = Number((rev - budget).toFixed(2));
       
@@ -542,7 +546,6 @@
       });
     }
 
-    // RENDERIZA LAS 3 TABLAS PEQUEÑAS
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
@@ -552,12 +555,14 @@
       const cpa = partners.filter(p => typeof p.cpaMtd === 'number' && p.cpaMtd > 0).sort((a,b) => b.cpaMtd - a.cpaMtd);
 
       const totalRows = cpl.length + cpr.length + cpa.length;
-      const allBudgetKpis = distributeEqual(kBudget, totalRows);
+      
+      // Si no hay filas con actividad en la fecha seleccionada, no divide y deja presupuesto en 0 de forma segura
+      const allBudgetKpis = totalRows > 0 ? distributeEqual(kBudget, totalRows) : [];
 
       let kpiIdx = 0;
-      cpl.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++]);
-      cpr.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++]);
-      cpa.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++]);
+      cpl.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++] || 0);
+      cpr.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++] || 0);
+      cpa.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++] || 0);
 
       const cplTotBKpi = cpl.reduce((a, p) => a + (p._bKpi || 0), 0);
       const cprTotBKpi = cpr.reduce((a, p) => a + (p._bKpi || 0), 0);
@@ -609,7 +614,7 @@
             <td class="text-center text-slate-500 font-bold">${p.cpaKpi||25}</td>
             <td class="text-center font-black">${p.cpaMtd}</td>
             <td class="text-center font-bold ${getRrColor(p.cpaRr, p.cpaKpi)}">${p.cpaRr}</td>
-            <td class="text-center font-bold text-purple-700">${s2p}</td>
+            <td class="text-center font-black text-purple-700">${s2p}</td>
             <td class="text-center font-bold">$${Number(r).toFixed(2)}</td>
             <td class="text-center font-bold">${roi}</td>
             <td class="p-2 text-center whitespace-nowrap">${badge}</td>
@@ -619,8 +624,9 @@
 
       const renderFoot = (list, type, totBKpi) => {
         const b = list.reduce((a,p)=>a+(p.budget||0),0), bRr = Math.round(b * rrF), r = list.reduce((a,p)=>a+(p.rev||0),0), roi = b > 0 ? `1:${(r/b).toFixed(1)}` : '—';
-        const bKpiTotDisplay = totBKpi > 0 ? `$${totBKpi.toLocaleString()}` : '$0';
+        const bKpiTotDisplay = `$${totBKpi.toLocaleString()}`;
 
+        // Suma matemática estricta ignorando guiones para evitar concatenaciones de texto
         const s = list.reduce((a,p) => a + (typeof p.sigMtd === 'number' ? p.sigMtd : 0), 0);
         const u = list.reduce((a,p) => a + (typeof p.cpaMtd === 'number' ? p.cpaMtd : 0), 0);
 
@@ -683,17 +689,17 @@
         <!-- CPL -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-sky-900 bg-sky-100 px-3 py-1 rounded-md">CPL</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-fuchsia-100">Leads</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpl, 'CPL') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpl, 'CPL', cplTotBKpi)}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-fuchsia-100">Leads</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpl, 'CPL') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpl.length ? renderFoot(cpl, 'CPL', cplTotBKpi) : ''}</tfoot></table></div>
         </div>
         <!-- CPR -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-amber-900 bg-amber-100 px-3 py-1 rounded-md">CPR</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpr, 'CPR', cprTotBKpi)}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpr.length ? renderFoot(cpr, 'CPR', cprTotBKpi) : ''}</tfoot></table></div>
         </div>
         <!-- CPA -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-md">CPA</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpa.length ? renderFoot(cpa, 'CPA', cpaTotBKpi) : ''}</tfoot></table></div>
         </div>`;
     }
 
