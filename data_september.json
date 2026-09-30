@@ -3,8 +3,8 @@
   "label": "September 2026",
   "date_range": {
     "start": "2026-09-01",
-    "end": "2026-09-28",
-    "days": 28
+    "end": "2026-09-30",
+    "days": 30
   },
   "team_kpis": {
     "budget": 5500,
@@ -16,28 +16,28 @@
   "totals": {
     "cpl": {
       "kpi": 4000,
-      "mtd": 4825,
-      "rr": 5170
+      "mtd": 4826,
+      "rr": 4826
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 796,
-      "rr": 850
+      "mtd": 1033,
+      "rr": 1033
     },
     "cpr": {
       "kpi": 200,
       "mtd": 5.0,
-      "rr": 5.36
+      "rr": 5.0
     },
     "cpa": {
       "kpi": 300,
-      "mtd": 49,
-      "rr": 51
+      "mtd": 53,
+      "rr": 53
     },
-    "revenue": 4366.22,
-    "budget": 552,
-    "profit": 3814.22,
-    "roi": "1:7.9"
+    "revenue": 4966.22,
+    "budget": 2122,
+    "profit": 2844.22,
+    "roi": "1:2.3"
   },
   "daily_series": [
     { "date": "2026-09-01", "leads": 265, "signups": 22, "cpr": 1, "users": 1, "rev": 130.0, "budget": 20 },
@@ -67,15 +67,17 @@
     { "date": "2026-09-25", "leads": 33, "signups": 17, "cpr": 0, "users": 1, "rev": 185.0, "budget": 17 },
     { "date": "2026-09-26", "leads": 22, "signups": 88, "cpr": 1, "users": 3, "rev": 360.0, "budget": 38 },
     { "date": "2026-09-27", "leads": 23, "signups": 95, "cpr": 0, "users": 3, "rev": 380.0, "budget": 40 },
-    { "date": "2026-09-28", "leads": 25, "signups": 98, "cpr": 0, "users": 3, "rev": 400.80, "budget": 40 }
+    { "date": "2026-09-28", "leads": 25, "signups": 98, "cpr": 0, "users": 3, "rev": 400.80, "budget": 40 },
+    { "date": "2026-09-29", "leads": 1, "signups": 118, "cpr": 0, "users": 2, "rev": 295.0, "budget": 780 },
+    { "date": "2026-09-30", "leads": 0, "signups": 119, "cpr": 0, "users": 2, "rev": 305.0, "budget": 790 }
   ],
   "partners": [
     {
       "name": "ADM",
       "cplMtd": 1146,
-      "cplRr": 1228,
+      "cplRr": 1146,
       "sigMtd": 12,
-      "sigRr": 13,
+      "sigRr": 12,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
@@ -90,7 +92,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 7,
-      "sigRr": 8,
+      "sigRr": 7,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 3,
@@ -162,10 +164,10 @@
     },
     {
       "name": "CHA",
-      "cplMtd": 16,
+      "cplMtd": 17,
       "cplRr": 17,
       "sigMtd": 21,
-      "sigRr": 22,
+      "sigRr": 21,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
@@ -195,7 +197,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 21,
-      "sigRr": 22,
+      "sigRr": 21,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -208,7 +210,7 @@
     {
       "name": "FXM",
       "cplMtd": 2576,
-      "cplRr": 2760,
+      "cplRr": 2576,
       "sigMtd": 0,
       "sigRr": 0,
       "cprMtd": 0,
@@ -223,7 +225,7 @@
     {
       "name": "FZY",
       "cplMtd": 18,
-      "cplRr": 19,
+      "cplRr": 18,
       "sigMtd": 2,
       "sigRr": 2,
       "cprMtd": 0,
@@ -239,8 +241,8 @@
       "name": "IPK",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 1,
+      "sigMtd": 3,
+      "sigRr": 3,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -253,9 +255,9 @@
     {
       "name": "LGL",
       "cplMtd": 1069,
-      "cplRr": 1145,
+      "cplRr": 1069,
       "sigMtd": 233,
-      "sigRr": 250,
+      "sigRr": 233,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
@@ -270,7 +272,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 11,
-      "sigRr": 12,
+      "sigRr": 11,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -300,29 +302,29 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 76,
-      "sigRr": 81,
+      "sigRr": 76,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 6,
       "cpaRr": 6,
       "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "potential"
+      "budget": 900,
+      "profit": -900,
+      "status": "not-working"
     },
     {
       "name": "PRO",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 58,
+      "sigMtd": 62,
       "sigRr": 62,
       "cprMtd": 0,
       "cprRr": 0,
-      "cpaMtd": 16,
+      "cpaMtd": 17,
       "cpaRr": 17,
-      "rev": 2190,
+      "rev": 2360,
       "budget": 0,
-      "profit": 2190,
+      "profit": 2360,
       "status": "working-well"
     },
     {
@@ -330,11 +332,11 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 33,
-      "sigRr": 35,
+      "sigRr": 33,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 9,
-      "cpaRr": 10,
+      "cpaRr": 9,
       "rev": 180,
       "budget": 75,
       "profit": 105,
@@ -375,7 +377,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 20,
-      "sigRr": 21,
+      "sigRr": 20,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
@@ -389,8 +391,8 @@
       "name": "VENE",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 14,
-      "sigRr": 15,
+      "sigMtd": 17,
+      "sigRr": 17,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -404,30 +406,30 @@
       "name": "WDG",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 21,
+      "sigMtd": 22,
       "sigRr": 22,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 3,
       "cpaRr": 3,
       "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "potential"
+      "budget": 450,
+      "profit": -450,
+      "status": "not-working"
     },
     {
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 247,
-      "sigRr": 265,
+      "sigMtd": 474,
+      "sigRr": 474,
       "cprMtd": 0,
       "cprRr": 0,
-      "cpaMtd": 4,
-      "cpaRr": 4,
-      "rev": 680,
-      "budget": 110,
-      "profit": 570,
+      "cpaMtd": 7,
+      "cpaRr": 7,
+      "rev": 1110,
+      "budget": 330,
+      "profit": 780,
       "status": "working-well"
     },
     {
@@ -452,7 +454,7 @@
       "sigMtd": 3,
       "sigRr": 3,
       "cprMtd": 5.0,
-      "cprRr": 5.36,
+      "cprRr": 5.0,
       "cpaMtd": 3,
       "cpaRr": 3,
       "rev": 16.22,
