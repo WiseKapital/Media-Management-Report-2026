@@ -146,6 +146,10 @@
     let cpaSortKey = null;
     let cpaSortDir = 'desc';
 
+    // Estado del ordenamiento en la tabla CPR
+    let cprSortKey = null;
+    let cprSortDir = 'desc';
+
     const statusWeight = {
       'working-well': 4,
       'potential': 3,
@@ -291,7 +295,9 @@
       const daysCount = Math.max(slice.length, 1), rrFactor = 30 / daysCount;
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
       const sigs = isFull ? data.totals.signups.mtd : slice.reduce((a,r) => a + r.signups, 0);
+      
       const cprVal = isFull ? (data.totals.cpr?.mtd || 0) : slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
+      
       const users = isFull ? data.totals.cpa.mtd : slice.reduce((a,r) => a + r.users, 0);
       const budget = isFull ? data.totals.budget : slice.reduce((a,r) => a + r.budget, 0);
       const rev = isFull ? data.totals.revenue : Number(slice.reduce((a,r) => a + r.rev, 0).toFixed(2));
@@ -565,7 +571,7 @@
       });
     }
 
-    // FUNCIÓN DE ORDENAMIENTO PARA LA TABLA CPA (Mayor a menor / Menor a mayor)
+    // FUNCIÓN DE ORDENAMIENTO PARA LA TABLA CPA
     function sortCpaTable(key) {
       if (cpaSortKey === key) {
         cpaSortDir = (cpaSortDir === 'desc') ? 'asc' : 'desc';
@@ -596,6 +602,46 @@
         if (!btn) return;
         if (cpaSortKey === k) {
           const icon = cpaSortDir === 'desc' ? 'fa-arrow-down-wide-short text-blue-600' : 'fa-arrow-up-wide-short text-blue-600';
+          btn.innerHTML = `Sort <i class="fa-solid ${icon}"></i>`;
+          btn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        } else {
+          btn.innerHTML = `Sort <i class="fa-solid fa-sort text-slate-400"></i>`;
+          btn.classList.remove('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        }
+      });
+    }
+
+    // FUNCIÓN DE ORDENAMIENTO PARA LA TABLA CPR
+    function sortCprTable(key) {
+      if (cprSortKey === key) {
+        cprSortDir = (cprSortDir === 'desc') ? 'asc' : 'desc';
+      } else {
+        cprSortKey = key;
+        cprSortDir = 'desc';
+      }
+
+      const tbody = document.getElementById('cprTableBody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.querySelectorAll('tr.cpr-row'));
+      if (rows.length === 0) return;
+
+      rows.sort((a, b) => {
+        const vA = parseFloat(a.dataset[key]) || 0;
+        const vB = parseFloat(b.dataset[key]) || 0;
+        return cprSortDir === 'desc' ? vB - vA : vA - vB;
+      });
+
+      rows.forEach(r => tbody.appendChild(r));
+      updateCprSortIcons();
+    }
+
+    function updateCprSortIcons() {
+      const keys = ['budget', 'cpr', 'users', 'revenue', 'status'];
+      keys.forEach(k => {
+        const btn = document.getElementById(`sort-cpr-${k}`);
+        if (!btn) return;
+        if (cprSortKey === k) {
+          const icon = cprSortDir === 'desc' ? 'fa-arrow-down-wide-short text-blue-600' : 'fa-arrow-up-wide-short text-blue-600';
           btn.innerHTML = `Sort <i class="fa-solid ${icon}"></i>`;
           btn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
         } else {
@@ -653,7 +699,7 @@
           </tr>`; 
         }
 
-        if (type === 'CPR') return `<tr class="hover:bg-slate-50">
+        if (type === 'CPR') return `<tr class="hover:bg-slate-50 cpr-row" data-budget="${b}" data-cpr="${p.cprMtd||0}" data-users="${p.cpaMtd||0}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
           <td class="p-2 font-bold">${p.name}</td>
           <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
           <td class="text-center font-bold">$${b}</td>
@@ -756,7 +802,7 @@
         <!-- 2. CPR SECOND -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-amber-900 bg-amber-100 px-3 py-1 rounded-md">CPR</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpr.length ? renderFoot(cpr, 'CPR', cprTotBKpi) : ''}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCprTable('budget')" id="sort-cpr-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCprTable('cpr')" id="sort-cpr-cpr" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('users')" id="sort-cpr-users" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCprTable('revenue')" id="sort-cpr-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('status')" id="sort-cpr-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cprTableBody" class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpr.length ? renderFoot(cpr, 'CPR', cprTotBKpi) : ''}</tfoot></table></div>
         </div>
 
         <!-- 3. CPL THIRD -->
@@ -766,6 +812,7 @@
         </div>`;
       
       updateCpaSortIcons();
+      updateCprSortIcons();
     }
 
     function renderInactive(list) {
