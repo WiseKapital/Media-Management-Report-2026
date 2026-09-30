@@ -14,6 +14,7 @@
     .text-green-custom { color: #00b074 !important; }
     .text-red-custom { color: #e11d48 !important; }
     table.table-grid, table.table-grid th, table.table-grid td { border: 1px solid #cbd5e1 !important; border-collapse: collapse !important; }
+    table.table-grid tr.sort-row-borderless th { border: none !important; background: transparent !important; padding: 4px 0 8px; }
     ::-webkit-scrollbar { width: 5px; height: 6px; }
     ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
   </style>
@@ -140,6 +141,17 @@
     
     let today = getSystemToday(), fromDate = new Date(2026, today.getMonth(), 1), toDate = new Date(today);
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
+
+    // Estado del ordenamiento en la tabla CPA
+    let cpaSortKey = null;
+    let cpaSortDir = 'desc';
+
+    const statusWeight = {
+      'working-well': 4,
+      'potential': 3,
+      'neutral': 2,
+      'not-working': 1
+    };
 
     function getRrColor(rrVal, kpiVal, isBudget = false) {
       if (kpiVal === '—' || kpiVal === undefined || kpiVal === null) return 'text-slate-500';
@@ -553,6 +565,46 @@
       });
     }
 
+    // FUNCIÓN DE ORDENAMIENTO PARA LA TABLA CPA (Mayor a menor / Menor a mayor)
+    function sortCpaTable(key) {
+      if (cpaSortKey === key) {
+        cpaSortDir = (cpaSortDir === 'desc') ? 'asc' : 'desc';
+      } else {
+        cpaSortKey = key;
+        cpaSortDir = 'desc';
+      }
+
+      const tbody = document.getElementById('cpaTableBody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.querySelectorAll('tr.cpa-row'));
+      if (rows.length === 0) return;
+
+      rows.sort((a, b) => {
+        const vA = parseFloat(a.dataset[key]) || 0;
+        const vB = parseFloat(b.dataset[key]) || 0;
+        return cpaSortDir === 'desc' ? vB - vA : vA - vB;
+      });
+
+      rows.forEach(r => tbody.appendChild(r));
+      updateCpaSortIcons();
+    }
+
+    function updateCpaSortIcons() {
+      const keys = ['budget', 'registrations', 'cpa', 'revenue', 'status'];
+      keys.forEach(k => {
+        const btn = document.getElementById(`sort-cpa-${k}`);
+        if (!btn) return;
+        if (cpaSortKey === k) {
+          const icon = cpaSortDir === 'desc' ? 'fa-arrow-down-wide-short text-blue-600' : 'fa-arrow-up-wide-short text-blue-600';
+          btn.innerHTML = `Sort <i class="fa-solid ${icon}"></i>`;
+          btn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        } else {
+          btn.innerHTML = `Sort <i class="fa-solid fa-sort text-slate-400"></i>`;
+          btn.classList.remove('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        }
+      });
+    }
+
     // RENDERIZA LAS 3 TABLAS PEQUEÑAS EN ORDEN: CPA PRIMERO, CPR SEGUNDO, CPL TERCERO
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
@@ -584,9 +636,8 @@
         const revDisplay = `$${Math.round(r).toLocaleString()}`;
 
         if (type === 'CPA') { 
-          // S2P: Conversión real de registros a usuarios (Signup to Paid)
           const s2p = p.sigMtd > 0 ? ((p.cpaMtd / p.sigMtd) * 100).toFixed(1) + '%' : '0.0%';
-          return `<tr class="hover:bg-slate-50">
+          return `<tr class="hover:bg-slate-50 cpa-row" data-budget="${b}" data-registrations="${p.sigMtd||0}" data-cpa="${p.cpaMtd||0}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
             <td class="p-2 font-bold">${p.name}</td>
             <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
             <td class="text-center font-bold">$${b}</td>
@@ -699,7 +750,7 @@
         <!-- 1. CPA FIRST -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-md">CPA</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCpaTable('budget')" id="sort-cpa-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('registrations')" id="sort-cpa-registrations" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('cpa')" id="sort-cpa-cpa" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCpaTable('revenue')" id="sort-cpa-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('status')" id="sort-cpa-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cpaTableBody" class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
         </div>
 
         <!-- 2. CPR SECOND -->
@@ -713,6 +764,8 @@
           <span class="text-xs font-black uppercase text-sky-900 bg-sky-100 px-3 py-1 rounded-md">CPL</span>
           <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-fuchsia-100">Leads</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody class="font-semibold">${renderRows(cpl, 'CPL') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpl.length ? renderFoot(cpl, 'CPL', cplTotBKpi) : ''}</tfoot></table></div>
         </div>`;
+      
+      updateCpaSortIcons();
     }
 
     function renderInactive(list) {
