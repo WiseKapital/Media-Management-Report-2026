@@ -21,8 +21,8 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 1002,
-      "rr": 1002
+      "mtd": 663,
+      "rr": 663
     },
     "cpr": {
       "kpi": 200,
@@ -65,11 +65,11 @@
     { "date": "2026-09-23", "leads": 43, "signups": 11, "cpr": 0, "users": 1, "rev": 75.0, "budget": 4 },
     { "date": "2026-09-24", "leads": 52, "signups": 13, "cpr": 0, "users": 2, "rev": 85.0, "budget": 6 },
     { "date": "2026-09-25", "leads": 33, "signups": 17, "cpr": 0, "users": 1, "rev": 185.0, "budget": 17 },
-    { "date": "2026-09-26", "leads": 22, "signups": 88, "cpr": 1, "users": 3, "rev": 360.0, "budget": 38 },
-    { "date": "2026-09-27", "leads": 23, "signups": 95, "cpr": 0, "users": 3, "rev": 380.0, "budget": 40 },
-    { "date": "2026-09-28", "leads": 25, "signups": 98, "cpr": 0, "users": 3, "rev": 400.80, "budget": 40 },
-    { "date": "2026-09-29", "leads": 1, "signups": 103, "cpr": 0, "users": 2, "rev": 295.0, "budget": 780 },
-    { "date": "2026-09-30", "leads": 0, "signups": 103, "cpr": 0, "users": 2, "rev": 305.0, "budget": 790 }
+    { "date": "2026-09-26", "leads": 22, "signups": 28, "cpr": 1, "users": 3, "rev": 360.0, "budget": 38 },
+    { "date": "2026-09-27", "leads": 23, "signups": 29, "cpr": 0, "users": 3, "rev": 380.0, "budget": 40 },
+    { "date": "2026-09-28", "leads": 25, "signups": 29, "cpr": 0, "users": 3, "rev": 400.80, "budget": 40 },
+    { "date": "2026-09-29", "leads": 1, "signups": 29, "cpr": 0, "users": 2, "rev": 295.0, "budget": 780 },
+    { "date": "2026-09-30", "leads": 0, "signups": 29, "cpr": 0, "users": 2, "rev": 305.0, "budget": 790 }
   ],
   "partners": [
     {
@@ -421,8 +421,8 @@
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 443,
-      "sigRr": 443,
+      "sigMtd": 104,
+      "sigRr": 104,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 7,
