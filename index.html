@@ -133,6 +133,9 @@
     const DATA_CACHE = {};
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
+    // Mínimo absoluto: 1 de Julio de 2026 (mes 6 en base 0)
+    const MIN_SYSTEM_DATE = new Date(2026, 6, 1);
+
     function getSystemToday() {
       const now = new Date();
       return new Date(now.getFullYear(), now.getMonth(), now.getDate());
@@ -140,6 +143,8 @@
     
     let today = getSystemToday();
     let fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    if (fromDate < MIN_SYSTEM_DATE) fromDate = new Date(MIN_SYSTEM_DATE);
+    
     let toDate = new Date(today);
     let fromViewYear = today.getFullYear(), toViewYear = today.getFullYear();
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
@@ -197,7 +202,9 @@
     async function loadAllJSONs() {
       try {
         today = getSystemToday();
-        fromDate = new Date(today.getFullYear(), today.getMonth(), 1); 
+        fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+        if (fromDate < MIN_SYSTEM_DATE) fromDate = new Date(MIN_SYSTEM_DATE);
+
         toDate = new Date(today);
         fromViewYear = toViewYear = today.getFullYear();
         fromViewMonth = toViewMonth = today.getMonth();
@@ -258,7 +265,12 @@
       if (m < 0) { m = 11; y--; }
       else if (m > 11) { m = 0; y++; }
       
-      // No permitir navegar al futuro más allá del mes actual
+      // BLOQUEO: Mínimo Julio 2026 (mes 6), no retroceder antes
+      if (y < 2026 || (y === 2026 && m < 6)) {
+        return;
+      }
+
+      // BLOQUEO: No avanzar al futuro más allá del mes y año actual
       if (y > today.getFullYear() || (y === today.getFullYear() && m > today.getMonth())) {
         return;
       }
@@ -283,8 +295,8 @@
         const cur = new Date(y, m, d), cell = document.createElement('div');
         cell.className = 'py-1.5 select-none text-xs font-bold transition-all'; cell.textContent = d;
         
-        // Bloquear días posteriores a hoy
-        if (cur.getTime() > max.getTime()) {
+        // Bloquear días anteriores al 1 de Julio de 2026 o posteriores a hoy
+        if (cur.getTime() < MIN_SYSTEM_DATE.getTime() || cur.getTime() > max.getTime()) {
           cell.classList.add('text-slate-300', 'cursor-not-allowed');
         } else {
           cell.classList.add('cursor-pointer');
