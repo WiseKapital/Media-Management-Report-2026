@@ -31,7 +31,7 @@
           <span class="tracking-wider uppercase text-[11px] text-slate-400">FROM</span>
           <div class="relative">
             <button id="fromBtn" onclick="toggleCal('from', event)" class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-black text-slate-800 shadow-2xs">
-              <span id="fromDateText">09/01/2026</span><i class="fa-regular fa-calendar text-slate-700"></i>
+              <span id="fromDateText"></span><i class="fa-regular fa-calendar text-slate-700"></i>
             </button>
             <div id="fromPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
@@ -46,7 +46,7 @@
           <span class="tracking-wider uppercase text-[11px] text-slate-400 ml-1">TO</span>
           <div class="relative">
             <button id="toBtn" onclick="toggleCal('to', event)" class="flex items-center gap-2 px-3 py-1.5 bg-white border border-slate-300 rounded-xl text-xs font-black text-slate-800 shadow-2xs">
-              <span id="toDateText">09/28/2026</span><i class="fa-regular fa-calendar text-slate-700"></i>
+              <span id="toDateText"></span><i class="fa-regular fa-calendar text-slate-700"></i>
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
@@ -129,17 +129,19 @@
 
   </div>
 
-  <!-- JAVASCRIPT ULTRA-OPTIMIZADO -->
   <script>
-    const DATA_CACHE = { july: null, august: null, september: null };
+    const DATA_CACHE = {};
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
     function getSystemToday() {
       const now = new Date();
-      return (now.getFullYear() === 2026) ? new Date(2026, now.getMonth(), now.getDate()) : new Date(2026, 8, 28);
+      return new Date(now.getFullYear(), now.getMonth(), now.getDate());
     }
     
-    let today = getSystemToday(), fromDate = new Date(2026, today.getMonth(), 1), toDate = new Date(today);
+    let today = getSystemToday();
+    let fromDate = new Date(today.getFullYear(), today.getMonth(), 1);
+    let toDate = new Date(today);
+    let fromViewYear = today.getFullYear(), toViewYear = today.getFullYear();
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
 
     // Estados de ordenamiento para cada tabla
@@ -194,14 +196,22 @@
 
     async function loadAllJSONs() {
       try {
-        [DATA_CACHE.september, DATA_CACHE.august, DATA_CACHE.july] = await Promise.all([
-          fetchJSON('./data_september.json'), fetchJSON('./data_august.json'), fetchJSON('./data_july.json')
-        ]);
         today = getSystemToday();
-        fromDate = new Date(2026, today.getMonth(), 1); 
+        fromDate = new Date(today.getFullYear(), today.getMonth(), 1); 
         toDate = new Date(today);
+        fromViewYear = toViewYear = today.getFullYear();
         fromViewMonth = toViewMonth = today.getMonth();
         updateDatesUI();
+
+        // Precargar mes actual y meses con data
+        const currentMonthName = MONTHS[today.getMonth()].toLowerCase();
+        const baseMonths = Array.from(new Set([currentMonthName, 'september', 'august', 'july']));
+        
+        await Promise.all(baseMonths.map(async m => {
+          const d = await fetchJSON(`./data_${m}.json`);
+          if (d) DATA_CACHE[m] = d;
+        }));
+
         dispatchRange(fromDate, toDate);
       } catch (err) {
         console.error("Error al iniciar:", err);
@@ -225,29 +235,56 @@
       document.getElementById(t === 'from' ? 'toPop' : 'fromPop').classList.add('hidden');
       const pop = document.getElementById(t + 'Pop');
       pop.classList.toggle('hidden');
-      if (!pop.classList.contains('hidden')) renderCalGrid(t);
-    }
-
-    function navCal(t, s, e) {
-      e?.stopPropagation();
-      let m = (t === 'from' ? fromViewMonth : toViewMonth) + s;
-      if (m >= 6 && m <= 8) {
-        if (t === 'from') fromViewMonth = m; else toViewMonth = m;
+      if (!pop.classList.contains('hidden')) {
+        const active = (t === 'from') ? fromDate : toDate;
+        if (t === 'from') {
+          fromViewYear = active.getFullYear();
+          fromViewMonth = active.getMonth();
+        } else {
+          toViewYear = active.getFullYear();
+          toViewMonth = active.getMonth();
+        }
         renderCalGrid(t);
       }
     }
 
+    function navCal(t, s, e) {
+      e?.stopPropagation();
+      const isFrom = (t === 'from');
+      let y = isFrom ? fromViewYear : toViewYear;
+      let m = isFrom ? fromViewMonth : toViewMonth;
+      
+      m += s;
+      if (m < 0) { m = 11; y--; }
+      else if (m > 11) { m = 0; y++; }
+      
+      // No permitir navegar al futuro más allá del mes actual
+      if (y > today.getFullYear() || (y === today.getFullYear() && m > today.getMonth())) {
+        return;
+      }
+
+      if (isFrom) { fromViewYear = y; fromViewMonth = m; }
+      else { toViewYear = y; toViewMonth = m; }
+      renderCalGrid(t);
+    }
+
     function renderCalGrid(t) {
-      const isFrom = (t === 'from'), m = isFrom ? fromViewMonth : toViewMonth;
-      document.getElementById(t + 'MonthLabel').textContent = `${MONTHS[m].toUpperCase()} 2026`;
+      const isFrom = (t === 'from');
+      const y = isFrom ? fromViewYear : toViewYear;
+      const m = isFrom ? fromViewMonth : toViewMonth;
+      document.getElementById(t + 'MonthLabel').textContent = `${MONTHS[m].toUpperCase()} ${y}`;
       const grid = document.getElementById(t + 'DaysGrid'); grid.innerHTML = '';
-      const startDay = (new Date(2026, m, 1).getDay() + 6) % 7, days = new Date(2026, m + 1, 0).getDate();
+      const startDay = (new Date(y, m, 1).getDay() + 6) % 7;
+      const days = new Date(y, m + 1, 0).getDate();
       for (let i = 0; i < startDay; i++) grid.appendChild(document.createElement('div'));
+      
       const active = isFrom ? fromDate : toDate, max = getSystemToday();
       for (let d = 1; d <= days; d++) {
-        const cur = new Date(2026, m, d), cell = document.createElement('div');
+        const cur = new Date(y, m, d), cell = document.createElement('div');
         cell.className = 'py-1.5 select-none text-xs font-bold transition-all'; cell.textContent = d;
-        if (cur > max) {
+        
+        // Bloquear días posteriores a hoy
+        if (cur.getTime() > max.getTime()) {
           cell.classList.add('text-slate-300', 'cursor-not-allowed');
         } else {
           cell.classList.add('cursor-pointer');
@@ -256,8 +293,13 @@
           } else cell.classList.add('text-slate-700', 'hover:bg-slate-100', 'rounded');
           cell.onclick = (e) => {
             e.stopPropagation();
-            if (isFrom) { fromDate = cur; if (fromDate > toDate) toDate = new Date(fromDate); }
-            else { toDate = cur; if (toDate < fromDate) fromDate = new Date(toDate); }
+            if (isFrom) { 
+              fromDate = cur; 
+              if (fromDate > toDate) toDate = new Date(fromDate); 
+            } else { 
+              toDate = cur; 
+              if (toDate < fromDate) fromDate = new Date(toDate); 
+            }
             document.getElementById(t + 'Pop').classList.add('hidden');
             updateDatesUI(); 
             dispatchRange(fromDate, toDate);
@@ -267,20 +309,40 @@
       }
     }
 
-    function dispatchRange(sDate, eDate) {
-      const sYMD = fmtYMD(sDate), eYMD = fmtYMD(eDate);
-      if (sYMD >= '2026-07-01' && eYMD <= '2026-07-31') return renderPeriod(DATA_CACHE.july, sDate, eDate, 'Jul');
-      if (sYMD >= '2026-08-01' && eYMD <= '2026-08-31') return renderPeriod(DATA_CACHE.august, sDate, eDate, 'Aug');
-      if (sYMD >= '2026-09-01' && eYMD <= '2026-09-30') return renderPeriod(DATA_CACHE.september, sDate, eDate, 'Sep');
+    async function dispatchRange(sDate, eDate) {
+      if (sDate.getFullYear() === eDate.getFullYear() && sDate.getMonth() === eDate.getMonth()) {
+        const m = sDate.getMonth();
+        const mName = MONTHS[m].toLowerCase();
+        const prefix = MONTHS[m].substring(0, 3);
+        let data = DATA_CACHE[mName];
+        if (!data) {
+          data = await fetchJSON(`./data_${mName}.json`);
+          if (data) DATA_CACHE[mName] = data;
+        }
+        return renderPeriod(data, sDate, eDate, prefix);
+      }
+
+      // Si abarca varios meses
+      let curM = new Date(sDate.getFullYear(), sDate.getMonth(), 1);
+      const endM = new Date(eDate.getFullYear(), eDate.getMonth(), 1);
+      while (curM <= endM) {
+        const mName = MONTHS[curM.getMonth()].toLowerCase();
+        if (!DATA_CACHE[mName]) {
+          const d = await fetchJSON(`./data_${mName}.json`);
+          if (d) DATA_CACHE[mName] = d;
+        }
+        curM.setMonth(curM.getMonth() + 1);
+      }
       renderMultiMonth(sDate, eDate);
     }
 
     function renderPeriod(data, sDate, eDate, prefix) {
       if (!data) return renderZeroState(sDate, eDate);
-      document.getElementById('tp-header-period').textContent = `MTD - ${prefix.toUpperCase()} 2026`;
+      document.getElementById('tp-header-period').textContent = `MTD - ${prefix.toUpperCase()} ${sDate.getFullYear()}`;
       const sYMD = fmtYMD(sDate), eYMD = fmtYMD(eDate);
       
-      const isFull = (sYMD === data.date_range?.start && (eYMD === data.date_range?.end || (eYMD >= data.date_range?.end && eYMD <= '2026-09-30')));
+      const lastDayOfMonth = fmtYMD(new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0));
+      const isFull = Boolean(data.date_range && sYMD === data.date_range.start && (eYMD === data.date_range.end || (eYMD >= data.date_range.end && eYMD <= lastDayOfMonth)));
       
       const dailyMap = {}; (data.daily_series || []).forEach(r => { if (r.date) dailyMap[r.date] = r; });
       const slice = []; let cur = new Date(sDate);
@@ -289,7 +351,8 @@
         slice.push(dailyMap[k] || { date: k, leads: 0, signups: 0, cpr: 0, users: 0, rev: 0, budget: 0 });
         cur.setDate(cur.getDate() + 1);
       }
-      const daysCount = Math.max(slice.length, 1), rrFactor = 30 / daysCount;
+      const totalMonthDays = new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0).getDate();
+      const daysCount = Math.max(slice.length, 1), rrFactor = totalMonthDays / daysCount;
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
       const sigs = isFull ? data.totals.signups.mtd : slice.reduce((a,r) => a + r.signups, 0);
       const cprVal = isFull ? (data.totals.cpr?.mtd || 0) : slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
@@ -313,10 +376,10 @@
 
       renderKPIs({ budget, sigs, users, rev, profit, rr, roi: isFull ? data.totals.roi : null, teamKpis });
 
-      const lRatio = leads / (data.totals.cpl.mtd || 1), sRatio = sigs / (data.totals.signups.mtd || 1);
+      const lRatio = leads / (data.totals.cpl?.mtd || 1), sRatio = sigs / (data.totals.signups?.mtd || 1);
       const totMonthlyCpr = data.totals.cpr?.mtd || 0;
       const cRatio = totMonthlyCpr > 0 ? (cprVal / totMonthlyCpr) : 0;
-      const uRatio = users / (data.totals.cpa.mtd || 1), bRatio = budget / (data.totals.budget || 1), rRatio = rev / (data.totals.revenue || 1);
+      const uRatio = users / (data.totals.cpa?.mtd || 1), bRatio = budget / (data.totals.budget || 1), rRatio = rev / (data.totals.revenue || 1);
 
       let partners = (data.partners || []).map(p => {
         const pL = isFull ? p.cplMtd : (typeof p.cplMtd === 'number' && p.cplMtd > 0 ? Math.round(p.cplMtd * lRatio) : '—');
@@ -343,7 +406,7 @@
       applyEqualKpis(partners, totKpis);
 
       renderTopCards(partners, teamKpis);
-      renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, 30);
+      renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, totalMonthDays);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
       renderInactive(data.inactive_partners);
     }
@@ -351,11 +414,19 @@
     function renderMultiMonth(sDate, eDate) {
       document.getElementById('tp-header-period').textContent = 'TOTAL CONSOLIDATED';
 
-      const sM = sDate.getMonth(), eM = eDate.getMonth();
       const covered = [];
-      if (sM <= 6 && eM >= 6 && DATA_CACHE.july) covered.push(DATA_CACHE.july);
-      if (sM <= 7 && eM >= 7 && DATA_CACHE.august) covered.push(DATA_CACHE.august);
-      if (sM <= 8 && eM >= 8 && DATA_CACHE.september) covered.push(DATA_CACHE.september);
+      let curM = new Date(sDate.getFullYear(), sDate.getMonth(), 1);
+      const endM = new Date(eDate.getFullYear(), eDate.getMonth(), 1);
+      while (curM <= endM) {
+        const mName = MONTHS[curM.getMonth()].toLowerCase();
+        const data = DATA_CACHE[mName];
+        if (data && !covered.includes(data)) {
+          covered.push(data);
+        }
+        curM.setMonth(curM.getMonth() + 1);
+      }
+
+      if (covered.length === 0) return renderZeroState(sDate, eDate);
 
       const allDays = {};
       covered.forEach(m => (m.daily_series || []).forEach(r => { if (r.date) allDays[r.date] = r; }));
@@ -436,7 +507,7 @@
       renderTopCards(partners, teamKpis);
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
-      renderInactive(DATA_CACHE.september?.inactive_partners || []);
+      renderInactive(covered[covered.length - 1]?.inactive_partners || []);
     }
 
     function applyEqualKpis(partners, totKpis) {
