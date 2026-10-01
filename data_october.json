@@ -1,0 +1,150 @@
+{
+  "month": "2026-10",
+  "label": "October 2026",
+  "date_range": {
+    "start": "2026-10-01",
+    "end": "2026-10-31",
+    "days": 31
+  },
+  "team_kpis": {
+    "budget": 5500,
+    "signups": 1000,
+    "users": 300,
+    "revenue": 16500,
+    "profit": 11000
+  },
+  "totals": {
+    "cpl": {
+      "kpi": 4000,
+      "mtd": 2,
+      "rr": 62
+    },
+    "signups": {
+      "kpi": 1000,
+      "mtd": 1,
+      "rr": 31
+    },
+    "cpr": {
+      "kpi": 200,
+      "mtd": 0.0,
+      "rr": 0.0
+    },
+    "cpa": {
+      "kpi": 300,
+      "mtd": 1,
+      "rr": 31
+    },
+    "revenue": 150.0,
+    "budget": 0,
+    "profit": 150.0,
+    "roi": "1:∞"
+  },
+  "daily_series": [
+    {
+      "date": "2026-10-01",
+      "leads": 2,
+      "signups": 1,
+      "cpr": 0,
+      "users": 1,
+      "rev": 150.0,
+      "budget": 0
+    }
+  ],
+  "partners": [
+    {
+      "name": "FXM",
+      "cplMtd": 2,
+      "cplRr": 62,
+      "sigMtd": 0,
+      "sigRr": 0,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "LGL",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 0,
+      "sigRr": 0,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 1,
+      "cpaRr": 31,
+      "rev": 150.0,
+      "budget": 0,
+      "profit": 150.0,
+      "status": "working-well"
+    },
+    {
+      "name": "WIZ",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 1,
+      "sigRr": 31,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    }
+  ],
+  "inactive_partners": [
+    "ADM",
+    "ADO",
+    "ADV",
+    "APG",
+    "BTD",
+    "CFL",
+    "CHA",
+    "DRCT",
+    "EPV",
+    "FZY",
+    "IPK",
+    "LUM",
+    "MOD",
+    "MON",
+    "PRO",
+    "REV",
+    "SDG",
+    "SGA",
+    "SPX",
+    "VENE",
+    "WDG",
+    "WRW",
+    "XLE",
+    "PUR",
+    "GRM",
+    "AWP",
+    "CAC",
+    "SIGb",
+    "GDC",
+    "FRA",
+    "ECO",
+    "AKI",
+    "ENJ",
+    "FIG",
+    "FST",
+    "WAN",
+    "ADD",
+    "CPX",
+    "GOS",
+    "GRZ",
+    "MAV",
+    "AGO",
+    "FCM",
+    "REU",
+    "RXD",
+    "TAK",
+    "iDc",
+    "sms"
+  ]
+}
