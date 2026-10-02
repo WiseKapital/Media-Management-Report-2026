@@ -50,7 +50,7 @@
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
-                <button onclick="navCal('to', -1, event)" class="w-6 h-6 rounded hover:bg-slate-100"><i class="fa-solid fa-chevron-left text-[11px]"></i></button>
+                <button onclick="navCal('to', -1, event)" class="w-6 h-6 rounded hover:bg-slate-100"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
                 <span id="toMonthLabel" class="uppercase"></span>
                 <button onclick="navCal('to', 1, event)" class="w-6 h-6 rounded hover:bg-slate-100"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
               </div>
@@ -161,7 +161,7 @@
       'not-working': 1
     };
 
-    // Funciones auxiliares para categorizar correctamente los modelos
+    // Filtros de categorización por modelo de negocio
     function isCplPartner(p) {
       if (p.model === 'CPL' || p.type === 'CPL') return true;
       return typeof p.cplMtd === 'number' && p.cplMtd > 0;
@@ -176,7 +176,7 @@
     function isCpaPartner(p) {
       if (p.model === 'CPA' || p.type === 'CPA') return true;
       if (isCplPartner(p) || isCprPartner(p)) return false;
-      // Entra en CPA si tiene conversiones CPA, O si tiene Registrations/Signups, O si tiene presupuesto asignado
+      // Entra en CPA si tiene usuarios, O registros, O presupuesto
       return (typeof p.cpaMtd === 'number' && p.cpaMtd > 0) ||
              (typeof p.sigMtd === 'number' && p.sigMtd > 0) ||
              (typeof p.budget === 'number' && p.budget > 0);
@@ -546,7 +546,6 @@
       const kCpa = totKpis.cpa?.kpi || 300;
       const kCpr = totKpis.cpr?.kpi || 200;
 
-      // Filtrado corregido usando las funciones lógicas de modelo
       const cplPartners = partners.filter(isCplPartner);
       const sigPartners = partners.filter(p => typeof p.sigMtd === 'number' && p.sigMtd > 0);
       const cpaPartners = partners.filter(isCpaPartner);
@@ -697,7 +696,7 @@
       keys.forEach(k => {
         const btn = document.getElementById(`sort-cpa-${k}`);
         if (!btn) return;
-        if (cpaSortKey === k) {
+        if (cpaSortKey === keyMatch(k, cpaSortKey)) {
           const icon = cpaSortDir === 'desc' ? 'fa-arrow-down-wide-short text-blue-600' : 'fa-arrow-up-wide-short text-blue-600';
           btn.innerHTML = `Sort <i class="fa-solid ${icon}"></i>`;
           btn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
@@ -733,7 +732,7 @@
     }
 
     function updateCprSortIcons() {
-      const keys = ['budget', 'cpr', 'users', 'revenue', 'status'];
+      const keys = ['budget', 'cpr', 'registrations', 'users', 'revenue', 'status'];
       keys.forEach(k => {
         const btn = document.getElementById(`sort-cpr-${k}`);
         if (!btn) return;
@@ -788,12 +787,15 @@
       });
     }
 
-    // RENDERIZA LAS 3 TABLAS PEQUEÑAS EN ORDEN: CPA PRIMERO, CPR SEGUNDO, CPL TERCERO
+    function keyMatch(k, activeKey) {
+      return activeKey === k ? k : null;
+    }
+
+    // RENDERIZA LAS 3 TABLAS EN ORDEN: CPA PRIMERO, CPR SEGUNDO, CPL TERCERO
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
       
-      // Filtrados corregidos
       const cpa = partners.filter(isCpaPartner).sort((a,b) => {
         const uA = typeof a.cpaMtd === 'number' ? a.cpaMtd : 0;
         const uB = typeof b.cpaMtd === 'number' ? b.cpaMtd : 0;
@@ -802,6 +804,7 @@
         const sB = typeof b.sigMtd === 'number' ? b.sigMtd : 0;
         return sB - sA;
       });
+
       const cpr = partners.filter(isCprPartner).sort((a,b) => (b.cprMtd || 0) - (a.cprMtd || 0));
       const cpl = partners.filter(isCplPartner).sort((a,b) => (b.cplMtd || 0) - (a.cplMtd || 0));
 
@@ -823,10 +826,11 @@
         const bKpiDisplay = `$${bKpi.toLocaleString()}`;
         const badge = getStatusBadge(p.status);
         const revDisplay = `$${Math.round(r).toLocaleString()}`;
+        const sigVal = typeof p.sigMtd === 'number' ? p.sigMtd : 0;
+        const usersVal = typeof p.cpaMtd === 'number' ? p.cpaMtd : 0;
 
         if (type === 'CPA') { 
-          const cpaVal = typeof p.cpaMtd === 'number' ? p.cpaMtd : 0;
-          const sigVal = typeof p.sigMtd === 'number' ? p.sigMtd : 0;
+          const cpaVal = usersVal;
           const cpaRrVal = typeof p.cpaRr === 'number' ? p.cpaRr : (p.cpaRr === '—' ? 0 : (p.cpaRr || 0));
           const s2p = sigVal > 0 ? ((cpaVal / sigVal) * 100).toFixed(1) + '%' : '0.0%';
 
@@ -849,9 +853,8 @@
         if (type === 'CPR') {
           const cprMtdVal = typeof p.cprMtd === 'number' ? Number(p.cprMtd).toFixed(1) : '0.0';
           const cprRrVal = typeof p.cprRr === 'number' ? p.cprRr : (p.cprRr || 0);
-          const usersVal = typeof p.cpaMtd === 'number' ? p.cpaMtd : 0;
 
-          return `<tr class="hover:bg-slate-50 cpr-row" data-budget="${b}" data-cpr="${p.cprMtd||0}" data-users="${usersVal}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
+          return `<tr class="hover:bg-slate-50 cpr-row" data-budget="${b}" data-cpr="${p.cprMtd||0}" data-registrations="${sigVal}" data-users="${usersVal}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
             <td class="p-2 font-bold">${p.name}</td>
             <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
             <td class="text-center font-bold">$${b}</td>
@@ -859,6 +862,7 @@
             <td class="text-center text-slate-500 font-bold">${p.cprKpi||200}</td>
             <td class="text-center font-black">${cprMtdVal}</td>
             <td class="text-center font-bold ${getRrColor(cprRrVal, p.cprKpi)}">${cprRrVal}</td>
+            <td class="text-center font-bold">${sigVal}</td>
             <td class="text-center font-bold">${usersVal}</td>
             <td class="text-center font-bold">${revDisplay}</td>
             <td class="text-center font-bold">${roi}</td>
@@ -869,8 +873,6 @@
         if (type === 'CPL') {
           const cplVal = typeof p.cplMtd === 'number' ? p.cplMtd : 0;
           const cplRrVal = typeof p.cplRr === 'number' ? p.cplRr : (p.cplRr || 0);
-          const sigVal = typeof p.sigMtd === 'number' ? p.sigMtd : 0;
-          const usersVal = typeof p.cpaMtd === 'number' ? p.cpaMtd : 0;
 
           return `<tr class="hover:bg-slate-50 cpl-row" data-budget="${b}" data-leads="${cplVal}" data-registrations="${sigVal}" data-users="${usersVal}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
             <td class="p-2 font-bold">${p.name}</td>
@@ -915,6 +917,7 @@
             <td class="p-2 text-center whitespace-nowrap"><span class="text-[10px] font-black uppercase text-slate-500">${list.length} Media</span></td>
           </tr>`; 
         }
+
         if (type === 'CPR') { 
           const c = Number(list.reduce((a,p)=>a+p.cprMtd,0).toFixed(1)), cRr = list.reduce((a,p)=>a+(p.cprRr||0),0); 
           const cKpi = totKpis.cpr?.kpi || 200;
@@ -926,12 +929,14 @@
             <td class="text-center text-slate-700 font-black">${cKpi.toLocaleString()}</td>
             <td class="text-center font-black">${c}</td>
             <td class="text-center font-bold ${getRrColor(cRr, cKpi)}">${cRr}</td>
+            <td class="text-center font-black">${s}</td>
             <td class="text-center font-black">${u}</td>
             <td class="text-center font-black">${revTotDisplay}</td>
             <td class="text-center font-black">${roi}</td>
             <td class="p-2 text-center whitespace-nowrap"><span class="text-[10px] font-black uppercase text-slate-500">${list.length} Media</span></td>
           </tr>`; 
         }
+
         if (type === 'CPL') { 
           const l = list.reduce((a,p)=>a+p.cplMtd,0), lRr = Math.round(l * rrF); 
           const lKpi = totKpis.cpl?.kpi || 4000;
@@ -959,10 +964,10 @@
           <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCpaTable('budget')" id="sort-cpa-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('registrations')" id="sort-cpa-registrations" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('cpa')" id="sort-cpa-cpa" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCpaTable('revenue')" id="sort-cpa-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('status')" id="sort-cpa-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cpaTableBody" class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
         </div>
 
-        <!-- 2. CPR SECOND -->
+        <!-- 2. CPR SECOND (CON COLUMNA REGISTRATIONS INCLUIDA) -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-amber-900 bg-amber-100 px-3 py-1 rounded-md">CPR</span>
-          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCprTable('budget')" id="sort-cpr-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCprTable('cpr')" id="sort-cpr-cpr" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('users')" id="sort-cpr-users" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCprTable('revenue')" id="sort-cpr-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('status')" id="sort-cpr-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cprTableBody" class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="11" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpr.length ? renderFoot(cpr, 'CPR', cprTotBKpi) : ''}</tfoot></table></div>
+          <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCprTable('budget')" id="sort-cpr-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCprTable('cpr')" id="sort-cpr-cpr" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('registrations')" id="sort-cpr-registrations" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCprTable('users')" id="sort-cpr-users" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCprTable('revenue')" id="sort-cpr-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('status')" id="sort-cpr-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cprTableBody" class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpr.length ? renderFoot(cpr, 'CPR', cprTotBKpi) : ''}</tfoot></table></div>
         </div>
 
         <!-- 3. CPL THIRD -->
