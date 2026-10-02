@@ -16,13 +16,13 @@
   "totals": {
     "cpl": {
       "kpi": 4000,
-      "mtd": 2,
+      "mtd": 4,
       "rr": 62
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 1,
-      "rr": 31
+      "mtd": 3,
+      "rr": 47
     },
     "cpr": {
       "kpi": 200,
@@ -32,7 +32,7 @@
     "cpa": {
       "kpi": 300,
       "mtd": 1,
-      "rr": 31
+      "rr": 16
     },
     "revenue": 150.0,
     "budget": 0,
@@ -48,12 +48,21 @@
       "users": 1,
       "rev": 150.0,
       "budget": 0
+    },
+    {
+      "date": "2026-10-02",
+      "leads": 2,
+      "signups": 2,
+      "cpr": 0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
     }
   ],
   "partners": [
     {
       "name": "FXM",
-      "cplMtd": 2,
+      "cplMtd": 4,
       "cplRr": 62,
       "sigMtd": 0,
       "sigRr": 0,
@@ -75,18 +84,33 @@
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
-      "cpaRr": 31,
+      "cpaRr": 16,
       "rev": 150.0,
       "budget": 0,
       "profit": 150.0,
       "status": "working-well"
     },
     {
+      "name": "PRO",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 2,
+      "sigRr": 31,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 31,
+      "sigRr": 16,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -112,7 +136,6 @@
     "LUM",
     "MOD",
     "MON",
-    "PRO",
     "REV",
     "SDG",
     "SGA",
