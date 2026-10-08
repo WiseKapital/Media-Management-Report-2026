@@ -35,9 +35,9 @@
       "rr": 109
     },
     "revenue": 4434.0,
-    "budget": 667.0,
-    "profit": 3767.0,
-    "roi": "1:6.6"
+    "budget": 587,
+    "profit": 3847.0,
+    "roi": "1:7.6"
   },
   "daily_series": [
     {
@@ -110,7 +110,7 @@
       "cpr": 2.0,
       "users": 7,
       "rev": 1194.0,
-      "budget": 207
+      "budget": 127
     }
   ],
   "partners": [
@@ -265,21 +265,6 @@
       "status": "neutral"
     },
     {
-      "name": "TEST",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 0,
-      "sigRr": 0,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 80.0,
-      "profit": -80.0,
-      "status": "not-working"
-    },
-    {
       "name": "VENE",
       "cplMtd": 0,
       "cplRr": 0,
@@ -361,6 +346,7 @@
     "SIGb",
     "SPX",
     "TAK",
+    "TEST",
     "WAN",
     "WRW",
     "XLE",
