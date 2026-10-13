@@ -21,7 +21,7 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 656,
+      "mtd": 328,
       "rr": 1563
     },
     "cpr": {
@@ -124,7 +124,7 @@
     {
       "date": "2026-10-10",
       "leads": 1,
-      "signups": 110,
+      "signups": 30,
       "cpr": 3.5,
       "users": 2,
       "rev": 300.0,
@@ -133,7 +133,7 @@
     {
       "date": "2026-10-11",
       "leads": 1,
-      "signups": 115,
+      "signups": 31,
       "cpr": 3.5,
       "users": 2,
       "rev": 300.0,
@@ -142,7 +142,7 @@
     {
       "date": "2026-10-12",
       "leads": 1,
-      "signups": 112,
+      "signups": 30,
       "cpr": 3.5,
       "users": 2,
       "rev": 250.0,
@@ -151,7 +151,7 @@
     {
       "date": "2026-10-13",
       "leads": 1,
-      "signups": 112,
+      "signups": 30,
       "cpr": 3.5,
       "users": 1,
       "rev": 234.0,
@@ -448,7 +448,7 @@
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 565,
+      "sigMtd": 237,
       "sigRr": 1347,
       "cprMtd": 0,
       "cprRr": 0,
