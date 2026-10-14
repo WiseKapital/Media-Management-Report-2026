@@ -161,19 +161,24 @@
       'not-working': 1
     };
 
-    // Funciones lógicas de modelo de negocio
+    // Funciones lógicas de modelo de negocio (FZY asignado a CPA)
     function isCplPartner(p) {
+      if (p.name === 'FZY') return false;
+      if (p.model === 'CPA' || p.type === 'CPA') return false;
       if (p.model === 'CPL' || p.type === 'CPL') return true;
       return typeof p.cplMtd === 'number' && p.cplMtd > 0;
     }
 
     function isCprPartner(p) {
+      if (p.name === 'FZY') return false;
+      if (p.model === 'CPA' || p.type === 'CPA') return false;
       if (p.model === 'CPR' || p.type === 'CPR') return true;
       if (isCplPartner(p)) return false;
       return typeof p.cprMtd === 'number' && p.cprMtd > 0;
     }
 
     function isCpaPartner(p) {
+      if (p.name === 'FZY') return true;
       if (p.model === 'CPA' || p.type === 'CPA') return true;
       if (isCplPartner(p) || isCprPartner(p)) return false;
       return (typeof p.cpaMtd === 'number' && p.cpaMtd > 0) ||
