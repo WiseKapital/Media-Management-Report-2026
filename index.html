@@ -390,7 +390,7 @@
         rev: isFull ? data.totals.revenue : Math.round(rev * rrFactor),
         profit: isFull ? data.totals.profit : Math.round((rev - budget) * rrFactor),
         leads: isFull ? data.totals.cpl.rr : Math.round(leads * rrFactor),
-        cpr: isFull ? (data.totals.cpr?.rr || 0) : (cprVal > 0 ? Number((cprVal * rrFactor).toFixed(2)) : 0)
+        cpr: isFull ? Math.round(data.totals.cpr?.rr || 0) : (cprVal > 0 ? Math.round(cprVal * rrFactor) : 0)
       };
 
       const teamKpis = data.team_kpis || { budget: 5500, signups: 1000, users: 300, revenue: 16500, profit: 11000 };
@@ -411,8 +411,8 @@
         const pR = isFull ? p.rev : Number(((p.rev || 0) * rRatio).toFixed(2));
         const pP = Number((pR - pB).toFixed(2));
         
-        const pCpr = isFull ? (p.cprMtd || 0) : (typeof p.cprMtd === 'number' && p.cprMtd > 0 && cprVal > 0 ? Number((p.cprMtd * cRatio).toFixed(1)) : 0);
-        const pCprRr = isFull ? (p.cprRr || 0) : (pCpr > 0 ? Number((pCpr * rrFactor).toFixed(2)) : 0);
+        const pCpr = isFull ? Math.round(p.cprMtd || 0) : (typeof p.cprMtd === 'number' && p.cprMtd > 0 && cprVal > 0 ? Math.round(p.cprMtd * cRatio) : 0);
+        const pCprRr = isFull ? Math.round(p.cprRr || 0) : (pCpr > 0 ? Math.round(pCpr * rrFactor) : 0);
 
         let st = 'neutral';
         if (pP > 0 && pR > 0) st = 'working-well'; 
@@ -454,7 +454,7 @@
       if (covered.length === 0) return renderZeroState(sDate, eDate);
 
       const allDays = {};
-      covered.forEach(m => (m.daily_series || []).forEach(r => { if (r.date) allDays[r.date] = r; }));
+      covered.forEach(m => (m.daily_series || []).forEach(r => { if (r.date) dailyMap[r.date] = r; }));
       
       const slice = []; let cur = new Date(sDate);
       while (cur <= eDate) {
@@ -479,7 +479,7 @@
         rev: Math.round(rev * rrFactor), 
         profit: Math.round(profit * rrFactor), 
         leads: Math.round(leads * rrFactor),
-        cpr: cprVal > 0 ? Number((cprVal * rrFactor).toFixed(1)) : 0
+        cpr: cprVal > 0 ? Math.round(cprVal * rrFactor) : 0
       };
 
       const teamKpis = {
@@ -520,14 +520,14 @@
         else if (pP < 0 && p.budget > 0) st = 'not-working'; 
         else if (p.sigMtd >= 9 || p.cpaMtd >= 2) st = 'potential';
 
-        const pCpr = (typeof p.cprMtd === 'number' && p.cprMtd > 0 && cprVal > 0) ? Number((p.cprMtd * cRatio).toFixed(1)) : 0;
+        const pCpr = (typeof p.cprMtd === 'number' && p.cprMtd > 0 && cprVal > 0) ? Math.round(p.cprMtd * cRatio) : 0;
         return {
           ...p, profit: pP, status: st,
           cplRr: p.cplMtd > 0 ? Math.round(p.cplMtd * rrFactor) : '—',
           sigRr: p.sigMtd > 0 ? Math.round(p.sigMtd * rrFactor) : 0,
           cpaRr: p.cpaMtd > 0 ? Math.round(p.cpaMtd * rrFactor) : 0,
           cprMtd: pCpr,
-          cprRr: pCpr > 0 ? Number((pCpr * rrFactor).toFixed(1)) : 0
+          cprRr: pCpr > 0 ? Math.round(pCpr * rrFactor) : 0
         };
       });
 
@@ -602,7 +602,7 @@
       elP.textContent = (d.rr.profit < 0 ? '-$' : '$') + Math.round(Math.abs(d.rr.profit)).toLocaleString();
       elP.className = `${getRrColor(d.rr.profit, d.teamKpis?.profit || 11000)} font-black`;
 
-      document.getElementById('tp-rr-roi').textContent = d.budget > 0 ? `1:${(d.rev / d.budget).toFixed(1)}` : (d.roi || '1:0.0');
+      document.getElementById('tp-rr-roi').textContent = (d.budget > 0 && d.rev > 0) ? `1:${(d.rev / d.budget).toFixed(1)}` : (d.roi || '—');
     }
 
     function renderTopCards(partners, teamKpis = { budget: 5500, signups: 1000, users: 300, revenue: 16500, profit: 11000 }) {
@@ -816,7 +816,8 @@
       const cplTotBKpi = cpl.reduce((a, p) => a + (p._bKpi || 0), 0);
 
       const renderRows = (list, type) => list.map(p => {
-        const b = p.budget || 0, bRr = Math.round(b * rrF), r = p.rev || 0, roi = b > 0 ? `1:${(r/b).toFixed(1)}` : (r > 0 ? '1:∞' : '—');
+        const b = p.budget || 0, bRr = Math.round(b * rrF), r = p.rev || 0;
+        const roi = (b > 0 && r > 0) ? `1:${(r/b).toFixed(1)}` : '—';
         const bKpi = p._bKpi || 0;
         const bKpiDisplay = `$${bKpi.toLocaleString()}`;
         const badge = getStatusBadge(p.status);
@@ -846,8 +847,8 @@
         }
 
         if (type === 'CPR') {
-          const cprMtdVal = typeof p.cprMtd === 'number' ? Number(p.cprMtd).toFixed(1) : '0.0';
-          const cprRrVal = typeof p.cprRr === 'number' ? p.cprRr : (p.cprRr || 0);
+          const cprMtdVal = typeof p.cprMtd === 'number' ? Math.round(p.cprMtd) : 0;
+          const cprRrVal = typeof p.cprRr === 'number' ? Math.round(p.cprRr) : (p.cprRr ? Math.round(p.cprRr) : 0);
 
           return `<tr class="hover:bg-slate-50 cpr-row" data-budget="${b}" data-cpr="${p.cprMtd||0}" data-registrations="${sigVal}" data-users="${usersVal}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
             <td class="p-2 font-bold">${p.name}</td>
@@ -887,7 +888,8 @@
       }).join('');
 
       const renderFoot = (list, type, totBKpi) => {
-        const b = list.reduce((a,p)=>a+(p.budget||0),0), bRr = Math.round(b * rrF), r = list.reduce((a,p)=>a+(p.rev||0),0), roi = b > 0 ? `1:${(r/b).toFixed(1)}` : '—';
+        const b = list.reduce((a,p)=>a+(p.budget||0),0), bRr = Math.round(b * rrF), r = list.reduce((a,p)=>a+(p.rev||0),0);
+        const roi = (b > 0 && r > 0) ? `1:${(r/b).toFixed(1)}` : '—';
         const bKpiTotDisplay = totBKpi > 0 ? `$${totBKpi.toLocaleString()}` : '$0';
         const revTotDisplay = `$${Math.round(r).toLocaleString()}`;
 
@@ -914,7 +916,7 @@
         }
 
         if (type === 'CPR') { 
-          const c = Number(list.reduce((a,p)=>a+p.cprMtd,0).toFixed(1)), cRr = list.reduce((a,p)=>a+(p.cprRr||0),0); 
+          const c = Math.round(list.reduce((a,p)=>a+(p.cprMtd||0),0)), cRr = Math.round(list.reduce((a,p)=>a+(p.cprRr||0),0)); 
           const cKpi = totKpis.cpr?.kpi || 200;
           return `<tr>
             <td class="p-2 font-black">Grand total</td>
