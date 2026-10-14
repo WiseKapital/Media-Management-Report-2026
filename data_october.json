@@ -21,7 +21,7 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 689,
+      "mtd": 343,
       "rr": 1522
     },
     "cpr": {
@@ -160,7 +160,7 @@
     {
       "date": "2026-10-14",
       "leads": 1,
-      "signups": 361,
+      "signups": 15,
       "cpr": 0,
       "users": 0,
       "rev": 0,
@@ -457,7 +457,7 @@
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 583,
+      "sigMtd": 237,
       "sigRr": 1291,
       "cprMtd": 0,
       "cprRr": 0,
