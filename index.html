@@ -50,7 +50,7 @@
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
-                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-left text-[11px]"></i></button>
+                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
                 <span id="toMonthLabel" class="uppercase"></span>
                 <button onclick="navCal('to', 1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
               </div>
@@ -115,6 +115,71 @@
     <!-- SECCIÓN 2: 3 TABLAS DE DESGLOSE (CPA PRIMERO, CPR SEGUNDO, CPL TERCERO) -->
     <div id="section-v2" class="space-y-6">
       <div id="breakdown-tables-container" class="space-y-6"></div>
+
+      <!-- BRANDS SUMMARY REPORT -->
+      <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 space-y-3">
+        <div class="overflow-x-auto">
+          <table class="w-full text-xs table-grid">
+            <thead>
+              <tr class="font-black text-center select-none text-slate-800 bg-slate-100">
+                <th colspan="8" class="p-2 uppercase tracking-wide text-xs">BRANDS SUMMARY REPORT</th>
+              </tr>
+              <tr class="bg-slate-50 font-bold text-center select-none text-slate-700">
+                <th class="p-2 text-left">Advertiser</th>
+                <th class="p-2 text-left">Brand</th>
+                <th class="p-2">SignUps</th>
+                <th class="p-2">Ftd</th>
+                <th class="p-2">Revenue</th>
+                <th class="p-2">Budget</th>
+                <th class="p-2">Profit</th>
+                <th class="p-2">S2P</th>
+              </tr>
+            </thead>
+            <tbody id="brandsSummaryBody" class="font-semibold text-slate-700">
+              <tr>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+              </tr>
+              <tr>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+                <td class="p-2.5">&nbsp;</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
     </div>
 
     <!-- SECCIÓN 3: INACTIVE PARTNERS -->
