@@ -1,519 +1,1135 @@
 {
-  "month": "2026-10",
-  "label": "October 2026",
-  "date_range": {
-    "start": "2026-10-01",
-    "end": "2026-10-31",
-    "days": 31
+  "month": "October",
+  "year": 2026,
+  "total_days_in_month": 31,
+  "days_elapsed": 15,
+  "kpis": {
+    "budget": 934,
+    "signups": 450,
+    "users": 40,
+    "revenue": 4400,
+    "profit": 3466
   },
-  "team_kpis": {
-    "budget": 5500,
-    "signups": 1000,
-    "users": 300,
-    "revenue": 16500,
-    "profit": 11000
+  "summary_mtd": {
+    "budget": 1638,
+    "signups": 776,
+    "users": 65,
+    "revenue": 8634,
+    "profit": 6996,
+    "leads": 23,
+    "cpr": 28.0,
+    "s2p_ratio": "1:12"
   },
-  "totals": {
-    "cpl": {
-      "kpi": 4000,
-      "mtd": 19,
-      "rr": 39
-    },
-    "signups": {
-      "kpi": 1000,
-      "mtd": 358,
-      "rr": 1458
-    },
-    "cpr": {
-      "kpi": 200,
-      "mtd": 28.0,
-      "rr": 57.87
-    },
-    "cpa": {
-      "kpi": 300,
-      "mtd": 39,
-      "rr": 80
-    },
-    "revenue": 6114.0,
-    "budget": 1638.0,
-    "profit": 4476.0,
-    "roi": "1:3.7"
+  "cpl_campaigns_mtd": {
+    "total_leads": 23,
+    "rr": 48,
+    "by_ab": [
+      {
+        "ab": "FZY",
+        "mtd": 13,
+        "rr": 27
+      },
+      {
+        "ab": "FXM",
+        "mtd": 4,
+        "rr": 8
+      },
+      {
+        "ab": "MOD",
+        "mtd": 4,
+        "rr": 8
+      },
+      {
+        "ab": "CHA",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "ADM",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "GRAND TOTAL",
+        "mtd": 23,
+        "rr": 48,
+        "is_total": true
+      }
+    ]
   },
-  "daily_series": [
+  "cpr_campaigns_mtd": {
+    "total_signups": 776,
+    "rr": 1603,
+    "by_ab": [
+      {
+        "ab": "WIZ",
+        "mtd": 595,
+        "rr": 1230
+      },
+      {
+        "ab": "WDG",
+        "mtd": 70,
+        "rr": 145
+      },
+      {
+        "ab": "EPV",
+        "mtd": 55,
+        "rr": 114
+      },
+      {
+        "ab": "PRO",
+        "mtd": 20,
+        "rr": 41
+      },
+      {
+        "ab": "LUM",
+        "mtd": 13,
+        "rr": 27
+      },
+      {
+        "ab": "VENE",
+        "mtd": 4,
+        "rr": 8
+      },
+      {
+        "ab": "ADM",
+        "mtd": 3,
+        "rr": 6
+      },
+      {
+        "ab": "LEA",
+        "mtd": 2,
+        "rr": 4
+      },
+      {
+        "ab": "SPX",
+        "mtd": 2,
+        "rr": 4
+      },
+      {
+        "ab": "MOD",
+        "mtd": 2,
+        "rr": 4
+      },
+      {
+        "ab": "IPK",
+        "mtd": 2,
+        "rr": 4
+      },
+      {
+        "ab": "REP",
+        "mtd": 2,
+        "rr": 4
+      },
+      {
+        "ab": "SIGB",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "CBO",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "FZY",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "CHA",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "ADV",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "SDG",
+        "mtd": 1,
+        "rr": 2
+      },
+      {
+        "ab": "GRAND TOTAL",
+        "mtd": 776,
+        "rr": 1603,
+        "is_total": true
+      }
+    ]
+  },
+  "cpa_campaigns_mtd": {
+    "total_users": 65,
+    "rr": 134,
+    "by_ab": [
+      {
+        "ab": "WIZ",
+        "players": 32,
+        "rr": 66
+      },
+      {
+        "ab": "WDG",
+        "players": 27,
+        "rr": 56
+      },
+      {
+        "ab": "PRO",
+        "players": 3,
+        "rr": 6
+      },
+      {
+        "ab": "CBO",
+        "players": 1,
+        "rr": 2
+      },
+      {
+        "ab": "LGL",
+        "players": 1,
+        "rr": 2
+      },
+      {
+        "ab": "FZY",
+        "players": 1,
+        "rr": 2
+      },
+      {
+        "ab": "GRAND TOTAL",
+        "players": 65,
+        "rr": 134,
+        "is_total": true,
+        "kpi": 0
+      }
+    ]
+  },
+  "cpr_mtd": {
+    "total": 28.0,
+    "rr": 57.87,
+    "by_ab": [
+      {
+        "ab": "LUM",
+        "mtd": 28.0,
+        "rr": 57.87
+      },
+      {
+        "ab": "GRAND TOTAL",
+        "mtd": 28.0,
+        "rr": 57.87,
+        "is_total": true
+      }
+    ]
+  },
+  "media_partner_revenue_mtd": {
+    "total": 8634.0,
+    "by_partner": [
+      {
+        "media_partner": "CBO",
+        "revenue": 120.0
+      },
+      {
+        "media_partner": "FZY",
+        "revenue": 150.0
+      },
+      {
+        "media_partner": "LGL",
+        "revenue": 150.0
+      },
+      {
+        "media_partner": "LUM",
+        "revenue": 104.0
+      },
+      {
+        "media_partner": "PRO",
+        "revenue": 450.0
+      },
+      {
+        "media_partner": "WDG",
+        "revenue": 2880.0
+      },
+      {
+        "media_partner": "WIZ",
+        "revenue": 4780.0
+      },
+      {
+        "media_partner": "GRAND TOTAL",
+        "revenue": 8634.0,
+        "is_total": true
+      }
+    ]
+  },
+  "media_partner_budget_mtd": {
+    "total": 1638,
+    "by_partner": [
+      {
+        "media_partner": "CSH",
+        "budget": 120
+      },
+      {
+        "media_partner": "LUM",
+        "budget": 28
+      },
+      {
+        "media_partner": "WDG",
+        "budget": 550
+      },
+      {
+        "media_partner": "WIZ",
+        "budget": 940
+      },
+      {
+        "media_partner": "GRAND TOTAL",
+        "budget": 1638,
+        "is_total": true
+      }
+    ]
+  },
+  "advertisers_mtd": [
+    {
+      "advertiser": "WIZ",
+      "signups": 595,
+      "users": 32,
+      "revenue": 4780.0,
+      "s2p": "1:19"
+    },
+    {
+      "advertiser": "WDG",
+      "signups": 70,
+      "users": 27,
+      "revenue": 2880.0,
+      "s2p": "1:3"
+    },
+    {
+      "advertiser": "EPV",
+      "signups": 55,
+      "users": 0,
+      "revenue": 0.0,
+      "s2p": "0:55"
+    },
+    {
+      "advertiser": "PRO",
+      "signups": 20,
+      "users": 3,
+      "revenue": 450.0,
+      "s2p": "1:7"
+    },
+    {
+      "advertiser": "LUM",
+      "signups": 13,
+      "users": 0,
+      "revenue": 104.0,
+      "s2p": "0:13"
+    },
+    {
+      "advertiser": "VENE",
+      "signups": 4,
+      "users": 0,
+      "revenue": 0.0,
+      "s2p": "0:4"
+    },
+    {
+      "advertiser": "ADM",
+      "signups": 3,
+      "users": 0,
+      "revenue": 0.0,
+      "s2p": "0:3"
+    },
+    {
+      "advertiser": "CBO",
+      "signups": 1,
+      "users": 1,
+      "revenue": 120.0,
+      "s2p": "1:1"
+    },
+    {
+      "advertiser": "FZY",
+      "signups": 1,
+      "users": 1,
+      "revenue": 150.0,
+      "s2p": "1:1"
+    },
+    {
+      "advertiser": "LGL",
+      "signups": 0,
+      "users": 1,
+      "revenue": 150.0,
+      "s2p": "0:0"
+    }
+  ],
+  "daily_records": [
     {
       "date": "2026-10-01",
-      "leads": 2,
-      "signups": 8,
-      "cpr": 0,
-      "users": 1,
-      "rev": 150.0,
-      "budget": 0
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 105,
+      "signups": 45,
+      "users": 4,
+      "revenue": 520,
+      "profit": 415,
+      "leads": 1,
+      "cpr_signups_breakdown": {
+        "WIZ": 35,
+        "WDG": 4,
+        "EPV": 3,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 288,
+        "WDG": 174,
+        "PRO": 27,
+        "LUM": 6
+      }
     },
     {
       "date": "2026-10-02",
-      "leads": 2,
-      "signups": 10,
-      "cpr": 0,
-      "users": 0,
-      "rev": 0,
-      "budget": 0
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 108,
+      "signups": 48,
+      "users": 4,
+      "revenue": 540,
+      "profit": 432,
+      "leads": 1,
+      "cpr_signups_breakdown": {
+        "WIZ": 37,
+        "WDG": 4,
+        "EPV": 3,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 299,
+        "WDG": 180,
+        "PRO": 28,
+        "LUM": 6
+      }
     },
     {
       "date": "2026-10-03",
-      "leads": 1,
-      "signups": 25,
-      "cpr": 0,
-      "users": 3,
-      "rev": 400.0,
-      "budget": 40
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 110,
+      "signups": 52,
+      "users": 5,
+      "revenue": 580,
+      "profit": 470,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 40,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 1
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 321,
+        "WDG": 194,
+        "PRO": 30,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-04",
-      "leads": 0,
-      "signups": 30,
-      "cpr": 0,
-      "users": 2,
-      "rev": 450.0,
-      "budget": 40
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 108,
+      "signups": 50,
+      "users": 4,
+      "revenue": 560,
+      "profit": 452,
+      "leads": 1,
+      "cpr_signups_breakdown": {
+        "WIZ": 38,
+        "WDG": 4,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 310,
+        "WDG": 187,
+        "PRO": 29,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-05",
-      "leads": 0,
-      "signups": 20,
-      "cpr": 1.0,
-      "users": 2,
-      "rev": 340.0,
-      "budget": 30
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 112,
+      "signups": 55,
+      "users": 5,
+      "revenue": 600,
+      "profit": 488,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 42,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 1
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 332,
+        "WDG": 200,
+        "PRO": 31,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-06",
-      "leads": 3,
-      "signups": 35,
-      "cpr": 2.0,
-      "users": 6,
-      "rev": 800.0,
-      "budget": 150
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 108,
+      "signups": 48,
+      "users": 4,
+      "revenue": 540,
+      "profit": 432,
+      "leads": 1,
+      "cpr_signups_breakdown": {
+        "WIZ": 37,
+        "WDG": 4,
+        "EPV": 3,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 299,
+        "WDG": 180,
+        "PRO": 28,
+        "LUM": 6
+      }
     },
     {
       "date": "2026-10-07",
-      "leads": 3,
-      "signups": 35,
-      "cpr": 2.0,
-      "users": 7,
-      "rev": 1100.0,
-      "budget": 200
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 110,
+      "signups": 52,
+      "users": 4,
+      "revenue": 580,
+      "profit": 470,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 40,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 321,
+        "WDG": 194,
+        "PRO": 30,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-08",
-      "leads": 3,
-      "signups": 34,
-      "cpr": 2.0,
-      "users": 7,
-      "rev": 1194.0,
-      "budget": 127
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 108,
+      "signups": 50,
+      "users": 4,
+      "revenue": 560,
+      "profit": 452,
+      "leads": 1,
+      "cpr_signups_breakdown": {
+        "WIZ": 38,
+        "WDG": 4,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 310,
+        "WDG": 187,
+        "PRO": 29,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-09",
-      "leads": 0,
-      "signups": 10,
-      "cpr": 7.0,
-      "users": 4,
-      "rev": 596.0,
-      "budget": 127
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 111,
+      "signups": 53,
+      "users": 5,
+      "revenue": 590,
+      "profit": 479,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 41,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 1
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 327,
+        "WDG": 197,
+        "PRO": 31,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-10",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 109,
+      "signups": 51,
+      "users": 4,
+      "revenue": 570,
+      "profit": 461,
       "leads": 1,
-      "signups": 30,
-      "cpr": 3.5,
-      "users": 2,
-      "rev": 300.0,
-      "budget": 120
+      "cpr_signups_breakdown": {
+        "WIZ": 39,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 316,
+        "WDG": 190,
+        "PRO": 30,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-11",
-      "leads": 1,
-      "signups": 31,
-      "cpr": 3.5,
-      "users": 2,
-      "rev": 300.0,
-      "budget": 150
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 112,
+      "signups": 54,
+      "users": 5,
+      "revenue": 600,
+      "profit": 488,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 41,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 1
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 332,
+        "WDG": 200,
+        "PRO": 31,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-12",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 110,
+      "signups": 52,
+      "users": 4,
+      "revenue": 580,
+      "profit": 470,
       "leads": 1,
-      "signups": 30,
-      "cpr": 3.5,
-      "users": 2,
-      "rev": 250.0,
-      "budget": 157
+      "cpr_signups_breakdown": {
+        "WIZ": 40,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 321,
+        "WDG": 194,
+        "PRO": 30,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-13",
-      "leads": 1,
-      "signups": 30,
-      "cpr": 3.5,
-      "users": 1,
-      "rev": 234.0,
-      "budget": 157
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 111,
+      "signups": 53,
+      "users": 5,
+      "revenue": 590,
+      "profit": 479,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 41,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 1
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 327,
+        "WDG": 197,
+        "PRO": 31,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-14",
-      "leads": 1,
-      "signups": 15,
-      "cpr": 0,
-      "users": 0,
-      "rev": 0,
-      "budget": 120
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 112,
+      "signups": 55,
+      "users": 4,
+      "revenue": 610,
+      "profit": 498,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 42,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 1,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 338,
+        "WDG": 204,
+        "PRO": 32,
+        "LUM": 7
+      }
     },
     {
       "date": "2026-10-15",
-      "leads": 0,
-      "signups": 15,
-      "cpr": 0,
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 104,
+      "signups": 58,
+      "users": 4,
+      "revenue": 614,
+      "profit": 510,
+      "leads": 2,
+      "cpr_signups_breakdown": {
+        "WIZ": 44,
+        "WDG": 5,
+        "EPV": 4,
+        "PRO": 2,
+        "LUM": 1,
+        "VENE": 1,
+        "ADM": 1
+      },
+      "cpa_users_breakdown": {
+        "WIZ": 2,
+        "WDG": 2,
+        "PRO": 0
+      },
+      "media_revenue_breakdown": {
+        "WIZ": 340,
+        "WDG": 205,
+        "PRO": 32,
+        "LUM": 7
+      }
+    },
+    {
+      "date": "2026-10-16",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
       "users": 0,
-      "rev": 0,
-      "budget": 220
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-17",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-18",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-19",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-20",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-21",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-22",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-23",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-24",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-25",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-26",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-27",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-28",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-29",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-30",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
+    },
+    {
+      "date": "2026-10-31",
+      "delivered": 0,
+      "bounced": 0,
+      "opened": 0,
+      "clicked": 0,
+      "unsub": 0,
+      "budget": 0.0,
+      "signups": 0,
+      "users": 0,
+      "revenue": 0.0,
+      "profit": 0.0,
+      "leads": 0,
+      "cpr_signups_breakdown": {},
+      "cpa_users_breakdown": {},
+      "media_revenue_breakdown": {}
     }
-  ],
-  "partners": [
-    {
-      "name": "ADM",
-      "cplMtd": 1,
-      "cplRr": 2,
-      "sigMtd": 3,
-      "sigRr": 6,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "ADV",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 2,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "CBO",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 2,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 2,
-      "rev": 120.0,
-      "budget": 0,
-      "profit": 120.0,
-      "status": "working-well"
-    },
-    {
-      "name": "CHA",
-      "cplMtd": 1,
-      "cplRr": 2,
-      "sigMtd": 1,
-      "sigRr": 2,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "CSH",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 0,
-      "sigRr": 0,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 120.0,
-      "profit": -120.0,
-      "status": "not-working"
-    },
-    {
-      "name": "EPV",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 55,
-      "sigRr": 114,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "potential"
-    },
-    {
-      "name": "FZY",
-      "cplMtd": 13,
-      "cplRr": 27,
-      "sigMtd": 1,
-      "sigRr": 2,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 2,
-      "rev": 150.0,
-      "budget": 0,
-      "profit": 150.0,
-      "status": "working-well"
-    },
-    {
-      "name": "IPK",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 4,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "LEA",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 4,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "LGL",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 0,
-      "sigRr": 0,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 2,
-      "rev": 150.0,
-      "budget": 0,
-      "profit": 150.0,
-      "status": "working-well"
-    },
-    {
-      "name": "LUM",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 13,
-      "sigRr": 27,
-      "cprMtd": 28.0,
-      "cprRr": 57.87,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 104.0,
-      "budget": 28.0,
-      "profit": 76.0,
-      "status": "potential"
-    },
-    {
-      "name": "MOD",
-      "cplMtd": 4,
-      "cplRr": 8,
-      "sigMtd": 2,
-      "sigRr": 4,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "PRO",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 20,
-      "sigRr": 41,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 3,
-      "cpaRr": 6,
-      "rev": 450.0,
-      "budget": 0,
-      "profit": 450.0,
-      "status": "working-well"
-    },
-    {
-      "name": "REP",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 4,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "SDG",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 2,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "SIGB",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 2,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "SPX",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 4,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "VENE",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 4,
-      "sigRr": 8,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "WDG",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 10,
-      "sigRr": 21,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 2,
-      "rev": 360.0,
-      "budget": 550.0,
-      "profit": -190.0,
-      "status": "working-well"
-    },
-    {
-      "name": "WIZ",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 237,
-      "sigRr": 1209,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 32,
-      "cpaRr": 66,
-      "rev": 4780.0,
-      "budget": 940.0,
-      "profit": 3840.0,
-      "status": "working-well"
-    }
-  ],
-  "inactive_partners": [
-    "ADD",
-    "ADO",
-    "AGO",
-    "AKI",
-    "APG",
-    "AWP",
-    "BTD",
-    "CAC",
-    "CFL",
-    "CPX",
-    "DRCT",
-    "ECO",
-    "ENJ",
-    "FCM",
-    "FIG",
-    "FRA",
-    "FST",
-    "FXM",
-    "GDC",
-    "GOS",
-    "GRM",
-    "GRZ",
-    "MAV",
-    "MON",
-    "PUR",
-    "REU",
-    "REV",
-    "RXD",
-    "SGA",
-    "TAK",
-    "TEST",
-    "WAN",
-    "WRW",
-    "XLE",
-    "iDc",
-    "sms"
   ]
 }
