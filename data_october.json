@@ -17,27 +17,27 @@
     "cpl": {
       "kpi": 4000,
       "mtd": 23,
-      "rr": 48
+      "rr": 45
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 776,
-      "rr": 1603
+      "mtd": 598,
+      "rr": 1584
     },
     "cpr": {
       "kpi": 200,
       "mtd": 28.0,
-      "rr": 57.87
+      "rr": 54.25
     },
     "cpa": {
       "kpi": 300,
-      "mtd": 65,
-      "rr": 134
+      "mtd": 67,
+      "rr": 130
     },
-    "revenue": 8634.0,
+    "revenue": 8934.0,
     "budget": 1638.0,
-    "profit": 6996.0,
-    "roi": "1:5.3"
+    "profit": 7296.0,
+    "roi": "1:5.5"
   },
   "daily_series": [
     {
@@ -169,11 +169,20 @@
     {
       "date": "2026-10-15",
       "leads": 4,
-      "signups": 433,
+      "signups": 255,
       "cpr": 0,
       "users": 26,
       "rev": 2520.0,
       "budget": 220
+    },
+    {
+      "date": "2026-10-16",
+      "leads": 0,
+      "signups": 0,
+      "cpr": 0,
+      "users": 2,
+      "rev": 300.0,
+      "budget": 0
     }
   ],
   "partners": [
@@ -226,8 +235,8 @@
       "name": "CHA",
       "cplMtd": 1,
       "cplRr": 2,
-      "sigMtd": 1,
-      "sigRr": 2,
+      "sigMtd": 2,
+      "sigRr": 4,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -256,8 +265,8 @@
       "name": "EPV",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 55,
-      "sigRr": 114,
+      "sigMtd": 74,
+      "sigRr": 143,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -285,7 +294,7 @@
     {
       "name": "FZY",
       "cplMtd": 13,
-      "cplRr": 27,
+      "cplRr": 25,
       "sigMtd": 1,
       "sigRr": 2,
       "cprMtd": 0,
@@ -316,8 +325,8 @@
       "name": "LEA",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 4,
+      "sigMtd": 3,
+      "sigRr": 6,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -347,9 +356,9 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 13,
-      "sigRr": 27,
+      "sigRr": 25,
       "cprMtd": 28.0,
-      "cprRr": 57.87,
+      "cprRr": 54.25,
       "cpaMtd": 0,
       "cpaRr": 0,
       "rev": 104.0,
@@ -377,7 +386,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 20,
-      "sigRr": 41,
+      "sigRr": 39,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 3,
@@ -466,27 +475,27 @@
       "name": "WDG",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 70,
-      "sigRr": 145,
+      "sigMtd": 74,
+      "sigRr": 143,
       "cprMtd": 0,
       "cprRr": 0,
-      "cpaMtd": 27,
+      "cpaMtd": 29,
       "cpaRr": 56,
-      "rev": 2880.0,
+      "rev": 3180.0,
       "budget": 550.0,
-      "profit": 2330.0,
+      "profit": 2630.0,
       "status": "working-well"
     },
     {
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 595,
-      "sigRr": 1230,
+      "sigMtd": 392,
+      "sigRr": 1184,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 32,
-      "cpaRr": 66,
+      "cpaRr": 62,
       "rev": 4780.0,
       "budget": 940.0,
       "profit": 3840.0,
