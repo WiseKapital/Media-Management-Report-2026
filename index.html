@@ -121,9 +121,34 @@
         <div class="overflow-x-auto">
           <table class="w-full text-xs table-grid">
             <thead>
+              <!-- TÍTULO DE LA TABLA -->
               <tr class="font-black text-center select-none text-slate-800 bg-slate-100">
                 <th colspan="8" class="p-2 uppercase tracking-wide text-xs">BRANDS SUMMARY REPORT</th>
               </tr>
+              <!-- FILA DE BOTONES DE ORDENAMIENTO (SORT) -->
+              <tr class="sort-row-borderless select-none">
+                <th></th>
+                <th></th>
+                <th class="text-center">
+                  <button onclick="sortBrandsTable('signups')" id="sort-brand-signups" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button>
+                </th>
+                <th class="text-center">
+                  <button onclick="sortBrandsTable('ftd')" id="sort-brand-ftd" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button>
+                </th>
+                <th class="text-center">
+                  <button onclick="sortBrandsTable('revenue')" id="sort-brand-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button>
+                </th>
+                <th class="text-center">
+                  <button onclick="sortBrandsTable('budget')" id="sort-brand-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button>
+                </th>
+                <th class="text-center">
+                  <button onclick="sortBrandsTable('profit')" id="sort-brand-profit" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button>
+                </th>
+                <th class="text-center">
+                  <button onclick="sortBrandsTable('s2p')" id="sort-brand-s2p" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button>
+                </th>
+              </tr>
+              <!-- CABECERAS DE COLUMNA -->
               <tr class="bg-slate-50 font-bold text-center select-none text-slate-700">
                 <th class="p-2 text-left">Advertiser</th>
                 <th class="p-2 text-left">Brand</th>
@@ -180,6 +205,7 @@
     let cpaSortKey = null, cpaSortDir = 'desc';
     let cprSortKey = null, cprSortDir = 'desc';
     let cplSortKey = null, cplSortDir = 'desc';
+    let brandsSortKey = null, brandsSortDir = 'desc';
 
     const statusWeight = {
       'working-well': 4,
@@ -603,6 +629,48 @@
     }
 
     // ==========================================
+    // ORDENAMIENTO BRANDS SUMMARY
+    // ==========================================
+    function sortBrandsTable(key) {
+      if (brandsSortKey === key) {
+        brandsSortDir = (brandsSortDir === 'desc') ? 'asc' : 'desc';
+      } else {
+        brandsSortKey = key;
+        brandsSortDir = 'desc';
+      }
+
+      const tbody = document.getElementById('brandsSummaryBody');
+      if (!tbody) return;
+      const rows = Array.from(tbody.querySelectorAll('tr.brand-row'));
+      if (rows.length === 0) return;
+
+      rows.sort((a, b) => {
+        const vA = parseFloat(a.dataset[key]) || 0;
+        const vB = parseFloat(b.dataset[key]) || 0;
+        return brandsSortDir === 'desc' ? vB - vA : vA - vB;
+      });
+
+      rows.forEach(r => tbody.appendChild(r));
+      updateBrandsSortIcons();
+    }
+
+    function updateBrandsSortIcons() {
+      const keys = ['signups', 'ftd', 'revenue', 'budget', 'profit', 's2p'];
+      keys.forEach(k => {
+        const btn = document.getElementById(`sort-brand-${k}`);
+        if (!btn) return;
+        if (brandsSortKey === k) {
+          const icon = brandsSortDir === 'desc' ? 'fa-arrow-down-wide-short text-blue-600' : 'fa-arrow-up-wide-short text-blue-600';
+          btn.innerHTML = `Sort <i class="fa-solid ${icon}"></i>`;
+          btn.classList.add('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        } else {
+          btn.innerHTML = `Sort <i class="fa-solid fa-sort text-slate-400"></i>`;
+          btn.classList.remove('bg-blue-50', 'border-blue-300', 'text-blue-700');
+        }
+      });
+    }
+
+    // ==========================================
     // RENDERIZADO DINÁMICO DE BRANDS SUMMARY REPORT
     // ==========================================
     function renderBrandsSummary(brands, ratios = { sRatio: 1, uRatio: 1, bRatio: 1, rRatio: 1 }) {
@@ -631,6 +699,7 @@
         totBudget += b;
 
         // CÁLCULO DINÁMICO DE S2P = (FTD / SignUps) * 100%
+        const rawS2p = s > 0 ? (f / s) : 0;
         const s2p = s > 0 ? ((f / s) * 100).toFixed(1) + '%' : '0.0%';
 
         const revDisplay = `$${Math.round(r).toLocaleString()}`;
@@ -638,7 +707,13 @@
         const profitDisplay = (p < 0 ? '-$' : '$') + Math.round(Math.abs(p)).toLocaleString();
         const profitColor = p < 0 ? 'text-red-custom' : (p > 0 ? 'text-green-custom' : 'text-slate-700');
 
-        return `<tr class="hover:bg-slate-50 transition-colors">
+        return `<tr class="hover:bg-slate-50 transition-colors brand-row" 
+                    data-signups="${s}" 
+                    data-ftd="${f}" 
+                    data-revenue="${r}" 
+                    data-budget="${b}" 
+                    data-profit="${p}" 
+                    data-s2p="${rawS2p}">
           <td class="p-2 font-bold text-left text-slate-900">${item.advertiser || '—'}</td>
           <td class="p-2 font-semibold text-left text-slate-700">${item.brand || '—'}</td>
           <td class="p-2 text-center font-bold text-slate-800">${s.toLocaleString()}</td>
@@ -651,6 +726,18 @@
       }).join('');
 
       tbody.innerHTML = rowsHtml;
+
+      // Si había un ordenamiento activo, mantenerlo al refrescar los datos
+      if (brandsSortKey) {
+        const rows = Array.from(tbody.querySelectorAll('tr.brand-row'));
+        rows.sort((a, b) => {
+          const vA = parseFloat(a.dataset[brandsSortKey]) || 0;
+          const vB = parseFloat(b.dataset[brandsSortKey]) || 0;
+          return brandsSortDir === 'desc' ? vB - vA : vA - vB;
+        });
+        rows.forEach(r => tbody.appendChild(r));
+      }
+      updateBrandsSortIcons();
 
       const totProfit = Number((totRev - totBudget).toFixed(2));
       const totS2p = totSignups > 0 ? ((totFtd / totSignups) * 100).toFixed(1) + '%' : '0.0%';
