@@ -50,7 +50,7 @@
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
-                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
+                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-left text-[11px]"></i></button>
                 <span id="toMonthLabel" class="uppercase"></span>
                 <button onclick="navCal('to', 1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
               </div>
@@ -112,7 +112,7 @@
       </div>
     </div>
 
-    <!-- SECCIÓN 2: 3 TABLAS DE DESGLOSE (CPA PRIMERO, CPR SEGUNDO, CPL TERCERO) -->
+    <!-- SECCIÓN 2: 3 TABLAS DE DESGLOSE Y BRANDS SUMMARY -->
     <div id="section-v2" class="space-y-6">
       <div id="breakdown-tables-container" class="space-y-6"></div>
 
@@ -127,56 +127,18 @@
               <tr class="bg-slate-50 font-bold text-center select-none text-slate-700">
                 <th class="p-2 text-left">Advertiser</th>
                 <th class="p-2 text-left">Brand</th>
-                <th class="p-2">SignUps</th>
-                <th class="p-2">Ftd</th>
-                <th class="p-2">Revenue</th>
-                <th class="p-2">Budget</th>
-                <th class="p-2">Profit</th>
-                <th class="p-2">S2P</th>
+                <th class="p-2 text-center">SignUps</th>
+                <th class="p-2 text-center">Ftd</th>
+                <th class="p-2 text-center">Revenue</th>
+                <th class="p-2 text-center">Budget</th>
+                <th class="p-2 text-center">Profit</th>
+                <th class="p-2 text-center">S2P</th>
               </tr>
             </thead>
-            <tbody id="brandsSummaryBody" class="font-semibold text-slate-700">
-              <tr>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-              </tr>
-              <tr>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-              </tr>
-              <tr>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-              </tr>
-              <tr>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-                <td class="p-2.5">&nbsp;</td>
-              </tr>
+            <tbody id="brandsSummaryBody" class="font-semibold text-slate-700 divide-y divide-slate-100">
+              <tr><td colspan="8" class="p-3 text-center text-slate-400">Loading data...</td></tr>
             </tbody>
+            <tfoot id="brandsSummaryFoot" class="font-black bg-slate-50 border-t-2"></tfoot>
           </table>
         </div>
       </div>
@@ -226,7 +188,6 @@
       'not-working': 1
     };
 
-    // Funciones lógicas de modelo de negocio (FZY asignado a CPA)
     function isCplPartner(p) {
       if (p.name === 'FZY') return false;
       if (p.model === 'CPA' || p.type === 'CPA') return false;
@@ -503,6 +464,11 @@
       renderTopCards(partners, teamKpis);
       renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, totalMonthDays);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
+
+      // Renderiza la tabla de marcas (Brands Summary)
+      const brandRatios = isFull ? { sRatio: 1, uRatio: 1, bRatio: 1, rRatio: 1 } : { sRatio, uRatio, bRatio, rRatio };
+      renderBrandsSummary(data.advertisers_brands || [], brandRatios);
+
       renderInactive(data.inactive_partners);
     }
 
@@ -524,7 +490,7 @@
       if (covered.length === 0) return renderZeroState(sDate, eDate);
 
       const allDays = {};
-      covered.forEach(m => (m.daily_series || []).forEach(r => { if (r.date) dailyMap[r.date] = r; }));
+      covered.forEach(m => (m.daily_series || []).forEach(r => { if (r.date) allDays[r.date] = r; }));
       
       const slice = []; let cur = new Date(sDate);
       while (cur <= eDate) {
@@ -606,7 +572,103 @@
       renderTopCards(partners, teamKpis);
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
+
+      // Consolidación Multimes de Brands Summary
+      const bMap = {};
+      covered.forEach(m => (m.advertisers_brands || []).forEach(b => {
+        const key = `${b.advertiser || ''}___${b.brand || ''}`;
+        if (!bMap[key]) {
+          bMap[key] = {
+            advertiser: b.advertiser,
+            brand: b.brand,
+            signups: 0,
+            ftd: 0,
+            revenue: 0,
+            budget: 0
+          };
+        }
+        bMap[key].signups += (b.signups || 0);
+        bMap[key].ftd += (b.ftd || 0);
+        bMap[key].revenue += Number((b.revenue || 0).toFixed(2));
+        bMap[key].budget += Number((b.budget || 0).toFixed(2));
+      }));
+
+      const multiBrands = Object.values(bMap).map(b => ({
+        ...b,
+        profit: Number((b.revenue - b.budget).toFixed(2))
+      }));
+      renderBrandsSummary(multiBrands, { sRatio: 1, uRatio: 1, bRatio: 1, rRatio: 1 });
+
       renderInactive(covered[covered.length - 1]?.inactive_partners || []);
+    }
+
+    // ==========================================
+    // RENDERIZADO DINÁMICO DE BRANDS SUMMARY REPORT
+    // ==========================================
+    function renderBrandsSummary(brands, ratios = { sRatio: 1, uRatio: 1, bRatio: 1, rRatio: 1 }) {
+      const tbody = document.getElementById('brandsSummaryBody');
+      const tfoot = document.getElementById('brandsSummaryFoot');
+      if (!tbody) return;
+
+      if (!brands || brands.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="p-3 text-center text-slate-400 font-bold">No brand records available</td></tr>';
+        if (tfoot) tfoot.innerHTML = '';
+        return;
+      }
+
+      let totSignups = 0, totFtd = 0, totRev = 0, totBudget = 0;
+
+      const rowsHtml = brands.map(item => {
+        const s = Math.round((item.signups || 0) * (ratios.sRatio ?? 1));
+        const f = Math.round((item.ftd || 0) * (ratios.uRatio ?? 1));
+        const b = Math.round((item.budget || 0) * (ratios.bRatio ?? 1));
+        const r = Number(((item.revenue || 0) * (ratios.rRatio ?? 1)).toFixed(2));
+        const p = Number((r - b).toFixed(2));
+
+        totSignups += s;
+        totFtd += f;
+        totRev += r;
+        totBudget += b;
+
+        // CÁLCULO DINÁMICO DE S2P = (FTD / SignUps) * 100%
+        const s2p = s > 0 ? ((f / s) * 100).toFixed(1) + '%' : '0.0%';
+
+        const revDisplay = `$${Math.round(r).toLocaleString()}`;
+        const bDisplay = `$${Math.round(b).toLocaleString()}`;
+        const profitDisplay = (p < 0 ? '-$' : '$') + Math.round(Math.abs(p)).toLocaleString();
+        const profitColor = p < 0 ? 'text-red-custom' : (p > 0 ? 'text-green-custom' : 'text-slate-700');
+
+        return `<tr class="hover:bg-slate-50 transition-colors">
+          <td class="p-2 font-bold text-left text-slate-900">${item.advertiser || '—'}</td>
+          <td class="p-2 font-semibold text-left text-slate-700">${item.brand || '—'}</td>
+          <td class="p-2 text-center font-bold text-slate-800">${s.toLocaleString()}</td>
+          <td class="p-2 text-center font-black text-slate-900">${f.toLocaleString()}</td>
+          <td class="p-2 text-center font-bold text-slate-800">${revDisplay}</td>
+          <td class="p-2 text-center font-bold text-slate-800">${bDisplay}</td>
+          <td class="p-2 text-center font-extrabold ${profitColor}">${profitDisplay}</td>
+          <td class="p-2 text-center font-black text-purple-700">${s2p}</td>
+        </tr>`;
+      }).join('');
+
+      tbody.innerHTML = rowsHtml;
+
+      const totProfit = Number((totRev - totBudget).toFixed(2));
+      const totS2p = totSignups > 0 ? ((totFtd / totSignups) * 100).toFixed(1) + '%' : '0.0%';
+      const totProfitDisplay = (totProfit < 0 ? '-$' : '$') + Math.round(Math.abs(totProfit)).toLocaleString();
+      const totProfitColor = totProfit < 0 ? 'text-red-custom' : (totProfit > 0 ? 'text-green-custom' : 'text-slate-900');
+
+      if (tfoot) {
+        tfoot.innerHTML = `<tr>
+          <td class="p-2 font-black text-left text-slate-900">Grand total</td>
+          <td class="p-2 font-extrabold text-left text-slate-500">${brands.length} Brands</td>
+          <td class="p-2 text-center font-black text-slate-900">${totSignups.toLocaleString()}</td>
+          <td class="p-2 text-center font-black text-slate-900">${totFtd.toLocaleString()}</td>
+          <td class="p-2 text-center font-black text-slate-900">$${Math.round(totRev).toLocaleString()}</td>
+          <td class="p-2 text-center font-black text-slate-900">$${Math.round(totBudget).toLocaleString()}</td>
+          <td class="p-2 text-center font-black ${totProfitColor}">${totProfitDisplay}</td>
+          <td class="p-2 text-center font-black text-purple-700">${totS2p}</td>
+        </tr>`;
+      }
     }
 
     function applyEqualKpis(partners, totKpis) {
@@ -738,12 +800,8 @@
 
     // ORDENAMIENTO CPA
     function sortCpaTable(key) {
-      if (cpaSortKey === key) {
-        cpaSortDir = (cpaSortDir === 'desc') ? 'asc' : 'desc';
-      } else {
-        cpaSortKey = key;
-        cpaSortDir = 'desc';
-      }
+      if (cpaSortKey === key) cpaSortDir = (cpaSortDir === 'desc') ? 'asc' : 'desc';
+      else { cpaSortKey = key; cpaSortDir = 'desc'; }
 
       const tbody = document.getElementById('cpaTableBody');
       if (!tbody) return;
@@ -778,12 +836,8 @@
 
     // ORDENAMIENTO CPR
     function sortCprTable(key) {
-      if (cprSortKey === key) {
-        cprSortDir = (cprSortDir === 'desc') ? 'asc' : 'desc';
-      } else {
-        cprSortKey = key;
-        cprSortDir = 'desc';
-      }
+      if (cprSortKey === key) cprSortDir = (cprSortDir === 'desc') ? 'asc' : 'desc';
+      else { cprSortKey = key; cprSortDir = 'desc'; }
 
       const tbody = document.getElementById('cprTableBody');
       if (!tbody) return;
@@ -818,12 +872,8 @@
 
     // ORDENAMIENTO CPL
     function sortCplTable(key) {
-      if (cplSortKey === key) {
-        cplSortDir = (cplSortDir === 'desc') ? 'asc' : 'desc';
-      } else {
-        cplSortKey = key;
-        cplSortDir = 'desc';
-      }
+      if (cplSortKey === key) cplSortDir = (cplSortDir === 'desc') ? 'asc' : 'desc';
+      else { cplSortKey = key; cplSortDir = 'desc'; }
 
       const tbody = document.getElementById('cplTableBody');
       if (!tbody) return;
@@ -856,7 +906,6 @@
       });
     }
 
-    // RENDERIZA LAS 3 TABLAS EN ORDEN: CPA PRIMERO, CPR SEGUNDO, CPL TERCERO
     function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
       const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
@@ -1060,6 +1109,7 @@
       });
       document.getElementById('tp-rr-roi').textContent = '—';
       document.getElementById('breakdown-tables-container').innerHTML = '';
+      renderBrandsSummary([]);
     }
 
     function switchTab(tab) {
