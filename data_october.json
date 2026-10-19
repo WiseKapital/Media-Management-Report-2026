@@ -41,10 +41,10 @@
       "mtd": 79,
       "rr": 130
     },
-    "revenue": 10834.0,
+    "revenue": 11882.0,
     "budget": 1758.0,
-    "profit": 9076.0,
-    "roi": "1:6.2"
+    "profit": 10124.0,
+    "roi": "1:6.8"
   },
   "daily_series": [
     {
@@ -215,7 +215,7 @@
       "signups": 63,
       "cpr": 16.0,
       "users": 4,
-      "rev": 600.0,
+      "rev": 1648.0,
       "budget": 40
     }
   ],
@@ -545,9 +545,9 @@
       "cprRr": 0,
       "cpaMtd": 37,
       "cpaRr": 60,
-      "rev": 4230.0,
+      "rev": 5278.0,
       "budget": 550.0,
-      "profit": 3680.0,
+      "profit": 4728.0,
       "status": "working-well"
     },
     {
@@ -752,9 +752,9 @@
       "brand": "Casinio",
       "signups": 49,
       "ftd": 2,
-      "revenue": 140.0,
+      "revenue": 228.0,
       "budget": 0.0,
-      "profit": 140.0
+      "profit": 228.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -842,9 +842,9 @@
       "brand": "LuckyBunny",
       "signups": 45,
       "ftd": 8,
-      "revenue": 0.0,
+      "revenue": 960.0,
       "budget": 330.0,
-      "profit": -330.0
+      "profit": 630.0
     },
     {
       "advertiser": "OTHERS",
@@ -859,9 +859,9 @@
   "advertisers_brands_totals": {
     "signups": 1008,
     "ftd": 79,
-    "revenue": 10834.0,
+    "revenue": 11882.0,
     "budget": 1758.0,
-    "profit": 9076.0
+    "profit": 10124.0
   },
   "inactive_partners": [
     "ADD",
