@@ -843,7 +843,13 @@
         const col = document.createElement('div'); col.className = 'flex flex-col gap-2.5 min-w-0';
         col.innerHTML = `
           <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between h-[115px]">
-            <div class="flex justify-between items-start"><span class="text-[10px] font-extrabold uppercase text-slate-500">${cat.t}</span><div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style="background:${cat.c}20; color:${cat.c}"><i class="fa-solid fa-${cat.ic}"></i></div></div>
+            <div class="flex justify-between items-start">
+              <div>
+                <span class="text-[10px] font-extrabold uppercase text-slate-500">${cat.t}</span>
+                ${cat.k === 'sigs' ? '<div class="text-[9px] font-bold text-slate-400">Registrations only with approved WIZ: 616</div>' : ''}
+              </div>
+              <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style="background:${cat.c}20; color:${cat.c}"><i class="fa-solid fa-${cat.ic}"></i></div>
+            </div>
             <div class="my-0.5 flex items-baseline gap-1"><span class="text-xl font-black text-slate-900">${cat.p === '$' ? (total < 0 ? '-$' : '$') : ''}${Math.round(Math.abs(total)).toLocaleString()}</span><span class="text-[9px] font-bold text-slate-400">TOTAL</span></div>
             <div class="text-[9px] font-bold text-slate-400">KPI: ${cat.p}${Math.round(cat.kpi).toLocaleString()}</div>
           </div>
