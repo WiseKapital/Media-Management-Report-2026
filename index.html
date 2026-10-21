@@ -180,9 +180,8 @@
 
   <script>
     // TEXTO CONFIGURABLE DE WIZ: Puedes cambiar el número aquí y el código lo detectará automáticamente
-    let APPROVED_WIZ_TEXT = "SignUps only with approved WIZ and removed EPV: 668";
+    let APPROVED_WIZ_TEXT = "SignUps with approved WIZ and removed EPV: 668";
 
-    // Función que extrae automáticamente el número presente en el texto
     function getApprovedWizCount() {
       const el = document.getElementById('wiz-approved-badge');
       const textToScan = el ? el.textContent : APPROVED_WIZ_TEXT;
