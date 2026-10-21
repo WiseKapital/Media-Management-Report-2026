@@ -28,7 +28,7 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 1202,
+      "mtd": 1082,
       "rr": 1771
     },
     "cpr": {
@@ -221,7 +221,7 @@
     {
       "date": "2026-10-20",
       "leads": 1,
-      "signups": 97,
+      "signups": 37,
       "cpr": 6.0,
       "users": 6,
       "rev": 1138.0,
@@ -230,7 +230,7 @@
     {
       "date": "2026-10-21",
       "leads": 0,
-      "signups": 97,
+      "signups": 37,
       "cpr": 6.0,
       "users": 6,
       "rev": 1138.0,
@@ -312,21 +312,6 @@
       "budget": 120.0,
       "profit": -120.0,
       "status": "not-working"
-    },
-    {
-      "name": "EPV",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 120,
-      "sigRr": 177,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "potential"
     },
     {
       "name": "FXM",
@@ -789,7 +774,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "CardCrush",
-      "signups": 180,
+      "signups": 66,
       "ftd": 4,
       "revenue": 440.0,
       "budget": 0.0,
@@ -825,7 +810,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "LavishLuck",
-      "signups": 57,
+      "signups": 53,
       "ftd": 1,
       "revenue": 180.0,
       "budget": 0.0,
@@ -870,7 +855,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Crown Coins Email",
-      "signups": 13,
+      "signups": 11,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -941,7 +926,7 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 1202,
+    "signups": 1082,
     "ftd": 91,
     "revenue": 14158.0,
     "budget": 2138.0,
@@ -961,6 +946,7 @@
     "DRCT",
     "ECO",
     "ENJ",
+    "EPV",
     "FCM",
     "FIG",
     "FRA",
