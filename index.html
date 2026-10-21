@@ -50,7 +50,7 @@
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
-                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-left text-[11px]"></i></button>
+                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
                 <span id="toMonthLabel" class="uppercase"></span>
                 <button onclick="navCal('to', 1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
               </div>
@@ -121,11 +121,9 @@
         <div class="overflow-x-auto">
           <table class="w-full text-xs table-grid">
             <thead>
-              <!-- TÍTULO DE LA TABLA -->
               <tr class="font-black text-center select-none text-slate-800 bg-slate-100">
                 <th colspan="8" class="p-2 uppercase tracking-wide text-xs">BRANDS SUMMARY REPORT</th>
               </tr>
-              <!-- FILA DE BOTONES DE ORDENAMIENTO (SORT) -->
               <tr class="sort-row-borderless select-none">
                 <th></th>
                 <th></th>
@@ -148,7 +146,6 @@
                   <button onclick="sortBrandsTable('s2p')" id="sort-brand-s2p" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button>
                 </th>
               </tr>
-              <!-- CABECERAS DE COLUMNA CON COLORES INTEGRADOS -->
               <tr class="font-extrabold text-center select-none text-xs">
                 <th class="p-2 text-left bg-slate-50 text-slate-800">Advertiser</th>
                 <th class="p-2 text-left bg-slate-50 text-slate-800">Brand</th>
@@ -238,13 +235,13 @@
              (typeof p.budget === 'number' && p.budget > 0);
     }
 
-    function getRrColor(rrVal, kpiVal, isBudget = false) {
+    // Regla global: El RR se pone en verde solo si es superior o igual al KPI (incluye Budget)
+    function getRrColor(rrVal, kpiVal) {
       if (kpiVal === '—' || kpiVal === undefined || kpiVal === null) return 'text-slate-500';
       const r = parseFloat(String(rrVal).replace(/[^0-9.-]/g, ''));
       const k = parseFloat(String(kpiVal).replace(/[^0-9.-]/g, ''));
       if (isNaN(r) || isNaN(k)) return 'text-slate-500';
       
-      if (isBudget) return r <= k ? 'text-green-custom' : 'text-red-custom';
       return r >= k ? 'text-green-custom' : 'text-red-custom';
     }
 
@@ -491,7 +488,6 @@
       renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, totalMonthDays);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
 
-      // Renderiza la tabla de marcas (Brands Summary)
       const brandRatios = isFull ? { sRatio: 1, uRatio: 1, bRatio: 1, rRatio: 1 } : { sRatio, uRatio, bRatio, rRatio };
       renderBrandsSummary(data.advertisers_brands || [], brandRatios);
 
@@ -599,7 +595,6 @@
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
       renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
 
-      // Consolidación Multimes de Brands Summary
       const bMap = {};
       covered.forEach(m => (m.advertisers_brands || []).forEach(b => {
         const key = `${b.advertiser || ''}___${b.brand || ''}`;
@@ -628,9 +623,6 @@
       renderInactive(covered[covered.length - 1]?.inactive_partners || []);
     }
 
-    // ==========================================
-    // ORDENAMIENTO BRANDS SUMMARY
-    // ==========================================
     function sortBrandsTable(key) {
       if (brandsSortKey === key) {
         brandsSortDir = (brandsSortDir === 'desc') ? 'asc' : 'desc';
@@ -670,9 +662,6 @@
       });
     }
 
-    // ==========================================
-    // RENDERIZADO DINÁMICO DE BRANDS SUMMARY REPORT
-    // ==========================================
     function renderBrandsSummary(brands, ratios = { sRatio: 1, uRatio: 1, bRatio: 1, rRatio: 1 }) {
       const tbody = document.getElementById('brandsSummaryBody');
       const tfoot = document.getElementById('brandsSummaryFoot');
@@ -698,7 +687,6 @@
         totRev += r;
         totBudget += b;
 
-        // CÁLCULO DINÁMICO DE S2P = (FTD / SignUps) * 100%
         const rawS2p = s > 0 ? (f / s) : 0;
         const s2p = s > 0 ? ((f / s) * 100).toFixed(1) + '%' : '0.0%';
 
@@ -727,7 +715,6 @@
 
       tbody.innerHTML = rowsHtml;
 
-      // Si había un ordenamiento activo, mantenerlo al refrescar los datos
       if (brandsSortKey) {
         const rows = Array.from(tbody.querySelectorAll('tr.brand-row'));
         rows.sort((a, b) => {
@@ -803,7 +790,7 @@
 
       const elB = document.getElementById('tp-rr-budget');
       elB.textContent = '$' + Math.round(d.rr.budget).toLocaleString();
-      elB.className = `${getRrColor(d.rr.budget, d.teamKpis?.budget || 5500, true)} font-black`;
+      elB.className = `${getRrColor(d.rr.budget, d.teamKpis?.budget || 5500)} font-black`;
 
       const elS = document.getElementById('tp-rr-signups');
       elS.textContent = d.rr.sigs.toLocaleString();
@@ -824,9 +811,6 @@
       document.getElementById('tp-rr-roi').textContent = (d.budget > 0 && d.rev > 0) ? `1:${(d.rev / d.budget).toFixed(1)}` : (d.roi || '—');
     }
 
-    // ==============================================================
-    // 5 METRIC CARDS: REDONDEADO A ENTEROS (SIN DECIMALES EN LISTA)
-    // ==============================================================
     function renderTopCards(partners, teamKpis = { budget: 5500, signups: 1000, users: 300, revenue: 16500, profit: 11000 }) {
       const cats = [
         { k: 'budget', t: 'BUDGET', p: '$', ic: 'wallet', c: '#f59e0b', bg: 'bg-amber-50 text-amber-800', f: p => p.budget, kpi: teamKpis.budget },
@@ -1052,7 +1036,7 @@
             <td class="p-2 font-bold">${p.name}</td>
             <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
             <td class="text-center font-bold">$${b}</td>
-            <td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td>
+            <td class="text-center ${getRrColor(bRr, bKpi)} font-extrabold">$${bRr}</td>
             <td class="text-center font-bold">${sigVal}</td>
             <td class="text-center text-slate-500 font-bold">${p.cpaKpi || 25}</td>
             <td class="text-center font-black">${cpaVal}</td>
@@ -1072,7 +1056,7 @@
             <td class="p-2 font-bold">${p.name}</td>
             <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
             <td class="text-center font-bold">$${b}</td>
-            <td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td>
+            <td class="text-center ${getRrColor(bRr, bKpi)} font-extrabold">$${bRr}</td>
             <td class="text-center text-slate-500 font-bold">${p.cprKpi||200}</td>
             <td class="text-center font-black">${cprMtdVal}</td>
             <td class="text-center font-bold ${getRrColor(cprRrVal, p.cprKpi)}">${cprRrVal}</td>
@@ -1092,7 +1076,7 @@
             <td class="p-2 font-bold">${p.name}</td>
             <td class="text-center font-semibold text-slate-700">${bKpiDisplay}</td>
             <td class="text-center font-bold">$${b}</td>
-            <td class="text-center ${getRrColor(bRr, bKpi, true)} font-extrabold">$${bRr}</td>
+            <td class="text-center ${getRrColor(bRr, bKpi)} font-extrabold">$${bRr}</td>
             <td class="text-center text-slate-500 font-bold">${p.cplKpi||'—'}</td>
             <td class="text-center font-black">${cplVal}</td>
             <td class="text-center font-black ${getRrColor(cplRrVal, p.cplKpi)}">${cplRrVal}</td>
@@ -1121,7 +1105,7 @@
             <td class="p-2 font-black">Grand total</td>
             <td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td>
             <td class="text-center font-black">$${b}</td>
-            <td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td>
+            <td class="text-center ${getRrColor(bRr, totBKpi)} font-black">$${bRr}</td>
             <td class="text-center font-black">${s}</td>
             <td class="text-center text-slate-700 font-black">${aKpi.toLocaleString()}</td>
             <td class="text-center font-black">${u}</td>
@@ -1140,7 +1124,7 @@
             <td class="p-2 font-black">Grand total</td>
             <td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td>
             <td class="text-center font-black">$${b}</td>
-            <td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td>
+            <td class="text-center ${getRrColor(bRr, totBKpi)} font-black">$${bRr}</td>
             <td class="text-center text-slate-700 font-black">${cKpi.toLocaleString()}</td>
             <td class="text-center font-black">${c}</td>
             <td class="text-center font-bold ${getRrColor(cRr, cKpi)}">${cRr}</td>
@@ -1159,7 +1143,7 @@
             <td class="p-2 font-black">Grand total</td>
             <td class="text-center font-black text-slate-700">${bKpiTotDisplay}</td>
             <td class="text-center font-black">$${b}</td>
-            <td class="text-center ${getRrColor(bRr, totBKpi, true)} font-black">$${bRr}</td>
+            <td class="text-center ${getRrColor(bRr, totBKpi)} font-black">$${bRr}</td>
             <td class="text-center text-slate-700 font-black">${lKpi.toLocaleString()}</td>
             <td class="text-center font-black">${l}</td>
             <td class="text-center font-black ${getRrColor(lRr, lKpi)}">${lRr}</td>
