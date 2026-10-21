@@ -50,7 +50,7 @@
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
-                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
+                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-left text-[11px]"></i></button>
                 <span id="toMonthLabel" class="uppercase"></span>
                 <button onclick="navCal('to', 1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
               </div>
@@ -179,6 +179,19 @@
   </div>
 
   <script>
+    // TEXTO CONFIGURABLE DE WIZ: Puedes cambiar el número aquí y el código lo detectará automáticamente
+    let APPROVED_WIZ_TEXT = "Registrations only with approved WIZ: 706";
+
+    // Función que extrae automáticamente el número presente en el texto
+    function getApprovedWizCount() {
+      const el = document.getElementById('wiz-approved-badge');
+      const textToScan = el ? el.textContent : APPROVED_WIZ_TEXT;
+      const match = textToScan.match(/\d[\d,]*/);
+      if (!match) return null;
+      return parseInt(match[0].replace(/,/g, ''), 10);
+    }
+
+    let currentRrFactor = 1; // Factor de días transcurridos para calcular el RR
     const DATA_CACHE = {};
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
@@ -429,6 +442,8 @@
       }
       const totalMonthDays = new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0).getDate();
       const daysCount = Math.max(slice.length, 1), rrFactor = totalMonthDays / daysCount;
+      currentRrFactor = rrFactor; // Almacenamos el factor para los cálculos de Signups
+
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
       const sigs = isFull ? data.totals.signups.mtd : slice.reduce((a,r) => a + r.signups, 0);
       const cprVal = isFull ? (data.totals.cpr?.mtd || 0) : slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
@@ -524,6 +539,7 @@
       const totalTargetDays = covered.reduce((a, m) => a + (m.date_range?.days || 30), 0) || 30;
       const daysCount = Math.max(slice.length, 1);
       const rrFactor = totalTargetDays / daysCount;
+      currentRrFactor = rrFactor;
 
       const leads = slice.reduce((a,r) => a + r.leads, 0), sigs = slice.reduce((a,r) => a + r.signups, 0);
       const cprVal = slice.reduce((a,r) => a + (r.cpr !== undefined ? r.cpr : 0), 0);
@@ -783,7 +799,13 @@
         document.getElementById('tp-kpi-profit').textContent = '$' + Math.round(d.teamKpis.profit).toLocaleString();
       }
       document.getElementById('tp-mtd-budget').textContent = '$' + Math.round(d.budget).toLocaleString();
-      document.getElementById('tp-mtd-signups').textContent = d.sigs.toLocaleString();
+      
+      // DETECCIÓN DINÁMICA DEL NÚMERO DE SIGNUPS Y CÁLCULO DE RR
+      const detectedSigs = getApprovedWizCount();
+      const finalMtdSigs = (detectedSigs !== null) ? detectedSigs : d.sigs;
+      const finalRrSigs = (detectedSigs !== null) ? Math.round(detectedSigs * currentRrFactor) : d.rr.sigs;
+
+      document.getElementById('tp-mtd-signups').textContent = finalMtdSigs.toLocaleString();
       document.getElementById('tp-mtd-users').textContent = d.users.toLocaleString();
       document.getElementById('tp-mtd-revenue').textContent = '$' + Math.round(d.rev).toLocaleString();
       document.getElementById('tp-mtd-profit').textContent = (d.profit < 0 ? '-$' : '$') + Math.round(Math.abs(d.profit)).toLocaleString();
@@ -792,9 +814,10 @@
       elB.textContent = '$' + Math.round(d.rr.budget).toLocaleString();
       elB.className = `${getRrColor(d.rr.budget, d.teamKpis?.budget || 5500)} font-black`;
 
+      // RR DE SIGNUPS CON SU COLOR ACTUALIZADO
       const elS = document.getElementById('tp-rr-signups');
-      elS.textContent = d.rr.sigs.toLocaleString();
-      elS.className = `${getRrColor(d.rr.sigs, d.teamKpis?.signups || 1000)} font-black`;
+      elS.textContent = finalRrSigs.toLocaleString();
+      elS.className = `${getRrColor(finalRrSigs, d.teamKpis?.signups || 1000)} font-black`;
 
       const elU = document.getElementById('tp-rr-users');
       elU.textContent = d.rr.users.toLocaleString();
@@ -830,7 +853,7 @@
             <div class="flex justify-between items-start">
               <div>
                 <span class="text-[10px] font-extrabold uppercase text-slate-500">${cat.t}</span>
-                ${cat.k === 'sigs' ? '<div class="inline-block mt-0.5 px-1.5 py-0.5 bg-yellow-300 text-red-600 text-[11px] font-black rounded">Registrations only with approved WIZ: 706</div>' : ''}
+                ${cat.k === 'sigs' ? `<div id="wiz-approved-badge" class="inline-block mt-0.5 px-1.5 py-0.5 bg-yellow-300 text-red-600 text-[11px] font-black rounded">${APPROVED_WIZ_TEXT}</div>` : ''}
               </div>
               <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style="background:${cat.c}20; color:${cat.c}"><i class="fa-solid fa-${cat.ic}"></i></div>
             </div>
@@ -854,6 +877,19 @@
           </div>`;
         grid.appendChild(col);
       });
+
+      // Sincronización final tras montar el badge
+      const detectedNum = getApprovedWizCount();
+      if (detectedNum !== null) {
+        const tpSignups = document.getElementById('tp-mtd-signups');
+        const tpRrSignups = document.getElementById('tp-rr-signups');
+        if (tpSignups) tpSignups.textContent = detectedNum.toLocaleString();
+        if (tpRrSignups) {
+          const calcRr = Math.round(detectedNum * currentRrFactor);
+          tpRrSignups.textContent = calcRr.toLocaleString();
+          tpRrSignups.className = `${getRrColor(calcRr, teamKpis?.signups || 1000)} font-black`;
+        }
+      }
     }
 
     function renderLineChart(slice, prefix, kpis = { cpl: 4000, sigs: 1000, users: 300 }, totalDays = 30) {
