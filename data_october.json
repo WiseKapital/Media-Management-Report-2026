@@ -38,7 +38,7 @@
     },
     "cpa": {
       "kpi": 300,
-      "mtd": 100,
+      "mtd": 101,
       "rr": 106
     },
     "revenue": 15646.0,
@@ -304,7 +304,7 @@
       "leads": 9,
       "signups": 8,
       "cpr": 10.0,
-      "users": 0,
+      "users": 1,
       "rev": 38.0,
       "budget": 628
     }
@@ -423,8 +423,8 @@
       "sigRr": 7,
       "cprMtd": 0,
       "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 1,
+      "cpaMtd": 2,
+      "cpaRr": 2,
       "rev": 150.0,
       "budget": 0,
       "profit": 150.0,
