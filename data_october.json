@@ -42,9 +42,9 @@
       "rr": 106
     },
     "revenue": 15646.0,
-    "budget": 4256.0,
-    "profit": 11390.0,
-    "roi": "1:3.7"
+    "budget": 2628.0,
+    "profit": 13018.0,
+    "roi": "1:6.0"
   },
   "daily_series": [
     {
@@ -288,7 +288,7 @@
       "cpr": 8.0,
       "users": 0,
       "rev": 30.0,
-      "budget": 500
+      "budget": 0
     },
     {
       "date": "2026-10-28",
@@ -297,7 +297,7 @@
       "cpr": 10.0,
       "users": 0,
       "rev": 30.0,
-      "budget": 500
+      "budget": 0
     },
     {
       "date": "2026-10-29",
@@ -306,7 +306,7 @@
       "cpr": 10.0,
       "users": 1,
       "rev": 38.0,
-      "budget": 628
+      "budget": 0
     }
   ],
   "partners": [
@@ -366,9 +366,9 @@
       "cpaMtd": 1,
       "cpaRr": 1,
       "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
+      "budget": 510.0,
+      "profit": -510.0,
+      "status": "not-working"
     },
     {
       "name": "CHA",
@@ -396,8 +396,8 @@
       "cpaMtd": 0,
       "cpaRr": 0,
       "rev": 0,
-      "budget": 360.0,
-      "profit": -360.0,
+      "budget": 120.0,
+      "profit": -120.0,
       "status": "not-working"
     },
     {
@@ -516,8 +516,8 @@
       "cpaMtd": 0,
       "cpaRr": 0,
       "rev": 336.0,
-      "budget": 56.0,
-      "profit": 280.0,
+      "budget": 28.0,
+      "profit": 308.0,
       "status": "working-well"
     },
     {
@@ -651,9 +651,9 @@
       "cpaMtd": 0,
       "cpaRr": 0,
       "rev": 0,
-      "budget": 260.0,
-      "profit": -260.0,
-      "status": "not-working"
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
     },
     {
       "name": "VENE",
@@ -681,8 +681,8 @@
       "cpaMtd": 45,
       "cpaRr": 48,
       "rev": 6476.0,
-      "budget": 1100.0,
-      "profit": 5376.0,
+      "budget": 550.0,
+      "profit": 5926.0,
       "status": "working-well"
     },
     {
@@ -696,8 +696,8 @@
       "cpaMtd": 50,
       "cpaRr": 53,
       "rev": 8020.0,
-      "budget": 2480.0,
-      "profit": 5540.0,
+      "budget": 1420.0,
+      "profit": 6600.0,
       "status": "working-well"
     }
   ],
@@ -726,8 +726,8 @@
       "signups": 50,
       "ftd": 0,
       "revenue": 400.0,
-      "budget": 56.0,
-      "profit": 344.0
+      "budget": 28.0,
+      "profit": 372.0
     },
     {
       "advertiser": "ALL IN AFFILIATES",
@@ -879,8 +879,8 @@
       "signups": 5,
       "ftd": 1,
       "revenue": 360.0,
-      "budget": 0.0,
-      "profit": 360.0
+      "budget": 250.0,
+      "profit": 110.0
     },
     {
       "advertiser": "CHANCED",
@@ -951,8 +951,8 @@
       "signups": 162,
       "ftd": 21,
       "revenue": 3000.0,
-      "budget": 2040.0,
-      "profit": 960.0
+      "budget": 1200.0,
+      "profit": 1800.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -960,8 +960,8 @@
       "signups": 63,
       "ftd": 4,
       "revenue": 680.0,
-      "budget": 0.0,
-      "profit": 680.0
+      "budget": 130.0,
+      "profit": 550.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -1014,8 +1014,8 @@
       "signups": 45,
       "ftd": 8,
       "revenue": 960.0,
-      "budget": 660.0,
-      "profit": 300.0
+      "budget": 330.0,
+      "profit": 630.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -1050,8 +1050,8 @@
       "signups": 132,
       "ftd": 3,
       "revenue": 510.0,
-      "budget": 440.0,
-      "profit": 70.0
+      "budget": 220.0,
+      "profit": 290.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -1149,8 +1149,8 @@
       "signups": 4,
       "ftd": 0,
       "revenue": 0.0,
-      "budget": 260.0,
-      "profit": -260.0
+      "budget": 0.0,
+      "profit": 0.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -1158,8 +1158,8 @@
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
-      "budget": 440.0,
-      "profit": -440.0
+      "budget": 0.0,
+      "profit": 0.0
     },
     {
       "advertiser": "IMPACT",
@@ -1212,8 +1212,8 @@
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
-      "budget": 360.0,
-      "profit": -360.0
+      "budget": 120.0,
+      "profit": -120.0
     },
     {
       "advertiser": "SPLASH",
@@ -1223,14 +1223,23 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0
+    },
+    {
+      "advertiser": "BASHER AGENCY",
+      "brand": "LuckyZino",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 350.0,
+      "profit": -350.0
     }
   ],
   "advertisers_brands_totals": {
     "signups": 1171,
     "ftd": 101,
     "revenue": 15646.0,
-    "budget": 4256.0,
-    "profit": 11390.0
+    "budget": 2628.0,
+    "profit": 13018.0
   },
   "inactive_partners": [
     "ADD",
