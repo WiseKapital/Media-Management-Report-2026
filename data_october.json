@@ -23,35 +23,35 @@
   "totals": {
     "cpl": {
       "kpi": 4000,
-      "mtd": 80,
-      "rr": 86
+      "mtd": 55,
+      "rr": 57
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 1171,
-      "rr": 1386
+      "mtd": 1333,
+      "rr": 1376
     },
     "cpr": {
       "kpi": 200,
-      "mtd": 56.0,
-      "rr": 59.86
+      "mtd": 28.0,
+      "rr": 28.93
     },
     "cpa": {
       "kpi": 300,
-      "mtd": 101,
-      "rr": 106
+      "mtd": 107,
+      "rr": 110
     },
-    "revenue": 15646.0,
-    "budget": 2628.0,
-    "profit": 13018.0,
-    "roi": "1:6.0"
+    "revenue": 16836.0,
+    "budget": 2238.0,
+    "profit": 14598.0,
+    "roi": "1:7.5"
   },
   "daily_series": [
     {
       "date": "2026-10-01",
       "leads": 2,
       "signups": 15,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 1,
       "rev": 150.0,
       "budget": 0
@@ -60,7 +60,7 @@
       "date": "2026-10-02",
       "leads": 2,
       "signups": 18,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 0,
       "rev": 0,
       "budget": 0
@@ -69,124 +69,124 @@
       "date": "2026-10-03",
       "leads": 1,
       "signups": 28,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 3,
       "rev": 400.0,
-      "budget": 40
+      "budget": 34
     },
     {
       "date": "2026-10-04",
       "leads": 0,
       "signups": 32,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 2,
       "rev": 450.0,
-      "budget": 40
+      "budget": 34
     },
     {
       "date": "2026-10-05",
       "leads": 0,
       "signups": 28,
-      "cpr": 1.0,
+      "cpr": 0.47,
       "users": 2,
       "rev": 340.0,
-      "budget": 30
+      "budget": 26
     },
     {
       "date": "2026-10-06",
       "leads": 3,
       "signups": 38,
-      "cpr": 2.0,
+      "cpr": 0.93,
       "users": 6,
       "rev": 800.0,
-      "budget": 150
+      "budget": 128
     },
     {
       "date": "2026-10-07",
       "leads": 3,
       "signups": 38,
-      "cpr": 2.0,
+      "cpr": 0.93,
       "users": 7,
       "rev": 1100.0,
-      "budget": 200
+      "budget": 170
     },
     {
       "date": "2026-10-08",
       "leads": 3,
       "signups": 36,
-      "cpr": 2.0,
+      "cpr": 0.93,
       "users": 7,
       "rev": 1194.0,
-      "budget": 127
+      "budget": 108
     },
     {
       "date": "2026-10-09",
       "leads": 0,
       "signups": 28,
-      "cpr": 7.0,
+      "cpr": 3.27,
       "users": 4,
       "rev": 596.0,
-      "budget": 127
+      "budget": 108
     },
     {
       "date": "2026-10-10",
       "leads": 1,
       "signups": 38,
-      "cpr": 3.5,
+      "cpr": 1.63,
       "users": 2,
       "rev": 300.0,
-      "budget": 120
+      "budget": 102
     },
     {
       "date": "2026-10-11",
       "leads": 1,
       "signups": 38,
-      "cpr": 3.5,
+      "cpr": 1.63,
       "users": 2,
       "rev": 300.0,
-      "budget": 150
+      "budget": 128
     },
     {
       "date": "2026-10-12",
       "leads": 1,
       "signups": 38,
-      "cpr": 3.5,
+      "cpr": 1.63,
       "users": 2,
       "rev": 250.0,
-      "budget": 157
+      "budget": 134
     },
     {
       "date": "2026-10-13",
       "leads": 1,
       "signups": 32,
-      "cpr": 3.5,
+      "cpr": 1.63,
       "users": 1,
       "rev": 234.0,
-      "budget": 157
+      "budget": 134
     },
     {
       "date": "2026-10-14",
       "leads": 1,
       "signups": 35,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 0,
       "rev": 0,
-      "budget": 120
+      "budget": 102
     },
     {
       "date": "2026-10-15",
       "leads": 4,
       "signups": 70,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 4,
       "rev": 2520.0,
-      "budget": 220
+      "budget": 187
     },
     {
       "date": "2026-10-16",
       "leads": 0,
       "signups": 65,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 6,
       "rev": 300.0,
       "budget": 0
@@ -195,70 +195,70 @@
       "date": "2026-10-17",
       "leads": 1,
       "signups": 67,
-      "cpr": 2.0,
+      "cpr": 0.93,
       "users": 7,
       "rev": 650.0,
-      "budget": 40
+      "budget": 34
     },
     {
       "date": "2026-10-18",
       "leads": 1,
       "signups": 67,
-      "cpr": 2.0,
+      "cpr": 0.93,
       "users": 7,
       "rev": 650.0,
-      "budget": 40
+      "budget": 34
     },
     {
       "date": "2026-10-19",
       "leads": 0,
       "signups": 66,
-      "cpr": 16.0,
+      "cpr": 7.47,
       "users": 8,
       "rev": 1648.0,
-      "budget": 40
+      "budget": 34
     },
     {
       "date": "2026-10-20",
       "leads": 1,
       "signups": 63,
-      "cpr": 6.0,
+      "cpr": 2.8,
       "users": 8,
       "rev": 1138.0,
-      "budget": 190
+      "budget": 162
     },
     {
       "date": "2026-10-21",
       "leads": 0,
       "signups": 63,
-      "cpr": 6.0,
+      "cpr": 2.8,
       "users": 8,
       "rev": 1138.0,
-      "budget": 190
+      "budget": 162
     },
     {
       "date": "2026-10-22",
       "leads": 5,
       "signups": 56,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 6,
       "rev": 600.0,
-      "budget": 230
+      "budget": 196
     },
     {
       "date": "2026-10-23",
       "leads": 24,
       "signups": 50,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 3,
       "rev": 150.0,
-      "budget": 260
+      "budget": 221
     },
     {
       "date": "2026-10-24",
       "leads": 0,
       "signups": 45,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 1,
       "rev": 180.0,
       "budget": 0
@@ -267,7 +267,7 @@
       "date": "2026-10-25",
       "leads": 0,
       "signups": 45,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 1,
       "rev": 180.0,
       "budget": 0
@@ -276,46 +276,55 @@
       "date": "2026-10-26",
       "leads": 0,
       "signups": 48,
-      "cpr": 0,
+      "cpr": 0.0,
       "users": 2,
       "rev": 280.0,
       "budget": 0
     },
     {
       "date": "2026-10-27",
-      "leads": 8,
-      "signups": 8,
-      "cpr": 8.0,
-      "users": 0,
-      "rev": 30.0,
+      "leads": 0,
+      "signups": 46,
+      "cpr": 0.0,
+      "users": 2,
+      "rev": 322,
       "budget": 0
     },
     {
       "date": "2026-10-28",
-      "leads": 8,
-      "signups": 8,
-      "cpr": 10.0,
-      "users": 0,
-      "rev": 30.0,
+      "leads": 0,
+      "signups": 46,
+      "cpr": 0.0,
+      "users": 2,
+      "rev": 322,
       "budget": 0
     },
     {
       "date": "2026-10-29",
-      "leads": 9,
-      "signups": 8,
-      "cpr": 10.0,
+      "leads": 0,
+      "signups": 47,
+      "cpr": 0.0,
+      "users": 2,
+      "rev": 322,
+      "budget": 0
+    },
+    {
+      "date": "2026-10-30",
+      "leads": 0,
+      "signups": 47,
+      "cpr": 0.02,
       "users": 1,
-      "rev": 38.0,
+      "rev": 322,
       "budget": 0
     }
   ],
   "partners": [
     {
       "name": "ADM",
-      "cplMtd": 3,
-      "cplRr": 3,
-      "sigMtd": 4,
-      "sigRr": 4,
+      "cplMtd": 2,
+      "cplRr": 2,
+      "sigMtd": 6,
+      "sigRr": 6,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -359,23 +368,23 @@
       "name": "CBO",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 2,
+      "sigMtd": 17,
+      "sigRr": 18,
       "cprMtd": 0,
       "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 1,
-      "rev": 0,
-      "budget": 510.0,
-      "profit": -510.0,
-      "status": "not-working"
+      "cpaMtd": 7,
+      "cpaRr": 7,
+      "rev": 1190.0,
+      "budget": 0,
+      "profit": 1190.0,
+      "status": "working-well"
     },
     {
       "name": "CHA",
-      "cplMtd": 9,
-      "cplRr": 10,
-      "sigMtd": 8,
-      "sigRr": 9,
+      "cplMtd": 8,
+      "cplRr": 8,
+      "sigMtd": 11,
+      "sigRr": 11,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -383,7 +392,7 @@
       "rev": 0,
       "budget": 0,
       "profit": 0,
-      "status": "neutral"
+      "status": "potential"
     },
     {
       "name": "CSH",
@@ -396,14 +405,29 @@
       "cpaMtd": 0,
       "cpaRr": 0,
       "rev": 0,
-      "budget": 120.0,
-      "profit": -120.0,
+      "budget": 240.0,
+      "profit": -240.0,
       "status": "not-working"
     },
     {
+      "name": "EPV",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 120,
+      "sigRr": 124,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "potential"
+    },
+    {
       "name": "FXM",
-      "cplMtd": 8,
-      "cplRr": 9,
+      "cplMtd": 4,
+      "cplRr": 4,
       "sigMtd": 0,
       "sigRr": 0,
       "cprMtd": 0,
@@ -417,10 +441,10 @@
     },
     {
       "name": "FZY",
-      "cplMtd": 47,
-      "cplRr": 50,
-      "sigMtd": 7,
-      "sigRr": 7,
+      "cplMtd": 34,
+      "cplRr": 35,
+      "sigMtd": 10,
+      "sigRr": 10,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
@@ -479,8 +503,8 @@
       "name": "LEA",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 3,
-      "sigRr": 3,
+      "sigMtd": 5,
+      "sigRr": 5,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -510,9 +534,9 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 45,
-      "sigRr": 48,
-      "cprMtd": 56.0,
-      "cprRr": 59.86,
+      "sigRr": 46,
+      "cprMtd": 28.0,
+      "cprRr": 28.93,
       "cpaMtd": 0,
       "cpaRr": 0,
       "rev": 336.0,
@@ -522,10 +546,10 @@
     },
     {
       "name": "MOD",
-      "cplMtd": 13,
-      "cplRr": 14,
-      "sigMtd": 4,
-      "sigRr": 4,
+      "cplMtd": 7,
+      "cplRr": 7,
+      "sigMtd": 5,
+      "sigRr": 5,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -540,7 +564,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 8,
-      "sigRr": 9,
+      "sigRr": 8,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -641,26 +665,11 @@
       "status": "neutral"
     },
     {
-      "name": "TEST",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 0,
-      "sigRr": 0,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
       "name": "VENE",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 18,
-      "sigRr": 19,
+      "sigMtd": 20,
+      "sigRr": 21,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -674,12 +683,12 @@
       "name": "WDG",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 112,
-      "sigRr": 120,
+      "sigMtd": 110,
+      "sigRr": 114,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 45,
-      "cpaRr": 48,
+      "cpaRr": 46,
       "rev": 6476.0,
       "budget": 550.0,
       "profit": 5926.0,
@@ -689,12 +698,12 @@
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 924,
-      "sigRr": 996,
+      "sigMtd": 934,
+      "sigRr": 971,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 50,
-      "cpaRr": 53,
+      "cpaRr": 52,
       "rev": 8020.0,
       "budget": 1420.0,
       "profit": 6600.0,
@@ -822,7 +831,7 @@
     {
       "advertiser": "BASHER AGENCY",
       "brand": "LuckyZino Sweepstakes Casino",
-      "signups": 24,
+      "signups": 26,
       "ftd": 4,
       "revenue": 480.0,
       "budget": 0.0,
@@ -879,8 +888,8 @@
       "signups": 5,
       "ftd": 1,
       "revenue": 360.0,
-      "budget": 250.0,
-      "profit": 110.0
+      "budget": 0.0,
+      "profit": 360.0
     },
     {
       "advertiser": "CHANCED",
@@ -930,7 +939,7 @@
     {
       "advertiser": "Eskhol Real_LoneS",
       "brand": "Real Prize(Eskhol)",
-      "signups": 114,
+      "signups": 116,
       "ftd": 11,
       "revenue": 2090.0,
       "budget": 0.0,
@@ -947,21 +956,30 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
+      "brand": "The Boss",
+      "signups": 80,
+      "ftd": 11,
+      "revenue": 1870.0,
+      "budget": 0.0,
+      "profit": 1870.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
       "brand": "Rolling Riches",
-      "signups": 162,
-      "ftd": 21,
+      "signups": 170,
+      "ftd": 20,
       "revenue": 3000.0,
       "budget": 1200.0,
       "profit": 1800.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "The Boss",
-      "signups": 63,
-      "ftd": 4,
-      "revenue": 680.0,
-      "budget": 130.0,
-      "profit": 550.0
+      "brand": "LuckyBunny",
+      "signups": 47,
+      "ftd": 8,
+      "revenue": 960.0,
+      "budget": 330.0,
+      "profit": 630.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -975,7 +993,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "CardCrush",
-      "signups": 74,
+      "signups": 195,
       "ftd": 4,
       "revenue": 440.0,
       "budget": 0.0,
@@ -1010,12 +1028,12 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "LuckyBunny",
-      "signups": 45,
-      "ftd": 8,
-      "revenue": 960.0,
-      "budget": 330.0,
-      "profit": 630.0
+      "brand": "Jackpotgo",
+      "signups": 134,
+      "ftd": 3,
+      "revenue": 510.0,
+      "budget": 220.0,
+      "profit": 290.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -1043,15 +1061,6 @@
       "revenue": 130.0,
       "budget": 0.0,
       "profit": 130.0
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
-      "brand": "Jackpotgo",
-      "signups": 132,
-      "ftd": 3,
-      "revenue": 510.0,
-      "budget": 220.0,
-      "profit": 290.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -1091,8 +1100,17 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
+      "brand": "McLuck",
+      "signups": 6,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
       "brand": "Pulsz SEO",
-      "signups": 18,
+      "signups": 19,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -1110,7 +1128,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Richsweeps",
-      "signups": 17,
+      "signups": 20,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -1128,7 +1146,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Spree",
-      "signups": 3,
+      "signups": 5,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -1145,21 +1163,12 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "McLuck",
-      "signups": 4,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
       "brand": "LuckyZino",
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
+      "budget": 220.0,
+      "profit": -220.0
     },
     {
       "advertiser": "IMPACT",
@@ -1212,8 +1221,8 @@
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
-      "budget": 120.0,
-      "profit": -120.0
+      "budget": 240.0,
+      "profit": -240.0
     },
     {
       "advertiser": "SPLASH",
@@ -1223,23 +1232,14 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0
-    },
-    {
-      "advertiser": "BASHER AGENCY",
-      "brand": "LuckyZino",
-      "signups": 0,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 350.0,
-      "profit": -350.0
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 1171,
-    "ftd": 101,
-    "revenue": 15646.0,
-    "budget": 2628.0,
-    "profit": 13018.0
+    "signups": 1333,
+    "ftd": 107,
+    "revenue": 16836.0,
+    "budget": 2238.0,
+    "profit": 14598.0
   },
   "inactive_partners": [
     "ADD",
@@ -1254,13 +1254,13 @@
     "DRCT",
     "ECO",
     "ENJ",
-    "EPV",
     "FCM",
     "FIG",
     "FRA",
     "FST",
     "GDC",
     "GOS",
+    "MAT",
     "MAV",
     "MON",
     "PUR",
@@ -1268,6 +1268,7 @@
     "REV",
     "RXD",
     "TAK",
+    "TEST",
     "WAN",
     "WRW",
     "XLE",
