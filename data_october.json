@@ -28,7 +28,7 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 1213,
+      "mtd": 1207,
       "rr": 1376
     },
     "cpr": {
@@ -284,7 +284,7 @@
     {
       "date": "2026-10-27",
       "leads": 0,
-      "signups": 16,
+      "signups": 15,
       "cpr": 0.0,
       "users": 2,
       "rev": 322,
@@ -293,7 +293,7 @@
     {
       "date": "2026-10-28",
       "leads": 0,
-      "signups": 16,
+      "signups": 15,
       "cpr": 0.0,
       "users": 2,
       "rev": 322,
@@ -302,7 +302,7 @@
     {
       "date": "2026-10-29",
       "leads": 0,
-      "signups": 17,
+      "signups": 15,
       "cpr": 0.0,
       "users": 2,
       "rev": 322,
@@ -311,7 +311,7 @@
     {
       "date": "2026-10-30",
       "leads": 0,
-      "signups": 17,
+      "signups": 15,
       "cpr": 0.02,
       "users": 1,
       "rev": 322,
@@ -407,7 +407,7 @@
       "rev": 0,
       "budget": 240.0,
       "profit": -240.0,
-      "status": "not-working"
+      "status": "neutral"
     },
     {
       "name": "FXM",
@@ -951,7 +951,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Rolling Riches",
-      "signups": 170,
+      "signups": 164,
       "ftd": 20,
       "revenue": 3000.0,
       "budget": 1200.0,
@@ -1014,7 +1014,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Jackpotgo",
-      "signups": 128,
+      "signups": 134,
       "ftd": 3,
       "revenue": 510.0,
       "budget": 220.0,
@@ -1131,7 +1131,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Spree",
-      "signups": 11,
+      "signups": 5,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -1220,7 +1220,7 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 1213,
+    "signups": 1207,
     "ftd": 107,
     "revenue": 16836.0,
     "budget": 2238.0,
