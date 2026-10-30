@@ -28,7 +28,7 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 1333,
+      "mtd": 1213,
       "rr": 1376
     },
     "cpr": {
@@ -53,7 +53,7 @@
       "signups": 15,
       "cpr": 0.0,
       "users": 1,
-      "rev": 150.0,
+      "rev": 150,
       "budget": 0
     },
     {
@@ -71,7 +71,7 @@
       "signups": 28,
       "cpr": 0.0,
       "users": 3,
-      "rev": 400.0,
+      "rev": 400,
       "budget": 34
     },
     {
@@ -80,7 +80,7 @@
       "signups": 32,
       "cpr": 0.0,
       "users": 2,
-      "rev": 450.0,
+      "rev": 450,
       "budget": 34
     },
     {
@@ -89,7 +89,7 @@
       "signups": 28,
       "cpr": 0.47,
       "users": 2,
-      "rev": 340.0,
+      "rev": 340,
       "budget": 26
     },
     {
@@ -98,7 +98,7 @@
       "signups": 38,
       "cpr": 0.93,
       "users": 6,
-      "rev": 800.0,
+      "rev": 800,
       "budget": 128
     },
     {
@@ -107,7 +107,7 @@
       "signups": 38,
       "cpr": 0.93,
       "users": 7,
-      "rev": 1100.0,
+      "rev": 1100,
       "budget": 170
     },
     {
@@ -116,7 +116,7 @@
       "signups": 36,
       "cpr": 0.93,
       "users": 7,
-      "rev": 1194.0,
+      "rev": 1194,
       "budget": 108
     },
     {
@@ -125,7 +125,7 @@
       "signups": 28,
       "cpr": 3.27,
       "users": 4,
-      "rev": 596.0,
+      "rev": 596,
       "budget": 108
     },
     {
@@ -134,7 +134,7 @@
       "signups": 38,
       "cpr": 1.63,
       "users": 2,
-      "rev": 300.0,
+      "rev": 300,
       "budget": 102
     },
     {
@@ -143,7 +143,7 @@
       "signups": 38,
       "cpr": 1.63,
       "users": 2,
-      "rev": 300.0,
+      "rev": 300,
       "budget": 128
     },
     {
@@ -152,7 +152,7 @@
       "signups": 38,
       "cpr": 1.63,
       "users": 2,
-      "rev": 250.0,
+      "rev": 250,
       "budget": 134
     },
     {
@@ -161,7 +161,7 @@
       "signups": 32,
       "cpr": 1.63,
       "users": 1,
-      "rev": 234.0,
+      "rev": 234,
       "budget": 134
     },
     {
@@ -179,7 +179,7 @@
       "signups": 70,
       "cpr": 0.0,
       "users": 4,
-      "rev": 2520.0,
+      "rev": 2520,
       "budget": 187
     },
     {
@@ -188,7 +188,7 @@
       "signups": 65,
       "cpr": 0.0,
       "users": 6,
-      "rev": 300.0,
+      "rev": 300,
       "budget": 0
     },
     {
@@ -197,7 +197,7 @@
       "signups": 67,
       "cpr": 0.93,
       "users": 7,
-      "rev": 650.0,
+      "rev": 650,
       "budget": 34
     },
     {
@@ -206,7 +206,7 @@
       "signups": 67,
       "cpr": 0.93,
       "users": 7,
-      "rev": 650.0,
+      "rev": 650,
       "budget": 34
     },
     {
@@ -215,7 +215,7 @@
       "signups": 66,
       "cpr": 7.47,
       "users": 8,
-      "rev": 1648.0,
+      "rev": 1648,
       "budget": 34
     },
     {
@@ -224,7 +224,7 @@
       "signups": 63,
       "cpr": 2.8,
       "users": 8,
-      "rev": 1138.0,
+      "rev": 1138,
       "budget": 162
     },
     {
@@ -233,7 +233,7 @@
       "signups": 63,
       "cpr": 2.8,
       "users": 8,
-      "rev": 1138.0,
+      "rev": 1138,
       "budget": 162
     },
     {
@@ -242,7 +242,7 @@
       "signups": 56,
       "cpr": 0.0,
       "users": 6,
-      "rev": 600.0,
+      "rev": 600,
       "budget": 196
     },
     {
@@ -251,7 +251,7 @@
       "signups": 50,
       "cpr": 0.0,
       "users": 3,
-      "rev": 150.0,
+      "rev": 150,
       "budget": 221
     },
     {
@@ -260,7 +260,7 @@
       "signups": 45,
       "cpr": 0.0,
       "users": 1,
-      "rev": 180.0,
+      "rev": 180,
       "budget": 0
     },
     {
@@ -269,7 +269,7 @@
       "signups": 45,
       "cpr": 0.0,
       "users": 1,
-      "rev": 180.0,
+      "rev": 180,
       "budget": 0
     },
     {
@@ -278,13 +278,13 @@
       "signups": 48,
       "cpr": 0.0,
       "users": 2,
-      "rev": 280.0,
+      "rev": 280,
       "budget": 0
     },
     {
       "date": "2026-10-27",
       "leads": 0,
-      "signups": 46,
+      "signups": 16,
       "cpr": 0.0,
       "users": 2,
       "rev": 322,
@@ -293,7 +293,7 @@
     {
       "date": "2026-10-28",
       "leads": 0,
-      "signups": 46,
+      "signups": 16,
       "cpr": 0.0,
       "users": 2,
       "rev": 322,
@@ -302,7 +302,7 @@
     {
       "date": "2026-10-29",
       "leads": 0,
-      "signups": 47,
+      "signups": 17,
       "cpr": 0.0,
       "users": 2,
       "rev": 322,
@@ -311,7 +311,7 @@
     {
       "date": "2026-10-30",
       "leads": 0,
-      "signups": 47,
+      "signups": 17,
       "cpr": 0.02,
       "users": 1,
       "rev": 322,
@@ -408,21 +408,6 @@
       "budget": 240.0,
       "profit": -240.0,
       "status": "not-working"
-    },
-    {
-      "name": "EPV",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 120,
-      "sigRr": 124,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "potential"
     },
     {
       "name": "FXM",
@@ -993,7 +978,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "CardCrush",
-      "signups": 195,
+      "signups": 75,
       "ftd": 4,
       "revenue": 440.0,
       "budget": 0.0,
@@ -1029,7 +1014,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Jackpotgo",
-      "signups": 134,
+      "signups": 128,
       "ftd": 3,
       "revenue": 510.0,
       "budget": 220.0,
@@ -1146,7 +1131,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Spree",
-      "signups": 5,
+      "signups": 11,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -1235,7 +1220,7 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 1333,
+    "signups": 1213,
     "ftd": 107,
     "revenue": 16836.0,
     "budget": 2238.0,
@@ -1254,6 +1239,7 @@
     "DRCT",
     "ECO",
     "ENJ",
+    "EPV",
     "FCM",
     "FIG",
     "FRA",
