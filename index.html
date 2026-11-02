@@ -50,7 +50,7 @@
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
-                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-left text-[11px]"></i></button>
+                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
                 <span id="toMonthLabel" class="uppercase"></span>
                 <button onclick="navCal('to', 1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
               </div>
@@ -440,8 +440,9 @@
         cur.setDate(cur.getDate() + 1);
       }
       const totalMonthDays = new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0).getDate();
-      const daysCount = Math.max(slice.length, 1), rrFactor = totalMonthDays / daysCount;
-      currentRrFactor = rrFactor; // Almacenamos el factor para los cálculos de Signups
+      const daysCount = Math.max(slice.length, 1);
+      const rrFactor = isFull ? 1 : (totalMonthDays / daysCount);
+      currentRrFactor = rrFactor;
 
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
       const sigs = isFull ? data.totals.signups.mtd : slice.reduce((a,r) => a + r.signups, 0);
@@ -489,6 +490,7 @@
 
         return {
           ...p, cplMtd: pL, sigMtd: pS, cpaMtd: pU, budget: pB, rev: pR, profit: pP, status: st,
+          budgetRr: isFull ? (p.budgetRr || pB) : Math.round(pB * rrFactor),
           cplRr: isFull ? p.cplRr : (typeof pL === 'number' ? Math.round(pL * rrFactor) : '—'),
           sigRr: isFull ? p.sigRr : (typeof pS === 'number' ? Math.round(pS * rrFactor) : 0),
           cpaRr: isFull ? p.cpaRr : (typeof pU === 'number' ? Math.round(pU * rrFactor) : 0),
@@ -500,7 +502,7 @@
 
       renderTopCards(partners, teamKpis);
       renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, totalMonthDays);
-      renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
+      renderBreakdownTables(partners, rrFactor, totKpis, teamKpis);
 
       const brandRatios = isFull ? { sRatio: 1, uRatio: 1, bRatio: 1, rRatio: 1 } : { sRatio, uRatio, bRatio, rRatio };
       renderBrandsSummary(data.advertisers_brands || [], brandRatios);
@@ -596,11 +598,12 @@
         const pCpr = (typeof p.cprMtd === 'number' && p.cprMtd > 0 && cprVal > 0) ? Math.round(p.cprMtd * cRatio) : 0;
         return {
           ...p, profit: pP, status: st,
+          budgetRr: p.budget > 0 ? Math.round(p.budget * rrFactor) : 0,
           cplRr: p.cplMtd > 0 ? Math.round(p.cplMtd * rrFactor) : '—',
           sigRr: p.sigMtd > 0 ? Math.round(p.sigMtd * rrFactor) : 0,
           cpaRr: p.cpaMtd > 0 ? Math.round(p.cpaMtd * rrFactor) : 0,
           cprMtd: pCpr,
-          cprRr: pCpr > 0 ? Math.round(p.cprRr * rrFactor) : 0
+          cprRr: pCpr > 0 ? Math.round(pCpr * rrFactor) : 0
         };
       });
 
@@ -608,7 +611,7 @@
 
       renderTopCards(partners, teamKpis);
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
-      renderBreakdownTables(partners, daysCount, totKpis, teamKpis);
+      renderBreakdownTables(partners, rrFactor, totKpis, teamKpis);
 
       const bMap = {};
       covered.forEach(m => (m.advertisers_brands || []).forEach(b => {
@@ -1024,8 +1027,9 @@
       });
     }
 
-    function renderBreakdownTables(partners, daysCount = 30, totKpis = {}, teamKpis = {}) {
-      const rrF = 30 / daysCount, container = document.getElementById('breakdown-tables-container');
+    // TABLAS DE DESGLOSE CON RR Y TOTALES EXACTOS
+    function renderBreakdownTables(partners, rrFactor = 1, totKpis = {}, teamKpis = {}) {
+      const container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
       
       const cpa = partners.filter(isCpaPartner).sort((a,b) => {
@@ -1048,12 +1052,30 @@
       cpr.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++] || 0);
       cpl.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++] || 0);
 
+      // Precalcular RRs consistentes por partner usando el factor real
+      [...cpa, ...cpr, ...cpl].forEach(p => {
+        const b = p.budget || 0;
+        p._budgetRr = (typeof p.budgetRr === 'number') ? p.budgetRr : Math.round(b * rrFactor);
+        
+        const sigVal = typeof p.sigMtd === 'number' ? p.sigMtd : 0;
+        p._sigRr = (typeof p.sigRr === 'number') ? p.sigRr : Math.round(sigVal * rrFactor);
+
+        const usersVal = typeof p.cpaMtd === 'number' ? p.cpaMtd : 0;
+        p._cpaRr = (typeof p.cpaRr === 'number') ? p.cpaRr : Math.round(usersVal * rrFactor);
+
+        const cprVal = typeof p.cprMtd === 'number' ? p.cprMtd : 0;
+        p._cprRr = (typeof p.cprRr === 'number') ? p.cprRr : Math.round(cprVal * rrFactor);
+
+        const cplVal = typeof p.cplMtd === 'number' ? p.cplMtd : 0;
+        p._cplRr = (typeof p.cplRr === 'number') ? p.cplRr : (typeof p.cplMtd === 'number' ? Math.round(p.cplMtd * rrFactor) : '—');
+      });
+
       const cpaTotBKpi = cpa.reduce((a, p) => a + (p._bKpi || 0), 0);
       const cprTotBKpi = cpr.reduce((a, p) => a + (p._bKpi || 0), 0);
       const cplTotBKpi = cpl.reduce((a, p) => a + (p._bKpi || 0), 0);
 
       const renderRows = (list, type) => list.map(p => {
-        const b = p.budget || 0, bRr = Math.round(b * rrF), r = p.rev || 0;
+        const b = p.budget || 0, bRr = p._budgetRr, r = p.rev || 0;
         const roi = (b > 0 && r > 0) ? `1:${(r/b).toFixed(1)}` : '—';
         const bKpi = p._bKpi || 0;
         const bKpiDisplay = `$${bKpi.toLocaleString()}`;
@@ -1064,7 +1086,7 @@
 
         if (type === 'CPA') { 
           const cpaVal = usersVal;
-          const cpaRrVal = typeof p.cpaRr === 'number' ? p.cpaRr : (p.cpaRr === '—' ? 0 : (p.cpaRr || 0));
+          const cpaRrVal = p._cpaRr;
           const s2p = sigVal > 0 ? ((cpaVal / sigVal) * 100).toFixed(1) + '%' : '0.0%';
 
           return `<tr class="hover:bg-slate-50 cpa-row" data-budget="${b}" data-registrations="${sigVal}" data-cpa="${cpaVal}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
@@ -1085,7 +1107,7 @@
 
         if (type === 'CPR') {
           const cprMtdVal = typeof p.cprMtd === 'number' ? Math.round(p.cprMtd) : 0;
-          const cprRrVal = typeof p.cprRr === 'number' ? Math.round(p.cprRr) : (p.cprRr ? Math.round(p.cprRr) : 0);
+          const cprRrVal = p._cprRr;
 
           return `<tr class="hover:bg-slate-50 cpr-row" data-budget="${b}" data-cpr="${p.cprMtd||0}" data-registrations="${sigVal}" data-users="${usersVal}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
             <td class="p-2 font-bold">${p.name}</td>
@@ -1105,7 +1127,7 @@
 
         if (type === 'CPL') {
           const cplVal = typeof p.cplMtd === 'number' ? p.cplMtd : 0;
-          const cplRrVal = typeof p.cplRr === 'number' ? p.cplRr : (p.cplRr || 0);
+          const cplRrVal = p._cplRr;
 
           return `<tr class="hover:bg-slate-50 cpl-row" data-budget="${b}" data-leads="${cplVal}" data-registrations="${sigVal}" data-users="${usersVal}" data-revenue="${r}" data-status="${statusWeight[p.status] || 0}">
             <td class="p-2 font-bold">${p.name}</td>
@@ -1125,7 +1147,10 @@
       }).join('');
 
       const renderFoot = (list, type, totBKpi) => {
-        const b = list.reduce((a,p)=>a+(p.budget||0),0), bRr = Math.round(b * rrF), r = list.reduce((a,p)=>a+(p.rev||0),0);
+        const b = list.reduce((a,p) => a + (p.budget || 0), 0);
+        // SUMA EXACTA DE LA COLUMNA RR BUDGET:
+        const bRr = list.reduce((a,p) => a + (p._budgetRr || 0), 0);
+        const r = list.reduce((a,p) => a + (p.rev || 0), 0);
         const roi = (b > 0 && r > 0) ? `1:${(r/b).toFixed(1)}` : '—';
         const bKpiTotDisplay = totBKpi > 0 ? `$${totBKpi.toLocaleString()}` : '$0';
         const revTotDisplay = `$${Math.round(r).toLocaleString()}`;
@@ -1134,7 +1159,9 @@
         const u = list.reduce((a,p) => a + (typeof p.cpaMtd === 'number' ? p.cpaMtd : 0), 0);
 
         if (type === 'CPA') { 
-          const uRr = Math.round(u * rrF), s2p = s > 0 ? ((u / s) * 100).toFixed(1) + '%' : '0.0%'; 
+          // SUMA EXACTA DE LA COLUMNA RR CPA:
+          const uRr = list.reduce((a,p) => a + (p._cpaRr || 0), 0);
+          const s2p = s > 0 ? ((u / s) * 100).toFixed(1) + '%' : '0.0%'; 
           const aKpi = totKpis.cpa?.kpi || 300;
           return `<tr>
             <td class="p-2 font-black">Grand total</td>
@@ -1153,7 +1180,9 @@
         }
 
         if (type === 'CPR') { 
-          const c = Math.round(list.reduce((a,p)=>a+(p.cprMtd||0),0)), cRr = Math.round(list.reduce((a,p)=>a+(p.cprRr||0),0)); 
+          const c = Math.round(list.reduce((a,p) => a + (p.cprMtd || 0), 0));
+          // SUMA EXACTA DE LA COLUMNA RR CPR:
+          const cRr = list.reduce((a,p) => a + (p._cprRr || 0), 0); 
           const cKpi = totKpis.cpr?.kpi || 200;
           return `<tr>
             <td class="p-2 font-black">Grand total</td>
@@ -1172,7 +1201,9 @@
         }
 
         if (type === 'CPL') { 
-          const l = list.reduce((a,p)=>a+p.cplMtd,0), lRr = Math.round(l * rrF); 
+          const l = list.reduce((a,p) => a + (typeof p.cplMtd === 'number' ? p.cplMtd : 0), 0);
+          // SUMA EXACTA DE LA COLUMNA RR CPL:
+          const lRr = list.reduce((a,p) => a + (typeof p._cplRr === 'number' ? p._cplRr : 0), 0); 
           const lKpi = totKpis.cpl?.kpi || 4000;
           return `<tr>
             <td class="p-2 font-black">Grand total</td>
