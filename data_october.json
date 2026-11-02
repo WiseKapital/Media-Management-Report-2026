@@ -419,21 +419,6 @@
       "status": "neutral"
     },
     {
-      "name": "FXM",
-      "cplMtd": 4,
-      "cplRr": 4,
-      "sigMtd": 0,
-      "sigRr": 0,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
       "name": "FZY",
       "cplMtd": 34,
       "cplRr": 34,
@@ -447,6 +432,21 @@
       "budget": 0,
       "profit": 150.0,
       "status": "working-well"
+    },
+    {
+      "name": "FXM",
+      "cplMtd": 4,
+      "cplRr": 4,
+      "sigMtd": 0,
+      "sigRr": 0,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
     },
     {
       "name": "GRM",
