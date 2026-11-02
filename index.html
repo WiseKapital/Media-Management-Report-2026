@@ -179,11 +179,10 @@
   </div>
 
   <script>
-    let currentRrFactor = 1; // Factor de días transcurridos para calcular el RR
+    let currentRrFactor = 1;
     const DATA_CACHE = {};
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
-    // Mínimo absoluto permitido: 1 de Julio de 2026 (mes 6 en base 0)
     const MIN_SYSTEM_DATE = new Date(2026, 6, 1);
 
     function getSystemToday() {
@@ -199,7 +198,6 @@
     let fromViewYear = today.getFullYear(), toViewYear = today.getFullYear();
     let fromViewMonth = today.getMonth(), toViewMonth = today.getMonth();
 
-    // Estados de ordenamiento para cada tabla
     let cpaSortKey = null, cpaSortDir = 'desc';
     let cprSortKey = null, cprSortDir = 'desc';
     let cplSortKey = null, cplSortDir = 'desc';
@@ -236,7 +234,6 @@
              (typeof p.budget === 'number' && p.budget > 0);
     }
 
-    // Regla global: El RR se pone en verde solo si es superior o igual al KPI (incluye Budget)
     function getRrColor(rrVal, kpiVal) {
       if (kpiVal === '—' || kpiVal === undefined || kpiVal === null) return 'text-slate-500';
       const r = parseFloat(String(rrVal).replace(/[^0-9.-]/g, ''));
@@ -274,7 +271,6 @@
       }
     }
 
-    // GESTIÓN DINÁMICA POR AÑO Y MES
     function getCacheKey(year, monthName) {
       return `${year}_${monthName.toLowerCase()}`;
     }
@@ -502,7 +498,7 @@
 
       applyEqualKpis(partners, totKpis);
 
-      renderTopCards(partners, teamKpis);
+      renderTopCards(partners, teamKpis, rr);
       renderLineChart(slice, prefix, { cpl: totKpis.cpl?.kpi || 4000, sigs: totKpis.signups?.kpi || 1000, users: totKpis.cpa?.kpi || 300 }, totalMonthDays);
       renderBreakdownTables(partners, rrFactor, totKpis, teamKpis);
 
@@ -612,7 +608,7 @@
 
       applyEqualKpis(partners, totKpis);
 
-      renderTopCards(partners, teamKpis);
+      renderTopCards(partners, teamKpis, rr);
       renderLineChart(slice, 'Multi', { cpl: totKpis.cpl.kpi, sigs: totKpis.signups.kpi, users: totKpis.cpa.kpi }, totalTargetDays);
       renderBreakdownTables(partners, rrFactor, totKpis, teamKpis);
 
@@ -832,19 +828,26 @@
       document.getElementById('tp-rr-roi').textContent = (d.budget > 0 && d.rev > 0) ? `1:${(d.rev / d.budget).toFixed(1)}` : (d.roi || '—');
     }
 
-    function renderTopCards(partners, teamKpis = { budget: 5500, signups: 1000, users: 300, revenue: 16500, profit: 11000 }) {
+    // TOP METRIC CARDS CON KPI Y RR
+    function renderTopCards(partners, teamKpis = { budget: 5500, signups: 1000, users: 300, revenue: 16500, profit: 11000 }, rr = {}) {
       const cats = [
-        { k: 'budget', t: 'BUDGET', p: '$', ic: 'wallet', c: '#f59e0b', bg: 'bg-amber-50 text-amber-800', f: p => p.budget, kpi: teamKpis.budget },
-        { k: 'sigs', t: 'SIGNUPS', p: '', ic: 'check', c: '#2563eb', bg: 'bg-blue-50 text-blue-800', f: p => typeof p.sigMtd === 'number' ? p.sigMtd : 0, kpi: teamKpis.signups },
-        { k: 'users', t: 'USERS', p: '', ic: 'user', c: '#a855f7', bg: 'bg-purple-50 text-purple-900', f: p => typeof p.cpaMtd === 'number' ? p.cpaMtd : 0, kpi: teamKpis.users },
-        { k: 'rev', t: 'REVENUE', p: '$', ic: 'dollar-sign', c: '#00d285', bg: 'bg-emerald-50 text-emerald-800', f: p => p.rev || 0, kpi: teamKpis.revenue },
-        { k: 'profit', t: 'PROFIT', p: '$', ic: 'sack-dollar', c: '#14b8a6', bg: 'bg-teal-50 text-teal-800', f: p => p.profit || 0, kpi: teamKpis.profit }
+        { k: 'budget', t: 'BUDGET', p: '$', ic: 'wallet', c: '#f59e0b', bg: 'bg-amber-50 text-amber-800', f: p => p.budget, kpi: teamKpis.budget, rrKey: 'budget' },
+        { k: 'sigs', t: 'SIGNUPS', p: '', ic: 'check', c: '#2563eb', bg: 'bg-blue-50 text-blue-800', f: p => typeof p.sigMtd === 'number' ? p.sigMtd : 0, kpi: teamKpis.signups, rrKey: 'sigs' },
+        { k: 'users', t: 'USERS', p: '', ic: 'user', c: '#a855f7', bg: 'bg-purple-50 text-purple-900', f: p => typeof p.cpaMtd === 'number' ? p.cpaMtd : 0, kpi: teamKpis.users, rrKey: 'users' },
+        { k: 'rev', t: 'REVENUE', p: '$', ic: 'dollar-sign', c: '#00d285', bg: 'bg-emerald-50 text-emerald-800', f: p => p.rev || 0, kpi: teamKpis.revenue, rrKey: 'rev' },
+        { k: 'profit', t: 'PROFIT', p: '$', ic: 'sack-dollar', c: '#14b8a6', bg: 'bg-teal-50 text-teal-800', f: p => p.profit || 0, kpi: teamKpis.profit, rrKey: 'profit' }
       ];
       const grid = document.getElementById('metrics-grid'); grid.innerHTML = '';
       cats.forEach(cat => {
         const items = partners.map(p => ({ name: p.name, val: cat.f(p) })).filter(i => cat.k === 'profit' ? i.val !== 0 : i.val > 0).sort((a,b) => b.val - a.val);
         const max = Math.max(...items.map(i => Math.abs(i.val)), 1);
         const total = items.reduce((a,i) => a + i.val, 0);
+
+        // Valor de Run Rate (RR) y color según KPI
+        const catRrVal = (rr && typeof rr[cat.rrKey] === 'number') ? rr[cat.rrKey] : Math.round(total * currentRrFactor);
+        const rrColor = getRrColor(catRrVal, cat.kpi);
+        const rrDisplay = (cat.p === '$' ? (catRrVal < 0 ? '-$' : '$') : '') + Math.round(Math.abs(catRrVal)).toLocaleString();
+
         const col = document.createElement('div'); col.className = 'flex flex-col gap-2.5 min-w-0';
         col.innerHTML = `
           <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex flex-col justify-between h-[115px]">
@@ -855,7 +858,10 @@
               <div class="w-5 h-5 rounded-full flex items-center justify-center text-[10px]" style="background:${cat.c}20; color:${cat.c}"><i class="fa-solid fa-${cat.ic}"></i></div>
             </div>
             <div class="my-0.5 flex items-baseline gap-1"><span class="text-xl font-black text-slate-900">${cat.p === '$' ? (total < 0 ? '-$' : '$') : ''}${Math.round(Math.abs(total)).toLocaleString()}</span><span class="text-[9px] font-bold text-slate-400">TOTAL</span></div>
-            <div class="text-[9px] font-bold text-slate-400">KPI: ${cat.p}${Math.round(cat.kpi).toLocaleString()}</div>
+            <div class="flex items-center justify-between text-[10px] font-bold text-slate-400 border-t border-slate-100 pt-1">
+              <span>KPI: <span class="text-slate-600 font-extrabold">${cat.p}${Math.round(cat.kpi).toLocaleString()}</span></span>
+              <span>RR: <span class="${rrColor} font-black">${rrDisplay}</span></span>
+            </div>
           </div>
           <div class="bg-white rounded-xl p-3 shadow-sm border border-slate-200 flex flex-col h-[320px]">
             <div class="${cat.bg} text-[10px] font-extrabold p-1.5 rounded-lg mb-3 text-center uppercase">${cat.t}</div>
