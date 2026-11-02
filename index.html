@@ -194,7 +194,7 @@
     const DATA_CACHE = {};
     const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
     
-    // Mínimo absoluto: 1 de Julio de 2026 (mes 6 en base 0)
+    // Mínimo absoluto permitido: 1 de Julio de 2026 (mes 6 en base 0)
     const MIN_SYSTEM_DATE = new Date(2026, 6, 1);
 
     function getSystemToday() {
@@ -285,6 +285,22 @@
       }
     }
 
+    // GESTIÓN DINÁMICA POR AÑO Y MES
+    function getCacheKey(year, monthName) {
+      return `${year}_${monthName.toLowerCase()}`;
+    }
+
+    async function getMonthData(year, monthName) {
+      const key = getCacheKey(year, monthName);
+      if (!DATA_CACHE[key]) {
+        // Carga dinámicamente desde la subcarpeta del año (ej. ./2026/data_november.json)
+        const path = `./${year}/data_${monthName.toLowerCase()}.json`;
+        const data = await fetchJSON(path);
+        if (data) DATA_CACHE[key] = data;
+      }
+      return DATA_CACHE[key];
+    }
+
     async function loadAllJSONs() {
       try {
         today = getSystemToday();
@@ -296,13 +312,17 @@
         fromViewMonth = toViewMonth = today.getMonth();
         updateDatesUI();
 
+        const currentYear = today.getFullYear();
         const currentMonthName = MONTHS[today.getMonth()].toLowerCase();
-        const baseMonths = Array.from(new Set([currentMonthName, 'september', 'august', 'july']));
+
+        // Precarga de los meses recientes del año actual
+        const baseMonths = Array.from(new Set([
+          currentMonthName,
+          MONTHS[Math.max(0, today.getMonth() - 1)].toLowerCase(),
+          MONTHS[Math.max(0, today.getMonth() - 2)].toLowerCase()
+        ]));
         
-        await Promise.all(baseMonths.map(async m => {
-          const d = await fetchJSON(`./data_${m}.json`);
-          if (d) DATA_CACHE[m] = d;
-        }));
+        await Promise.all(baseMonths.map(m => getMonthData(currentYear, m)));
 
         dispatchRange(fromDate, toDate);
       } catch (err) {
@@ -399,26 +419,23 @@
     }
 
     async function dispatchRange(sDate, eDate) {
+      // Mismo mes y mismo año
       if (sDate.getFullYear() === eDate.getFullYear() && sDate.getMonth() === eDate.getMonth()) {
+        const y = sDate.getFullYear();
         const m = sDate.getMonth();
         const mName = MONTHS[m].toLowerCase();
         const prefix = MONTHS[m].substring(0, 3);
-        let data = DATA_CACHE[mName];
-        if (!data) {
-          data = await fetchJSON(`./data_${mName}.json`);
-          if (data) DATA_CACHE[mName] = data;
-        }
+        const data = await getMonthData(y, mName);
         return renderPeriod(data, sDate, eDate, prefix);
       }
 
+      // Rango multimes o multiaño
       let curM = new Date(sDate.getFullYear(), sDate.getMonth(), 1);
       const endM = new Date(eDate.getFullYear(), eDate.getMonth(), 1);
       while (curM <= endM) {
+        const y = curM.getFullYear();
         const mName = MONTHS[curM.getMonth()].toLowerCase();
-        if (!DATA_CACHE[mName]) {
-          const d = await fetchJSON(`./data_${mName}.json`);
-          if (d) DATA_CACHE[mName] = d;
-        }
+        await getMonthData(y, mName);
         curM.setMonth(curM.getMonth() + 1);
       }
       renderMultiMonth(sDate, eDate);
@@ -517,8 +534,9 @@
       let curM = new Date(sDate.getFullYear(), sDate.getMonth(), 1);
       const endM = new Date(eDate.getFullYear(), eDate.getMonth(), 1);
       while (curM <= endM) {
+        const y = curM.getFullYear();
         const mName = MONTHS[curM.getMonth()].toLowerCase();
-        const data = DATA_CACHE[mName];
+        const data = DATA_CACHE[getCacheKey(y, mName)];
         if (data && !covered.includes(data)) {
           covered.push(data);
         }
@@ -802,7 +820,6 @@
       }
       document.getElementById('tp-mtd-budget').textContent = '$' + Math.round(d.budget).toLocaleString();
       
-      // DETECCIÓN DINÁMICA DEL NÚMERO DE SIGNUPS Y CÁLCULO DE RR
       const detectedSigs = getApprovedWizCount();
       const finalMtdSigs = (detectedSigs !== null) ? detectedSigs : d.sigs;
       const finalRrSigs = (detectedSigs !== null) ? Math.round(detectedSigs * currentRrFactor) : d.rr.sigs;
@@ -816,7 +833,6 @@
       elB.textContent = '$' + Math.round(d.rr.budget).toLocaleString();
       elB.className = `${getRrColor(d.rr.budget, d.teamKpis?.budget || 5500)} font-black`;
 
-      // RR DE SIGNUPS CON SU COLOR ACTUALIZADO
       const elS = document.getElementById('tp-rr-signups');
       elS.textContent = finalRrSigs.toLocaleString();
       elS.className = `${getRrColor(finalRrSigs, d.teamKpis?.signups || 1000)} font-black`;
@@ -880,7 +896,6 @@
         grid.appendChild(col);
       });
 
-      // Sincronización final tras montar el badge
       const detectedNum = getApprovedWizCount();
       if (detectedNum !== null) {
         const tpSignups = document.getElementById('tp-mtd-signups');
@@ -1027,7 +1042,7 @@
       });
     }
 
-    // TABLAS DE DESGLOSE CON RR Y TOTALES EXACTOS
+    // TABLAS DE DESGLOSE CON RR Y TOTALES
     function renderBreakdownTables(partners, rrFactor = 1, totKpis = {}, teamKpis = {}) {
       const container = document.getElementById('breakdown-tables-container');
       const kBudget = teamKpis.budget || 5500;
@@ -1052,7 +1067,6 @@
       cpr.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++] || 0);
       cpl.forEach(p => p._bKpi = allBudgetKpis[kpiIdx++] || 0);
 
-      // Precalcular RRs consistentes por partner usando el factor real
       [...cpa, ...cpr, ...cpl].forEach(p => {
         const b = p.budget || 0;
         p._budgetRr = (typeof p.budgetRr === 'number') ? p.budgetRr : Math.round(b * rrFactor);
@@ -1148,7 +1162,6 @@
 
       const renderFoot = (list, type, totBKpi) => {
         const b = list.reduce((a,p) => a + (p.budget || 0), 0);
-        // SUMA EXACTA DE LA COLUMNA RR BUDGET:
         const bRr = list.reduce((a,p) => a + (p._budgetRr || 0), 0);
         const r = list.reduce((a,p) => a + (p.rev || 0), 0);
         const roi = (b > 0 && r > 0) ? `1:${(r/b).toFixed(1)}` : '—';
@@ -1159,7 +1172,6 @@
         const u = list.reduce((a,p) => a + (typeof p.cpaMtd === 'number' ? p.cpaMtd : 0), 0);
 
         if (type === 'CPA') { 
-          // SUMA EXACTA DE LA COLUMNA RR CPA:
           const uRr = list.reduce((a,p) => a + (p._cpaRr || 0), 0);
           const s2p = s > 0 ? ((u / s) * 100).toFixed(1) + '%' : '0.0%'; 
           const aKpi = totKpis.cpa?.kpi || 300;
@@ -1181,7 +1193,6 @@
 
         if (type === 'CPR') { 
           const c = Math.round(list.reduce((a,p) => a + (p.cprMtd || 0), 0));
-          // SUMA EXACTA DE LA COLUMNA RR CPR:
           const cRr = list.reduce((a,p) => a + (p._cprRr || 0), 0); 
           const cKpi = totKpis.cpr?.kpi || 200;
           return `<tr>
@@ -1202,7 +1213,6 @@
 
         if (type === 'CPL') { 
           const l = list.reduce((a,p) => a + (typeof p.cplMtd === 'number' ? p.cplMtd : 0), 0);
-          // SUMA EXACTA DE LA COLUMNA RR CPL:
           const lRr = list.reduce((a,p) => a + (typeof p._cplRr === 'number' ? p._cplRr : 0), 0); 
           const lKpi = totKpis.cpl?.kpi || 4000;
           return `<tr>
@@ -1223,19 +1233,19 @@
       };
 
       container.innerHTML = `
-        <!-- 1. CPA FIRST -->
+        <!-- 1. CPA -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-purple-900 bg-purple-100 px-3 py-1 rounded-md">CPA</span>
           <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCpaTable('budget')" id="sort-cpa-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('registrations')" id="sort-cpa-registrations" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('cpa')" id="sort-cpa-cpa" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCpaTable('revenue')" id="sort-cpa-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCpaTable('status')" id="sort-cpa-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th rowspan="2" class="p-1.5 bg-slate-100 align-middle">Registrations</th><th colspan="3" class="p-1.5 bg-purple-100">CPA</th><th colspan="3" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>S2P</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cpaTableBody" class="font-semibold">${renderRows(cpa, 'CPA') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpa, 'CPA', cpaTotBKpi)}</tfoot></table></div>
         </div>
 
-        <!-- 2. CPR SECOND -->
+        <!-- 2. CPR -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-amber-900 bg-amber-100 px-3 py-1 rounded-md">CPR</span>
           <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCprTable('budget')" id="sort-cpr-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCprTable('cpr')" id="sort-cpr-cpr" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('registrations')" id="sort-cpr-registrations" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCprTable('users')" id="sort-cpr-users" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCprTable('revenue')" id="sort-cpr-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCprTable('status')" id="sort-cpr-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-amber-100">CPR</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cprTableBody" class="font-semibold">${renderRows(cpr, 'CPR') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No active CPR records</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${cpr.length ? renderFoot(cpr, 'CPR', cprTotBKpi) : ''}</tfoot></table></div>
         </div>
 
-        <!-- 3. CPL THIRD -->
+        <!-- 3. CPL -->
         <div class="bg-white rounded-2xl shadow-sm border p-4 space-y-3">
           <span class="text-xs font-black uppercase text-sky-900 bg-sky-100 px-3 py-1 rounded-md">CPL</span>
           <div class="overflow-x-auto"><table class="w-full text-xs table-grid"><thead><tr class="sort-row-borderless select-none"><th></th><th></th><th class="text-center"><button onclick="sortCplTable('budget')" id="sort-cpl-budget" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th></th><th class="text-center"><button onclick="sortCplTable('leads')" id="sort-cpl-leads" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCplTable('registrations')" id="sort-cpl-registrations" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCplTable('users')" id="sort-cpl-users" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th class="text-center"><button onclick="sortCplTable('revenue')" id="sort-cpl-revenue" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th><th></th><th class="text-center"><button onclick="sortCplTable('status')" id="sort-cpl-status" class="px-2 py-0.5 bg-white border border-slate-300 rounded text-[10px] font-bold shadow-2xs hover:bg-slate-100 flex items-center gap-1 mx-auto transition-all">Sort <i class="fa-solid fa-sort text-slate-400"></i></button></th></tr><tr class="font-extrabold text-center select-none"><th rowspan="2" class="p-2 text-left bg-slate-50 align-middle">Media Partner</th><th colspan="3" class="p-1.5 bg-sky-100">Budget</th><th colspan="3" class="p-1.5 bg-fuchsia-100">Leads</th><th colspan="4" class="p-1.5 bg-emerald-100">Performance</th><th rowspan="2" class="p-2 text-center bg-emerald-100/60 text-slate-800 align-middle">Status</th></tr><tr class="bg-slate-50 font-bold text-center select-none text-slate-700"><th>KPI</th><th>MTD</th><th>RR</th><th>KPI</th><th>MTD</th><th>RR</th><th>Registrations</th><th>Users</th><th>Revenue</th><th>ROI</th></tr></thead><tbody id="cplTableBody" class="font-semibold">${renderRows(cpl, 'CPL') || '<tr><td colspan="12" class="p-3 text-center text-slate-400">No data</td></tr>'}</tbody><tfoot class="font-black bg-slate-50 border-t-2">${renderFoot(cpl, 'CPL', cplTotBKpi)}</tfoot></table></div>
