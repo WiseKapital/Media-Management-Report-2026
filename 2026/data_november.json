@@ -9,7 +9,7 @@
   "team_kpis": {
     "budget": 5500,
     "signups": 1000,
-    "users": 300,
+    "users": 250,
     "revenue": 16500,
     "profit": 11000
   },
@@ -28,8 +28,8 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 3,
-      "rr": 45
+      "mtd": 19,
+      "rr": 285
     },
     "cpr": {
       "kpi": 200,
@@ -37,7 +37,7 @@
       "rr": 0.0
     },
     "cpa": {
-      "kpi": 300,
+      "kpi": 250,
       "mtd": 1,
       "rr": 15
     },
@@ -50,7 +50,7 @@
     {
       "date": "2026-11-01",
       "leads": 0,
-      "signups": 2,
+      "signups": 10,
       "cpr": 0.0,
       "users": 0,
       "rev": 0,
@@ -59,7 +59,7 @@
     {
       "date": "2026-11-02",
       "leads": 0,
-      "signups": 1,
+      "signups": 9,
       "cpr": 0.0,
       "users": 1,
       "rev": 170,
@@ -67,6 +67,36 @@
     }
   ],
   "partners": [
+    {
+      "name": "WIZ",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 8,
+      "sigRr": 120,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "WDG",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 6,
+      "sigRr": 90,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
     {
       "name": "FZY",
       "cplMtd": 0,
@@ -83,7 +113,37 @@
       "status": "neutral"
     },
     {
-      "name": "WIZ",
+      "name": "EPV",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 1,
+      "sigRr": 15,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "ADV",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 1,
+      "sigRr": 15,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "SDG",
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
@@ -207,7 +267,7 @@
     {
       "advertiser": "COINSROYALE",
       "brand": "Coins Royale sweeps",
-      "signups": 0,
+      "signups": 1,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -216,7 +276,7 @@
     {
       "advertiser": "COINSROYALE",
       "brand": "CoinsRoyale",
-      "signups": 0,
+      "signups": 15,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -368,7 +428,7 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 3,
+    "signups": 19,
     "ftd": 1,
     "revenue": 170.0,
     "budget": 0.0,
@@ -376,6 +436,8 @@
   },
   "inactive_partners": [
     "ADM",
+    "AKI",
+    "CBO",
     "CHA",
     "CSH",
     "FXM",
@@ -392,9 +454,37 @@
     "SGA",
     "SIGB",
     "SPX",
-    "WDG",
-    "ADV",
-    "EPV",
-    "SDG"
+    "ADD",
+    "ADO",
+    "AGO",
+    "APG",
+    "AWP",
+    "BTD",
+    "CAC",
+    "CFL",
+    "CPX",
+    "DRCT",
+    "ECO",
+    "ENJ",
+    "FCM",
+    "FIG",
+    "FRA",
+    "FST",
+    "GDC",
+    "GOS",
+    "MAT",
+    "MAV",
+    "MON",
+    "PUR",
+    "REU",
+    "REV",
+    "RXD",
+    "TAK",
+    "TEST",
+    "WAN",
+    "WRW",
+    "XLE",
+    "iDc",
+    "sms"
   ]
 }
