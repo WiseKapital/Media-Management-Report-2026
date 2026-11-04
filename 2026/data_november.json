@@ -3,7 +3,7 @@
   "label": "November 2026",
   "date_range": {
     "start": "2026-11-01",
-    "end": "2026-11-02",
+    "end": "2026-11-04",
     "days": 30
   },
   "team_kpis": {
@@ -28,8 +28,8 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 3,
-      "rr": 45
+      "mtd": 32,
+      "rr": 240
     },
     "cpr": {
       "kpi": 200,
@@ -39,12 +39,12 @@
     "cpa": {
       "kpi": 250,
       "mtd": 1,
-      "rr": 15
+      "rr": 8
     },
     "revenue": 170.0,
-    "budget": 0.0,
-    "profit": 170.0,
-    "roi": "1:\u221e"
+    "budget": 150.0,
+    "profit": 20.0,
+    "roi": "1:1.13"
   },
   "daily_series": [
     {
@@ -64,6 +64,24 @@
       "users": 1,
       "rev": 170,
       "budget": 0
+    },
+    {
+      "date": "2026-11-03",
+      "leads": 0,
+      "signups": 14,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 75
+    },
+    {
+      "date": "2026-11-04",
+      "leads": 0,
+      "signups": 15,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 75
     }
   ],
   "partners": [
@@ -72,7 +90,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 2,
-      "sigRr": 30,
+      "sigRr": 15,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -86,8 +104,53 @@
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
+      "sigMtd": 27,
+      "sigRr": 203,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 150,
+      "profit": -150,
+      "status": "needs-improvement"
+    },
+    {
+      "name": "CHA",
+      "cplMtd": 0,
+      "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 15,
+      "sigRr": 8,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "EMO",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 1,
+      "sigRr": 8,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "AWP",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 1,
+      "sigRr": 8,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -106,7 +169,7 @@
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
-      "cpaRr": 15,
+      "cpaRr": 8,
       "rev": 170.0,
       "budget": 0,
       "profit": 170.0,
@@ -189,7 +252,7 @@
     {
       "advertiser": "CHANCED",
       "brand": "Chanced",
-      "signups": 0,
+      "signups": 6,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -198,7 +261,7 @@
     {
       "advertiser": "CHANCED",
       "brand": "Punt",
-      "signups": 0,
+      "signups": 4,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -210,8 +273,8 @@
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
+      "budget": 150.0,
+      "profit": -150.0
     },
     {
       "advertiser": "COINSROYALE",
@@ -243,7 +306,7 @@
     {
       "advertiser": "Eskhol Real_LoneS",
       "brand": "Real Prize(Eskhol)",
-      "signups": 0,
+      "signups": 2,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -252,7 +315,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "The Boss",
-      "signups": 0,
+      "signups": 1,
       "ftd": 1,
       "revenue": 170.0,
       "budget": 0.0,
@@ -261,7 +324,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Casinio",
-      "signups": 0,
+      "signups": 1,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -269,8 +332,17 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "LavishLuck",
-      "signups": 0,
+      "brand": "CardCrush",
+      "signups": 11,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "PolyCasino",
+      "signups": 3,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -287,24 +359,6 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "LuckyZino",
-      "signups": 0,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
-      "brand": "Mega Spinz",
-      "signups": 0,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
       "brand": "Pulsz SEO",
       "signups": 1,
       "ftd": 0,
@@ -314,17 +368,8 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "Rolla",
-      "signups": 0,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
-      "brand": "Rolling Riches",
-      "signups": 0,
+      "brand": "Richsweeps",
+      "signups": 1,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -368,15 +413,14 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 3,
+    "signups": 32,
     "ftd": 1,
     "revenue": 170.0,
-    "budget": 0.0,
-    "profit": 170.0
+    "budget": 150.0,
+    "profit": 20.0
   },
   "inactive_partners": [
     "ADM",
-    "CHA",
     "CSH",
     "FXM",
     "GRM",
