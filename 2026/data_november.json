@@ -3,7 +3,7 @@
   "label": "November 2026",
   "date_range": {
     "start": "2026-11-01",
-    "end": "2026-11-04",
+    "end": "2026-11-06",
     "days": 30
   },
   "team_kpis": {
@@ -28,8 +28,8 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 32,
-      "rr": 240
+      "mtd": 64,
+      "rr": 320
     },
     "cpr": {
       "kpi": 200,
@@ -38,13 +38,13 @@
     },
     "cpa": {
       "kpi": 250,
-      "mtd": 1,
-      "rr": 8
+      "mtd": 2,
+      "rr": 10
     },
-    "revenue": 170.0,
-    "budget": 150.0,
-    "profit": 20.0,
-    "roi": "1:1.13"
+    "revenue": 350.0,
+    "budget": 350.0,
+    "profit": 0.0,
+    "roi": "1:1.00"
   },
   "daily_series": [
     {
@@ -82,45 +82,48 @@
       "users": 0,
       "rev": 0,
       "budget": 75
+    },
+    {
+      "date": "2026-11-05",
+      "leads": 0,
+      "signups": 16,
+      "cpr": 0.0,
+      "users": 1,
+      "rev": 180,
+      "budget": 100
+    },
+    {
+      "date": "2026-11-06",
+      "leads": 0,
+      "signups": 16,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 100
     }
   ],
   "partners": [
     {
-      "name": "FZY",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 15,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 27,
-      "sigRr": 203,
+      "sigMtd": 56,
+      "sigRr": 280,
       "cprMtd": 0,
       "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 150,
-      "profit": -150,
+      "cpaMtd": 1,
+      "cpaRr": 5,
+      "rev": 180.0,
+      "budget": 270,
+      "profit": -90.0,
       "status": "needs-improvement"
     },
     {
-      "name": "CHA",
+      "name": "FZY",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 8,
+      "sigMtd": 3,
+      "sigRr": 15,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -135,7 +138,22 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 8,
+      "sigRr": 5,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "CHA",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 1,
+      "sigRr": 5,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -150,7 +168,22 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 8,
+      "sigRr": 5,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "REP",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 1,
+      "sigRr": 5,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -164,19 +197,43 @@
       "name": "VENE",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 0,
-      "sigRr": 0,
+      "sigMtd": 1,
+      "sigRr": 5,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
-      "cpaRr": 8,
+      "cpaRr": 5,
       "rev": 170.0,
       "budget": 0,
       "profit": 170.0,
       "status": "working-well"
+    },
+    {
+      "name": "RVR",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 0,
+      "sigRr": 0,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 80,
+      "profit": -80,
+      "status": "needs-improvement"
     }
   ],
   "advertisers_brands": [
+    {
+      "advertiser": "AFF 66",
+      "brand": "Sixty6",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
     {
       "advertiser": "AFF 66",
       "brand": "SweepJungle",
@@ -198,6 +255,15 @@
     {
       "advertiser": "ALL IN AFFILIATES",
       "brand": "Casino Smartlink",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "ALL IN AFFILIATES",
+      "brand": "Ice Casino",
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
@@ -250,6 +316,24 @@
       "profit": 0.0
     },
     {
+      "advertiser": "BASHER AGENCY",
+      "brand": "LavishLuck Sweepstakes Casino",
+      "signups": 6,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "BASHER AGENCY",
+      "brand": "Sweet Sweeps",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
       "advertiser": "CHANCED",
       "brand": "Chanced",
       "signups": 6,
@@ -261,7 +345,16 @@
     {
       "advertiser": "CHANCED",
       "brand": "Punt",
-      "signups": 4,
+      "signups": 5,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "COINSROYALE",
+      "brand": "CoinsRoyale",
+      "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -275,15 +368,6 @@
       "revenue": 0.0,
       "budget": 150.0,
       "profit": -150.0
-    },
-    {
-      "advertiser": "COINSROYALE",
-      "brand": "CoinsRoyale",
-      "signups": 0,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
     },
     {
       "advertiser": "CardCrush",
@@ -314,12 +398,39 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
+      "brand": "LavishLuck",
+      "signups": 20,
+      "ftd": 1,
+      "revenue": 180.0,
+      "budget": 0.0,
+      "profit": 180.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
       "brand": "The Boss",
-      "signups": 1,
+      "signups": 2,
       "ftd": 1,
       "revenue": 170.0,
       "budget": 0.0,
       "profit": 170.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "Baba",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "CardCrush",
+      "signups": 5,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -332,8 +443,8 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "CardCrush",
-      "signups": 11,
+      "brand": "CrashMania",
+      "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -341,8 +452,8 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "PolyCasino",
-      "signups": 3,
+      "brand": "Lucky.Me",
+      "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -352,6 +463,33 @@
       "advertiser": "GAMETIME DIGITAL",
       "brand": "LuckyBunny",
       "signups": 1,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "LuckyZino",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "Mega Spinz",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "PolyCasino",
+      "signups": 5,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -374,6 +512,42 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "Rolla",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "RoxyMoxy",
+      "signups": 5,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "Spinblitz SEO",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "Rolling Riches",
+      "signups": 3,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 120.0,
+      "profit": -120.0
     },
     {
       "advertiser": "IMPACT",
@@ -403,6 +577,15 @@
       "profit": 0.0
     },
     {
+      "advertiser": "OTHERS",
+      "brand": "FortunePlay BL$20 Inc.",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 80.0,
+      "profit": -80.0
+    },
+    {
       "advertiser": "SPLASH",
       "brand": "splashcoins",
       "signups": 0,
@@ -413,11 +596,11 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 32,
-    "ftd": 1,
-    "revenue": 170.0,
-    "budget": 150.0,
-    "profit": 20.0
+    "signups": 64,
+    "ftd": 2,
+    "revenue": 350.0,
+    "budget": 350.0,
+    "profit": 0.0
   },
   "inactive_partners": [
     "ADM",
@@ -432,7 +615,6 @@
     "MOD",
     "OIN",
     "PRO",
-    "REP",
     "SGA",
     "SIGB",
     "SPX",
