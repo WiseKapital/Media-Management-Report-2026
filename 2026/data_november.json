@@ -48,11 +48,22 @@
   },
   "daily_series": [
     {
+      "date": "2026-11-01",
+      "label": "Nov 1",
+      "period": "01",
+      "leads": 0,
+      "signups": 2,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
+    },
+    {
       "date": "2026-11-03",
       "label": "Nov 3",
-      "period": "01-03",
+      "period": "02-03",
       "leads": 0,
-      "signups": 17,
+      "signups": 15,
       "cpr": 0.0,
       "users": 1,
       "rev": 170,
