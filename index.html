@@ -50,7 +50,7 @@
             </button>
             <div id="toPop" class="hidden absolute top-full left-0 mt-2 z-50 bg-white p-4 rounded-2xl shadow-2xl border border-slate-200 w-72 select-none">
               <div class="flex items-center justify-between font-black text-xs text-slate-800 mb-2">
-                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-left text-[11px]"></i></button>
+                <button onclick="navCal('to', -1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
                 <span id="toMonthLabel" class="uppercase"></span>
                 <button onclick="navCal('to', 1, event)" class="w-6 h-6 flex items-center justify-center rounded hover:bg-slate-100 text-slate-700"><i class="fa-solid fa-chevron-right text-[11px]"></i></button>
               </div>
@@ -430,16 +430,22 @@
       const lastDayOfMonth = fmtYMD(new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0));
       const isFull = Boolean(data.date_range && sYMD === data.date_range.start && (eYMD === data.date_range.end || (eYMD >= data.date_range.end && eYMD <= lastDayOfMonth)));
       
-      const dailyMap = {}; (data.daily_series || []).forEach(r => { if (r.date) dailyMap[r.date] = r; });
-      const slice = []; let cur = new Date(sDate);
-      while (cur <= eDate) {
-        const k = fmtYMD(cur);
-        slice.push(dailyMap[k] || { date: k, leads: 0, signups: 0, cpr: 0, users: 0, rev: 0, budget: 0 });
-        cur.setDate(cur.getDate() + 1);
+      // Tomar exactamente los registros que vienen en el JSON dentro del rango seleccionado
+      let slice = (data.daily_series || []).filter(r => r.date && r.date >= sYMD && r.date <= eYMD);
+
+      // Si no hay datos en ese rango, evitar romper el flujo
+      if (slice.length === 0) {
+        let cur = new Date(sDate);
+        while (cur <= eDate) {
+          const k = fmtYMD(cur);
+          slice.push({ date: k, leads: 0, signups: 0, cpr: 0, users: 0, rev: 0, budget: 0 });
+          cur.setDate(cur.getDate() + 1);
+        }
       }
+
       const totalMonthDays = new Date(sDate.getFullYear(), sDate.getMonth() + 1, 0).getDate();
-      const daysCount = Math.max(slice.length, 1);
-      const rrFactor = isFull ? 1 : (totalMonthDays / daysCount);
+      const calendarDays = Math.max(Math.round((new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate()) - new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate())) / 86400000) + 1, 1);
+      const rrFactor = isFull ? 1 : (totalMonthDays / calendarDays);
       currentRrFactor = rrFactor;
 
       const leads = isFull ? data.totals.cpl.mtd : slice.reduce((a,r) => a + r.leads, 0);
@@ -526,19 +532,37 @@
 
       if (covered.length === 0) return renderZeroState(sDate, eDate);
 
-      const allDays = {};
-      covered.forEach(m => (m.daily_series || []).forEach(r => { if (r.date) allDays[r.date] = r; }));
-      
-      const slice = []; let cur = new Date(sDate);
-      while (cur <= eDate) {
-        const k = fmtYMD(cur), mName = MONTHS[cur.getMonth()].substring(0,3);
-        slice.push(allDays[k] ? { ...allDays[k], label: `${mName} ${cur.getDate()}` } : { date: k, leads: 0, signups: 0, cpr: 0, users: 0, rev: 0, budget: 0, label: `${mName} ${cur.getDate()}` });
-        cur.setDate(cur.getDate() + 1);
+      const sYMD = fmtYMD(sDate), eYMD = fmtYMD(eDate);
+      const multiSeriesMap = {};
+      covered.forEach(m => (m.daily_series || []).forEach(r => {
+        if (r.date && r.date >= sYMD && r.date <= eYMD) {
+          multiSeriesMap[r.date] = r;
+        }
+      }));
+
+      let slice = Object.values(multiSeriesMap).sort((a, b) => a.date.localeCompare(b.date)).map(r => {
+        const parts = r.date.split('-');
+        const mIdx = parseInt(parts[1], 10) - 1;
+        const mName = MONTHS[mIdx] ? MONTHS[mIdx].substring(0, 3) : '';
+        const dNum = parseInt(parts[2], 10);
+        return {
+          ...r,
+          label: r.label || `${mName} ${dNum}`
+        };
+      });
+
+      if (slice.length === 0) {
+        let cur = new Date(sDate);
+        while (cur <= eDate) {
+          const k = fmtYMD(cur), mName = MONTHS[cur.getMonth()].substring(0,3);
+          slice.push({ date: k, leads: 0, signups: 0, cpr: 0, users: 0, rev: 0, budget: 0, label: `${mName} ${cur.getDate()}` });
+          cur.setDate(cur.getDate() + 1);
+        }
       }
 
       const totalTargetDays = covered.reduce((a, m) => a + (m.date_range?.days || 30), 0) || 30;
-      const daysCount = Math.max(slice.length, 1);
-      const rrFactor = totalTargetDays / daysCount;
+      const calendarDays = Math.max(Math.round((new Date(eDate.getFullYear(), eDate.getMonth(), eDate.getDate()) - new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate())) / 86400000) + 1, 1);
+      const rrFactor = totalTargetDays / calendarDays;
       currentRrFactor = rrFactor;
 
       const leads = slice.reduce((a,r) => a + r.leads, 0), sigs = slice.reduce((a,r) => a + r.signups, 0);
@@ -843,7 +867,6 @@
         const max = Math.max(...items.map(i => Math.abs(i.val)), 1);
         const total = items.reduce((a,i) => a + i.val, 0);
 
-        // Valor de Run Rate (RR) y color según KPI
         const catRrVal = (rr && typeof rr[cat.rrKey] === 'number') ? rr[cat.rrKey] : Math.round(total * currentRrFactor);
         const rrColor = getRrColor(catRrVal, cat.kpi);
         const rrDisplay = (cat.p === '$' ? (catRrVal < 0 ? '-$' : '$') : '') + Math.round(Math.abs(catRrVal)).toLocaleString();
