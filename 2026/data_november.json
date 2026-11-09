@@ -3,7 +3,7 @@
   "label": "November 2026",
   "date_range": {
     "start": "2026-11-01",
-    "end": "2026-11-06",
+    "end": "2026-11-09",
     "days": 30
   },
   "team_kpis": {
@@ -23,13 +23,13 @@
   "totals": {
     "cpl": {
       "kpi": 4000,
-      "mtd": 0,
-      "rr": 0
+      "mtd": 2,
+      "rr": 7
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 64,
-      "rr": 320
+      "mtd": 100,
+      "rr": 333
     },
     "cpr": {
       "kpi": 200,
@@ -38,68 +38,124 @@
     },
     "cpa": {
       "kpi": 250,
-      "mtd": 2,
-      "rr": 10
+      "mtd": 4,
+      "rr": 13
     },
-    "revenue": 350.0,
-    "budget": 350.0,
-    "profit": 0.0,
-    "roi": "1:1.00"
+    "revenue": 600.0,
+    "budget": 270.0,
+    "profit": 330.0,
+    "roi": "1:2.22"
   },
   "daily_series": [
     {
-      "date": "2026-11-01",
+      "date": "2026-11-03",
+      "label": "Nov 3",
+      "period": "01-03",
       "leads": 0,
-      "signups": 2,
-      "cpr": 0.0,
-      "users": 0,
-      "rev": 0,
-      "budget": 0
-    },
-    {
-      "date": "2026-11-02",
-      "leads": 0,
-      "signups": 1,
+      "signups": 17,
       "cpr": 0.0,
       "users": 1,
       "rev": 170,
-      "budget": 0
-    },
-    {
-      "date": "2026-11-03",
-      "leads": 0,
-      "signups": 14,
-      "cpr": 0.0,
-      "users": 0,
-      "rev": 0,
       "budget": 75
-    },
-    {
-      "date": "2026-11-04",
-      "leads": 0,
-      "signups": 15,
-      "cpr": 0.0,
-      "users": 0,
-      "rev": 0,
-      "budget": 75
-    },
-    {
-      "date": "2026-11-05",
-      "leads": 0,
-      "signups": 16,
-      "cpr": 0.0,
-      "users": 1,
-      "rev": 180,
-      "budget": 100
     },
     {
       "date": "2026-11-06",
+      "label": "Nov 6",
+      "period": "04-06",
       "leads": 0,
-      "signups": 16,
+      "signups": 47,
+      "cpr": 0.0,
+      "users": 1,
+      "rev": 180,
+      "budget": 195
+    },
+    {
+      "date": "2026-11-09",
+      "label": "Nov 9",
+      "period": "07-09",
+      "leads": 2,
+      "signups": 36,
+      "cpr": 0.0,
+      "users": 2,
+      "rev": 250,
+      "budget": 0
+    },
+    {
+      "date": "2026-11-12",
+      "label": "Nov 12",
+      "period": "10-12",
+      "leads": 0,
+      "signups": 0,
       "cpr": 0.0,
       "users": 0,
       "rev": 0,
-      "budget": 100
+      "budget": 0
+    },
+    {
+      "date": "2026-11-15",
+      "label": "Nov 15",
+      "period": "13-15",
+      "leads": 0,
+      "signups": 0,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
+    },
+    {
+      "date": "2026-11-18",
+      "label": "Nov 18",
+      "period": "16-18",
+      "leads": 0,
+      "signups": 0,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
+    },
+    {
+      "date": "2026-11-21",
+      "label": "Nov 21",
+      "period": "19-21",
+      "leads": 0,
+      "signups": 0,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
+    },
+    {
+      "date": "2026-11-24",
+      "label": "Nov 24",
+      "period": "22-24",
+      "leads": 0,
+      "signups": 0,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
+    },
+    {
+      "date": "2026-11-27",
+      "label": "Nov 27",
+      "period": "25-27",
+      "leads": 0,
+      "signups": 0,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
+    },
+    {
+      "date": "2026-11-30",
+      "label": "Nov 30",
+      "period": "28-30",
+      "leads": 0,
+      "signups": 0,
+      "cpr": 0.0,
+      "users": 0,
+      "rev": 0,
+      "budget": 0
     }
   ],
   "partners": [
@@ -107,23 +163,98 @@
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 56,
-      "sigRr": 280,
+      "sigMtd": 79,
+      "sigRr": 263,
       "cprMtd": 0,
       "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 5,
-      "rev": 180.0,
+      "cpaMtd": 3,
+      "cpaRr": 10,
+      "rev": 430.0,
       "budget": 270,
-      "profit": -90.0,
-      "status": "needs-improvement"
+      "profit": 160.0,
+      "status": "working-well"
+    },
+    {
+      "name": "WDG",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 5,
+      "sigRr": 17,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
     },
     {
       "name": "FZY",
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 3,
-      "sigRr": 15,
+      "sigRr": 10,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "VENE",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 3,
+      "sigRr": 10,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 1,
+      "cpaRr": 3,
+      "rev": 170.0,
+      "budget": 0,
+      "profit": 170.0,
+      "status": "working-well"
+    },
+    {
+      "name": "CHA",
+      "cplMtd": 2,
+      "cplRr": 7,
+      "sigMtd": 2,
+      "sigRr": 7,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "ADM",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 2,
+      "sigRr": 7,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "FST",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 2,
+      "sigRr": 7,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -138,22 +269,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 5,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "CHA",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 5,
+      "sigRr": 3,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -168,7 +284,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 5,
+      "sigRr": 3,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -183,7 +299,7 @@
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 5,
+      "sigRr": 3,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -194,34 +310,19 @@
       "status": "neutral"
     },
     {
-      "name": "VENE",
+      "name": "SIGB",
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 1,
-      "sigRr": 5,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 1,
-      "cpaRr": 5,
-      "rev": 170.0,
-      "budget": 0,
-      "profit": 170.0,
-      "status": "working-well"
-    },
-    {
-      "name": "RVR",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 0,
-      "sigRr": 0,
+      "sigRr": 3,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
       "cpaRr": 0,
       "rev": 0,
-      "budget": 80,
-      "profit": -80,
-      "status": "needs-improvement"
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
     }
   ],
   "advertisers_brands": [
@@ -264,7 +365,16 @@
     {
       "advertiser": "ALL IN AFFILIATES",
       "brand": "Ice Casino",
-      "signups": 0,
+      "signups": 2,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "ALL IN AFFILIATES",
+      "brand": "Rivo",
+      "signups": 1,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -317,8 +427,26 @@
     },
     {
       "advertiser": "BASHER AGENCY",
+      "brand": "Cazimbo",
+      "signups": 1,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "BASHER AGENCY",
+      "brand": "Fortuneplay",
+      "signups": 1,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "BASHER AGENCY",
       "brand": "LavishLuck Sweepstakes Casino",
-      "signups": 6,
+      "signups": 19,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -336,7 +464,7 @@
     {
       "advertiser": "CHANCED",
       "brand": "Chanced",
-      "signups": 6,
+      "signups": 7,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -399,7 +527,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "LavishLuck",
-      "signups": 20,
+      "signups": 16,
       "ftd": 1,
       "revenue": 180.0,
       "budget": 0.0,
@@ -408,11 +536,29 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "The Boss",
-      "signups": 2,
+      "signups": 6,
       "ftd": 1,
       "revenue": 170.0,
       "budget": 0.0,
       "profit": 170.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "PolyCasino",
+      "signups": 8,
+      "ftd": 1,
+      "revenue": 130.0,
+      "budget": 0.0,
+      "profit": 130.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "RoxyMoxy",
+      "signups": 6,
+      "ftd": 1,
+      "revenue": 120.0,
+      "budget": 0.0,
+      "profit": 120.0
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -426,7 +572,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "CardCrush",
-      "signups": 5,
+      "signups": 7,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -462,7 +608,7 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "LuckyBunny",
-      "signups": 1,
+      "signups": 2,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -481,15 +627,6 @@
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Mega Spinz",
       "signups": 0,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
-      "brand": "PolyCasino",
-      "signups": 5,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
@@ -524,15 +661,6 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
-      "brand": "RoxyMoxy",
-      "signups": 5,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
       "brand": "Spinblitz SEO",
       "signups": 0,
       "ftd": 0,
@@ -542,8 +670,17 @@
     },
     {
       "advertiser": "GAMETIME DIGITAL",
+      "brand": "TitanTreasure",
+      "signups": 1,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
       "brand": "Rolling Riches",
-      "signups": 3,
+      "signups": 12,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 120.0,
@@ -552,6 +689,15 @@
     {
       "advertiser": "IMPACT",
       "brand": "Borrowell",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0
+    },
+    {
+      "advertiser": "IMPACT",
+      "brand": "Freecash",
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
@@ -577,15 +723,6 @@
       "profit": 0.0
     },
     {
-      "advertiser": "OTHERS",
-      "brand": "FortunePlay BL$20 Inc.",
-      "signups": 0,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 80.0,
-      "profit": -80.0
-    },
-    {
       "advertiser": "SPLASH",
       "brand": "splashcoins",
       "signups": 0,
@@ -596,14 +733,13 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 64,
-    "ftd": 2,
-    "revenue": 350.0,
-    "budget": 350.0,
-    "profit": 0.0
+    "signups": 100,
+    "ftd": 4,
+    "revenue": 600.0,
+    "budget": 270.0,
+    "profit": 330.0
   },
   "inactive_partners": [
-    "ADM",
     "CSH",
     "FXM",
     "GRM",
@@ -616,11 +752,10 @@
     "OIN",
     "PRO",
     "SGA",
-    "SIGB",
     "SPX",
-    "WDG",
     "ADV",
     "EPV",
-    "SDG"
+    "SDG",
+    "RVR"
   ]
 }
