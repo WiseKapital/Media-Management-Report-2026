@@ -3,7 +3,7 @@
   "label": "November 2026",
   "date_range": {
     "start": "2026-11-01",
-    "end": "2026-11-11",
+    "end": "2026-11-12",
     "days": 30
   },
   "team_kpis": {
@@ -28,8 +28,8 @@
     },
     "signups": {
       "kpi": 1000,
-      "mtd": 140,
-      "rr": 382
+      "mtd": 160,
+      "rr": 400
     },
     "cpr": {
       "kpi": 200,
@@ -39,7 +39,7 @@
     "cpa": {
       "kpi": 250,
       "mtd": 7,
-      "rr": 19
+      "rr": 18
     },
     "revenue": 1100.0,
     "budget": 510.0,
@@ -94,9 +94,9 @@
     {
       "date": "2026-11-12",
       "label": "Nov 12",
-      "period": "10-11",
+      "period": "10-12",
       "leads": 0,
-      "signups": 40,
+      "signups": 60,
       "cpr": 0.0,
       "users": 3,
       "rev": 500,
@@ -174,12 +174,12 @@
       "name": "WIZ",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 112,
-      "sigRr": 305,
+      "sigMtd": 120,
+      "sigRr": 300,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 5,
-      "cpaRr": 14,
+      "cpaRr": 13,
       "rev": 730.0,
       "budget": 390,
       "profit": 340.0,
@@ -189,8 +189,8 @@
       "name": "WDG",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 6,
-      "sigRr": 16,
+      "sigMtd": 9,
+      "sigRr": 23,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -204,8 +204,8 @@
       "name": "VENE",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 4,
-      "sigRr": 11,
+      "sigMtd": 6,
+      "sigRr": 15,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
@@ -216,11 +216,26 @@
       "status": "working-well"
     },
     {
+      "name": "EMO",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 4,
+      "sigRr": 10,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
       "name": "FZY",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 3,
-      "sigRr": 8,
+      "sigMtd": 4,
+      "sigRr": 10,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 1,
@@ -231,7 +246,7 @@
       "status": "working-well"
     },
     {
-      "name": "ADM",
+      "name": "SDI",
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 3,
@@ -246,11 +261,26 @@
       "status": "neutral"
     },
     {
-      "name": "SDI",
+      "name": "AWP",
       "cplMtd": 0,
       "cplRr": 0,
-      "sigMtd": 2,
-      "sigRr": 5,
+      "sigMtd": 3,
+      "sigRr": 8,
+      "cprMtd": 0,
+      "cprRr": 0,
+      "cpaMtd": 0,
+      "cpaRr": 0,
+      "rev": 0,
+      "budget": 0,
+      "profit": 0,
+      "status": "neutral"
+    },
+    {
+      "name": "ADM",
+      "cplMtd": 0,
+      "cplRr": 0,
+      "sigMtd": 3,
+      "sigRr": 8,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -276,7 +306,7 @@
       "status": "neutral"
     },
     {
-      "name": "EMO",
+      "name": "REP",
       "cplMtd": 0,
       "cplRr": 0,
       "sigMtd": 2,
@@ -311,36 +341,6 @@
       "cplRr": 0,
       "sigMtd": 2,
       "sigRr": 5,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "AWP",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 3,
-      "cprMtd": 0,
-      "cprRr": 0,
-      "cpaMtd": 0,
-      "cpaRr": 0,
-      "rev": 0,
-      "budget": 0,
-      "profit": 0,
-      "status": "neutral"
-    },
-    {
-      "name": "REP",
-      "cplMtd": 0,
-      "cplRr": 0,
-      "sigMtd": 1,
-      "sigRr": 3,
       "cprMtd": 0,
       "cprRr": 0,
       "cpaMtd": 0,
@@ -390,12 +390,12 @@
     {
       "advertiser": "ALL IN AFFILIATES",
       "brand": "7Bit Casino",
-      "signups": 1,
+      "signups": 3,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "SDI (1 SignUps) | WDG (2 SignUps)"
     },
     {
       "advertiser": "ALL IN AFFILIATES",
@@ -410,12 +410,12 @@
     {
       "advertiser": "ALL IN AFFILIATES",
       "brand": "Ice Casino",
-      "signups": 3,
+      "signups": 4,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "WDG (4 SignUps)"
     },
     {
       "advertiser": "ALL IN AFFILIATES",
@@ -425,7 +425,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "WDG (1 SignUps)"
     },
     {
       "advertiser": "ALL IN AFFILIATES",
@@ -485,17 +485,17 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "WDG (1 SignUps)"
     },
     {
       "advertiser": "BASHER AGENCY",
       "brand": "Fortuneplay",
-      "signups": 2,
+      "signups": 3,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "SDI (2 SignUps) | WDG (1 SignUps)"
     },
     {
       "advertiser": "BASHER AGENCY",
@@ -505,7 +505,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "WIZ (28 SignUps)"
     },
     {
       "advertiser": "BASHER AGENCY",
@@ -520,12 +520,12 @@
     {
       "advertiser": "CHANCED",
       "brand": "Chanced",
-      "signups": 7,
+      "signups": 8,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "CHA (1 SignUps) | EMO (1 SignUps) | WIZ (6 SignUps)"
     },
     {
       "advertiser": "CHANCED",
@@ -535,7 +535,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "FZY (1 SignUps) | WIZ (4 SignUps)"
     },
     {
       "advertiser": "COINSROYALE",
@@ -575,7 +575,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "WIZ (1 SignUps)"
     },
     {
       "advertiser": "Eskhol Real_LoneS",
@@ -590,32 +590,32 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Pulsz SEO",
-      "signups": 2,
+      "signups": 5,
       "ftd": 1,
       "revenue": 200.0,
       "budget": 0.0,
       "profit": 200.0,
-      "media_partners": "-"
+      "media_partners": "FZY (1 SignUps, 1 Ftd, $200.00) | WIZ (2 SignUps)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "LavishLuck",
-      "signups": 16,
+      "signups": 17,
       "ftd": 1,
       "revenue": 180.0,
       "budget": 0.0,
       "profit": 180.0,
-      "media_partners": "-"
+      "media_partners": "EMO (1 SignUps) | REP (1 SignUps) | WIZ (15 SignUps, 1 Ftd, $180.00)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "The Boss",
-      "signups": 7,
+      "signups": 9,
       "ftd": 1,
       "revenue": 170.0,
       "budget": 0.0,
       "profit": 170.0,
-      "media_partners": "-"
+      "media_partners": "AWP (1 SignUps) | FST (2 SignUps) | VENE (6 SignUps, 1 Ftd, $170.00)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -625,7 +625,7 @@
       "revenue": 130.0,
       "budget": 0.0,
       "profit": 130.0,
-      "media_partners": "-"
+      "media_partners": "WIZ (8 SignUps, 1 Ftd, $130.00)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -635,17 +635,17 @@
       "revenue": 120.0,
       "budget": 0.0,
       "profit": 120.0,
-      "media_partners": "-"
+      "media_partners": "WIZ (6 SignUps, 1 Ftd, $120.00)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Rolling Riches",
-      "signups": 33,
+      "signups": 38,
       "ftd": 2,
       "revenue": 300.0,
       "budget": 240.0,
       "profit": 60.0,
-      "media_partners": "-"
+      "media_partners": "WIZ (27 SignUps, 2 Ftd, $300.00)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -655,7 +655,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "WIZ (3 SignUps)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -665,7 +665,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "ADM (1 SignUps) | WIZ (7 SignUps)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -675,7 +675,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "EMO (2 SignUps)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -700,22 +700,22 @@
     {
       "advertiser": "GAMETIME DIGITAL",
       "brand": "Lucky.Me",
-      "signups": 1,
-      "ftd": 0,
-      "revenue": 0.0,
-      "budget": 0.0,
-      "profit": 0.0,
-      "media_partners": "-"
-    },
-    {
-      "advertiser": "GAMETIME DIGITAL",
-      "brand": "LuckyBunny",
       "signups": 3,
       "ftd": 0,
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "ADM (1 SignUps) | REP (1 SignUps) | WIZ (1 SignUps)"
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "LuckyBunny",
+      "signups": 4,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0,
+      "media_partners": "FZY (2 SignUps) | SIGB (2 SignUps)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -745,7 +745,7 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "CHA (1 SignUps)"
     },
     {
       "advertiser": "GAMETIME DIGITAL",
@@ -775,7 +775,17 @@
       "revenue": 0.0,
       "budget": 0.0,
       "profit": 0.0,
-      "media_partners": "-"
+      "media_partners": "ADM (1 SignUps)"
+    },
+    {
+      "advertiser": "GAMETIME DIGITAL",
+      "brand": "WowVegas",
+      "signups": 1,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0,
+      "media_partners": "WIZ (1 SignUps)"
     },
     {
       "advertiser": "IMPACT",
@@ -800,6 +810,16 @@
     {
       "advertiser": "IMPACT",
       "brand": "MOLOTOV",
+      "signups": 0,
+      "ftd": 0,
+      "revenue": 0.0,
+      "budget": 0.0,
+      "profit": 0.0,
+      "media_partners": "-"
+    },
+    {
+      "advertiser": "IMPACT",
+      "brand": "Sesame Care",
       "signups": 0,
       "ftd": 0,
       "revenue": 0.0,
@@ -839,7 +859,7 @@
     }
   ],
   "advertisers_brands_totals": {
-    "signups": 140,
+    "signups": 160,
     "ftd": 7,
     "revenue": 1100.0,
     "budget": 510.0,
